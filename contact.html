@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Book Jude Coffee for your wedding, corporate event, or pop-up in Lakeland, Florida.">
+  <title>Contact — Jude Coffee</title>
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header" id="header">
+    <div class="header-inner">
+      <a href="/" class="logo" aria-label="Jude — Home">Jude</a>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav" id="nav">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/services.html">Services</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/menu.html">Menu</a></li>
+          <li><a href="/contact.html" class="nav-cta active">Book</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero fade-in">
+      <div class="container container--narrow">
+        <p class="eyebrow">Contact</p>
+        <h1>Let's talk about your event.</h1>
+        <p class="lead">Fill out the form below or book directly through our scheduling widget. We typically respond within 24 hours.</p>
+      </div>
+    </section>
+
+    <section class="section fade-in">
+      <div class="container">
+        <div class="contact-layout">
+          <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="event-type">Event type</label>
+              <select id="event-type" name="event_type" required>
+                <option value="" disabled selected>Select one</option>
+                <option value="wedding">Wedding</option>
+                <option value="corporate">Corporate event</option>
+                <option value="popup">Pop-up / market</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="date">Event date</label>
+              <input type="date" id="date" name="event_date">
+            </div>
+            <div class="form-group">
+              <label for="guests">Estimated guests</label>
+              <input type="number" id="guests" name="guest_count" min="1" placeholder="e.g. 150">
+            </div>
+            <div class="form-group form-group--full">
+              <label for="message">Tell us about your event</label>
+              <textarea id="message" name="message" rows="5" required placeholder="Venue, timing, anything we should know..."></textarea>
+            </div>
+            <button type="submit" class="btn">Send message</button>
+          </form>
+
+          <aside class="contact-aside">
+            <h2>Or book directly</h2>
+            <p>Check availability and request a quote through our booking platform.</p>
+            <div class="booking-widget" id="flashquotes-widget">
+              <!-- Flashquotes booking widget embed goes here -->
+              <p class="widget-placeholder">Booking widget coming soon</p>
+            </div>
+            <div class="contact-info">
+              <p>Follow us on Instagram for updates and behind-the-scenes.</p>
+              <a href="https://instagram.com/judeisforall" target="_blank" rel="noopener noreferrer" class="text-link">@judeisforall</a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">Jude</span>
+        <p>Mobile coffee catering<br>Lakeland, Florida</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/services.html">Services</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/menu.html">Menu</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="footer-contact">
+        <a href="https://instagram.com/judeisforall" target="_blank" rel="noopener noreferrer">@judeisforall</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; <span id="year"></span> Jude Coffee. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

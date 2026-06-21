@@ -1,0 +1,8 @@
+# Cloudflare Pages redirects
+# https://developers.cloudflare.com/pages/configuration/redirects/
+
+/services    /services.html    200
+/about       /about.html       200
+/menu        /menu.html        200
+/contact     /contact.html     200
+/book        /contact.html     301
