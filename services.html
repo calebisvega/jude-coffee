@@ -5,31 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Wedding, corporate, and pop-up coffee catering packages from Jude in Lakeland, Florida.">
   <title>Services — Jude Coffee</title>
-  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/images/favicon.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="/images/icon-mug-48.png" type="image/png" sizes="48x48">
+  <link rel="apple-touch-icon" href="/images/icon-mug-180.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
+<body class="page-services">
   <a href="#main" class="skip-link">Skip to content</a>
 
   <header class="site-header" id="header">
-    <div class="header-inner">
-      <a href="/" class="logo" aria-label="Jude — Home">Jude</a>
-      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
-        <span></span>
-        <span></span>
-      </button>
-      <nav class="site-nav" id="nav">
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/services.html" class="active">Services</a></li>
-          <li><a href="/about.html">About</a></li>
-          <li><a href="/menu.html">Menu</a></li>
-          <li><a href="/contact.html" class="nav-cta">Book</a></li>
-        </ul>
-      </nav>
+    <div class="header-inner header-inner--center">
+      <a href="/" class="logo" aria-label="Jude — Home">
+        <img src="/images/logo-transparent.png" alt="" class="logo-img" width="120" height="48">
+      </a>
     </div>
   </header>
 
@@ -117,7 +108,10 @@
       </div>
     </section>
 
-    <section class="section section--cta fade-in">
+    <section class="section section--cta section--cta-blue fade-in">
+      <div class="illus-wrap illus-wrap--cta" aria-hidden="true">
+        <img src="/images/illus-cart-green.png" alt="">
+      </div>
       <div class="container container--narrow text-center">
         <h2>Let's plan your event.</h2>
         <p class="lead">Share the details and we'll put together a quote.</p>
@@ -127,28 +121,16 @@
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="footer-logo">Jude</span>
-        <p>Mobile coffee catering<br>Lakeland, Florida</p>
+    <div class="footer-bar">
+      <div class="footer-bar__contact">
+        <p class="footer-bar__name">Jude Coffee</p>
+        <p class="footer-bar__location">Lakeland, FL 33801</p>
+        <a href="mailto:Jordan@judeforall.com" class="footer-bar__link">Jordan@judeforall.com</a>
+        <a href="tel:+12536919308" class="footer-bar__link">(253) 691-9308</a>
       </div>
-      <nav class="footer-nav" aria-label="Footer navigation">
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/services.html">Services</a></li>
-          <li><a href="/about.html">About</a></li>
-          <li><a href="/menu.html">Menu</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-        </ul>
-      </nav>
-      <div class="footer-contact">
-        <a href="https://instagram.com/judeisforall" target="_blank" rel="noopener noreferrer">@judeisforall</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="container">
-        <p>&copy; <span id="year"></span> Jude Coffee. All rights reserved.</p>
-      </div>
+      <a href="/" class="footer-bar__logo" aria-label="Jude — Home">
+        <img src="/images/logo-cream.png" alt="" class="footer-logo-mark" width="200" height="80">
+      </a>
     </div>
   </footer>
 

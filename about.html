@@ -5,127 +5,157 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Meet the team behind Jude — mobile specialty coffee catering in Lakeland, Florida.">
   <title>About — Jude Coffee</title>
-  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/images/favicon.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="/images/icon-mug-48.png" type="image/png" sizes="48x48">
+  <link rel="apple-touch-icon" href="/images/icon-mug-180.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to content</a>
 
   <header class="site-header" id="header">
-    <div class="header-inner">
-      <a href="/" class="logo" aria-label="Jude — Home">Jude</a>
-      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
-        <span></span>
-        <span></span>
-      </button>
-      <nav class="site-nav" id="nav">
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/services.html">Services</a></li>
-          <li><a href="/about.html" class="active">About</a></li>
-          <li><a href="/menu.html">Menu</a></li>
-          <li><a href="/contact.html" class="nav-cta">Book</a></li>
-        </ul>
-      </nav>
+    <div class="header-inner header-inner--center">
+      <a href="/" class="logo" aria-label="Jude — Home">
+        <img src="/images/logo-transparent.png" alt="" class="logo-img" width="120" height="48">
+      </a>
     </div>
   </header>
 
   <main id="main">
-    <section class="page-hero fade-in">
-      <div class="container container--narrow">
-        <p class="eyebrow">About</p>
-        <h1>Built on craft, driven by community.</h1>
-        <p class="lead">Jude started with a simple belief: the coffee at your event should be as intentional as everything else.</p>
+    <section class="section section--story fade-in">
+      <div class="story-editorial">
+        <figure class="story-editorial__figure">
+          <img src="/images/story-cart.png" alt="Jude mobile coffee cart with magazines and espresso equipment" class="story-editorial__image" width="900" height="1200" loading="lazy">
+        </figure>
+        <div class="story-editorial__copy">
+          <div class="story-accordion is-compressed" id="story-accordion" data-story-accordion>
+            <button type="button" class="story-accordion__trigger" id="story-accordion-trigger" aria-expanded="false" aria-controls="story-accordion-panel">
+              <span class="story-title tagline-underline story-accordion__label">Our Story</span>
+              <span class="story-accordion__icon" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 12 12" focusable="false">
+                  <path d="M2 4.25 6 8.25 10 4.25" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </span>
+            </button>
+            <div id="story-accordion-panel" class="story-accordion__panel" role="region" aria-labelledby="story-accordion-trigger">
+              <div class="story-accordion__panel-inner">
+                <p>In 2022, Jude was founded by Jordan and Kelsey Willcox in sunny Lakeland, Florida. From its inception, Jude has been designed to be a third place for community to gather and to embody a spirit of familial celebration by serving beautiful coffees with a heart of intentioned hospitality.</p>
+                <p>Since then, David &amp; Caleb have inherited this treasure of a coffee company. In the past years, we've been serving Coffee under a similar sensibility with Dumb Coffee, our last venture in hospitality.</p>
+              </div>
+            </div>
+          </div>
+          <div class="story-about">
+            <p class="story-about__title story-title tagline-underline" role="heading" aria-level="2">About us</p>
+            <p>Whether you're a roaster, a coffee producer with loads of experience or this is your first time trying to order a drink with a long Italian based name, we're here for you. We'll try our best to have a dialogue that leads to you experiencing the beauty and kindness of others. We may not know all the correct answers, and that's okay, (everybody knows <span class="story-misspell">capppucccino</span> is incredibly difficult to spell.)</p>
+            <p>We believe that both genuine care and others-centered hospitality are a large part of what makes us better humans. We believe that in an age where deep ties are fading and neighbors have grown farther estranged now more than ever our little pocket of Central Florida needs a reason to hang out and get to know each other. In fear of this sounding like a grand manifesto, we'd like to simply introduce Jude this way.</p>
+            <p class="story-tagline">Jude for all.</p>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="section fade-in">
-      <div class="container container--narrow">
-        <h2>Our story</h2>
-        <p>We're Caleb and David — two friends in Lakeland who saw a gap between the coffee people drink every day and the coffee served at the events they care about most. Jude was born to close that gap.</p>
-        <p>We built a mobile cart around equipment we'd trust in any specialty café: a La Marzocco GS3 espresso machine, an Anfim Caimano grinder, and beans sourced from Valor Coffee — one of the Southeast's finest third-wave roasters. No shortcuts. No compromise.</p>
-        <p>Whether it's a wedding, a corporate gathering, or a Saturday market, we show up early, dial in our shots, and serve every cup like it matters. Because at your event, it does.</p>
+    <section class="section fade-in section--maroon-tint">
+      <div class="illus-wrap illus-wrap--vision" aria-hidden="true">
+        <img src="/images/illus-mug-green.png" alt="">
+      </div>
+      <div class="container container--prose">
+        <h2 class="chapter-title">More than just coffee</h2>
+        <p>We love coffee. Not just for the taste, but for the moments it creates — the pause before a ceremony, the warmth between conversations, the quiet energy of a morning meeting done right.</p>
+        <p>We're Caleb and David, two friends in Lakeland who saw a gap between the coffee people drink every day and the coffee served at the events they care about most. Jude was born to close that gap.</p>
+        <p>To us, coffee at an event is a connection — between host and guest, between craft and occasion. When you book Jude, you're part of something we care deeply about: doing one thing well, and doing it for people who notice.</p>
+      </div>
+    </section>
+
+    <section class="split-panel fade-in">
+      <div class="split-panel__content">
+        <div class="split-panel__inner">
+          <h3>The cart</h3>
+          <p>Our mobile setup travels across Central Florida — weddings, corporate events, markets, and private gatherings. We arrive early, build the bar, dial in the espresso, and serve until the last cup.</p>
+        </div>
+      </div>
+      <div class="split-panel__media">
+        <img src="/images/cart.png" alt="Jude mobile coffee cart" loading="lazy" width="800" height="600">
+      </div>
+    </section>
+
+    <section class="split-panel split-panel--reverse fade-in">
+      <div class="split-panel__content">
+        <div class="split-panel__inner">
+          <h3>Sourcing</h3>
+          <p>We source beans from Valor Coffee, one of the Southeast's finest third-wave roasters. Combined with house-made syrups and precise extraction on our La Marzocco GS3, every drink reflects the same standard we'd hold in a brick-and-mortar café.</p>
+        </div>
+      </div>
+      <div class="split-panel__media">
+        <img src="/images/beans.png" alt="Fresh coffee beans being ground" loading="lazy" width="800" height="600">
       </div>
     </section>
 
     <section class="section section--alt fade-in">
       <div class="container">
-        <div class="section-header">
-          <p class="eyebrow">The team</p>
-          <h2>Who we are</h2>
-        </div>
-        <div class="team-grid">
+        <h2 class="chapter-title chapter-title--center">The team</h2>
+        <figure class="team-hero">
+          <img src="/images/team.png" alt="Caleb and David behind the Jude coffee cart" loading="lazy" width="1200" height="800">
+        </figure>
+        <div class="team-grid team-grid--bios">
           <article class="team-card">
-            <div class="team-photo" aria-hidden="true"></div>
             <h3>Caleb</h3>
-            <p>Co-founder &amp; barista. The one who won't serve a shot until the crema is right.</p>
+            <p class="team-role">Co-founder &amp; barista</p>
+            <p>The one who won't serve a shot until the crema is right. Caleb handles extraction, menu development, and making sure every cup meets the standard.</p>
           </article>
           <article class="team-card">
-            <div class="team-photo" aria-hidden="true"></div>
             <h3>David</h3>
-            <p>Co-founder &amp; operations. Keeps the cart running and the events seamless.</p>
+            <p class="team-role">Co-founder &amp; operations</p>
+            <p>Keeps the cart running and the events seamless. David handles logistics, client relationships, and the details that let the coffee speak for itself.</p>
           </article>
         </div>
       </div>
     </section>
 
     <section class="section fade-in">
-      <div class="container">
-        <div class="section-header">
-          <p class="eyebrow">The setup</p>
-          <h2>Equipment &amp; sourcing</h2>
-        </div>
-        <div class="equipment-grid">
-          <article class="equipment-card">
+      <div class="container container--prose">
+        <h2 class="chapter-title">The setup</h2>
+        <div class="equipment-list">
+          <div class="equipment-item">
             <h3>La Marzocco GS3</h3>
-            <p>Commercial-grade espresso machine. Temperature-stable, precise, and built to perform under pressure — literally.</p>
-          </article>
-          <article class="equipment-card">
+            <p>Commercial-grade espresso machine. Temperature-stable, precise, and built to perform under pressure.</p>
+          </div>
+          <div class="equipment-item">
             <h3>Anfim Caimano</h3>
             <p>On-demand grinder that delivers consistent, fresh grounds for every extraction.</p>
-          </article>
-          <article class="equipment-card">
+          </div>
+          <div class="equipment-item">
             <h3>Valor Coffee</h3>
             <p>Third-wave roasted beans from one of the Southeast's most respected specialty coffee roasters.</p>
-          </article>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section section--cta fade-in">
-      <div class="container container--narrow text-center">
-        <h2>We'd love to be part of your next event.</h2>
+    <section class="section section--cta section--cta-blue fade-in">
+      <div class="illus-wrap illus-wrap--cta" aria-hidden="true">
+        <img src="/images/illus-mug-green.png" alt="">
+      </div>
+      <div class="container container--prose text-center">
+        <h2 class="chapter-title">We'd love to be part of your next event.</h2>
         <a href="/contact.html" class="btn">Get in touch</a>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="footer-logo">Jude</span>
-        <p>Mobile coffee catering<br>Lakeland, Florida</p>
+    <div class="footer-bar">
+      <div class="footer-bar__contact">
+        <p class="footer-bar__name">Jude Coffee</p>
+        <p class="footer-bar__location">Lakeland, FL 33801</p>
+        <a href="mailto:Jordan@judeforall.com" class="footer-bar__link">Jordan@judeforall.com</a>
+        <a href="tel:+12536919308" class="footer-bar__link">(253) 691-9308</a>
       </div>
-      <nav class="footer-nav" aria-label="Footer navigation">
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/services.html">Services</a></li>
-          <li><a href="/about.html">About</a></li>
-          <li><a href="/menu.html">Menu</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-        </ul>
-      </nav>
-      <div class="footer-contact">
-        <a href="https://instagram.com/judeisforall" target="_blank" rel="noopener noreferrer">@judeisforall</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="container">
-        <p>&copy; <span id="year"></span> Jude Coffee. All rights reserved.</p>
-      </div>
+      <a href="/" class="footer-bar__logo" aria-label="Jude — Home">
+        <img src="/images/logo-cream.png" alt="" class="footer-logo-mark" width="200" height="80">
+      </a>
     </div>
   </footer>
 

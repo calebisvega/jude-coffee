@@ -5,131 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Jude Coffee menu — espresso, pour-over, and specialty drinks for events in Lakeland, Florida.">
   <title>Menu — Jude Coffee</title>
-  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/images/favicon.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="/images/icon-mug-48.png" type="image/png" sizes="48x48">
+  <link rel="apple-touch-icon" href="/images/icon-mug-180.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,500&family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
+<body class="page-menu">
   <a href="#main" class="skip-link">Skip to content</a>
 
   <header class="site-header" id="header">
-    <div class="header-inner">
-      <a href="/" class="logo" aria-label="Jude — Home">Jude</a>
-      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
-        <span></span>
-        <span></span>
-      </button>
-      <nav class="site-nav" id="nav">
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/services.html">Services</a></li>
-          <li><a href="/about.html">About</a></li>
-          <li><a href="/menu.html" class="active">Menu</a></li>
-          <li><a href="/contact.html" class="nav-cta">Book</a></li>
-        </ul>
-      </nav>
+    <div class="header-inner header-inner--center">
+      <a href="/" class="logo" aria-label="Jude — Home">
+        <img src="/images/logo-transparent.png" alt="" class="logo-img" width="120" height="48">
+      </a>
     </div>
   </header>
 
   <main id="main">
-    <section class="page-hero fade-in">
-      <div class="container container--narrow">
-        <p class="eyebrow">Menu</p>
-        <h1>Simple menu, serious coffee.</h1>
-        <p class="lead">Every drink is made to order with Valor Coffee beans and house-made syrups. Pricing below reflects our standard menu — event packages include full service.</p>
+    <section class="section section--menu-asset fade-in">
+      <div class="menu-editorial">
+        <p class="menu-editorial__body" lang="en"><span class="menu-editorial__lead">Our offerings are orchestrated to be concise.</span> We've tried our best to direct our attention to the most commonly beloved drinks. This doesn't mean that we're all prim &amp; proper and unwilling to crank out a specialty drink menu. This is just our primary offering, with a seasonal menu hopefully dropping soon. Syrups are all formulated in-house and coffee will come from a variety of roasters, please feel free to ask us before or during the event what we have on bar and we'd love to let you know what we're ripping.</p>
       </div>
-    </section>
-
-    <section class="section fade-in">
-      <div class="container container--narrow">
-        <div class="menu-list">
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <h3>Espresso</h3>
-              <p>Double shot, straight up</p>
-            </div>
-            <span class="menu-price">$4</span>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <h3>Drip / Filter</h3>
-              <p>Freshly brewed, single origin</p>
-            </div>
-            <span class="menu-price">$4</span>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <h3>Cortado</h3>
-              <p>Espresso with a touch of steamed milk</p>
-            </div>
-            <span class="menu-price">$4.50</span>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <h3>Americano</h3>
-              <p>Espresso diluted with hot water</p>
-            </div>
-            <span class="menu-price">$4.50</span>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <h3>Cappuccino</h3>
-              <p>Espresso, steamed milk, thick foam</p>
-            </div>
-            <span class="menu-price">$4.75</span>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <h3>Latte</h3>
-              <p>Espresso with silky steamed milk</p>
-            </div>
-            <span class="menu-price">$5.50</span>
-          </div>
-          <div class="menu-item">
-            <div class="menu-item-info">
-              <h3>Cold Brew</h3>
-              <p>Slow-steeped, smooth and bold</p>
-            </div>
-            <span class="menu-price">$5.50</span>
-          </div>
+      <div class="menu-asset-drag" id="menu-asset-drag">
+        <div class="menu-asset-drift">
+          <img src="/images/menu.gif" alt="Jude Coffee menu" class="menu-asset" width="518" height="1500" loading="eager" draggable="false">
         </div>
-        <p class="menu-note">House-made syrups available — ask about seasonal flavors.</p>
-      </div>
-    </section>
-
-    <section class="section section--cta fade-in">
-      <div class="container container--narrow text-center">
-        <h2>Want this menu at your event?</h2>
-        <a href="/contact.html" class="btn">Book Jude</a>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="footer-logo">Jude</span>
-        <p>Mobile coffee catering<br>Lakeland, Florida</p>
+    <div class="footer-bar">
+      <div class="footer-bar__contact">
+        <p class="footer-bar__name">Jude Coffee</p>
+        <p class="footer-bar__location">Lakeland, FL 33801</p>
+        <a href="mailto:Jordan@judeforall.com" class="footer-bar__link">Jordan@judeforall.com</a>
+        <a href="tel:+12536919308" class="footer-bar__link">(253) 691-9308</a>
       </div>
-      <nav class="footer-nav" aria-label="Footer navigation">
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/services.html">Services</a></li>
-          <li><a href="/about.html">About</a></li>
-          <li><a href="/menu.html">Menu</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-        </ul>
-      </nav>
-      <div class="footer-contact">
-        <a href="https://instagram.com/judeisforall" target="_blank" rel="noopener noreferrer">@judeisforall</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="container">
-        <p>&copy; <span id="year"></span> Jude Coffee. All rights reserved.</p>
-      </div>
+      <a href="/" class="footer-bar__logo" aria-label="Jude — Home">
+        <img src="/images/logo-cream.png" alt="" class="footer-logo-mark" width="200" height="80">
+      </a>
     </div>
   </footer>
 
