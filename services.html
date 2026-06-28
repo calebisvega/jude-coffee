@@ -10,112 +10,100 @@
   <link rel="apple-touch-icon" href="/images/icon-mug-180.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body class="page-services">
   <a href="#main" class="skip-link">Skip to content</a>
 
-  <header class="site-header" id="header">
-    <div class="header-inner header-inner--center">
-      <a href="/" class="logo" aria-label="Jude — Home">
-        <img src="/images/logo-transparent.png" alt="" class="logo-img" width="120" height="48">
-      </a>
+  <div class="services-marquee-frame" aria-hidden="true">
+    <div class="services-marquee services-marquee--horizontal services-marquee--top">
+      <div class="services-marquee__track" data-services-marquee-track data-marquee-axis="x" data-marquee-direction="left"></div>
     </div>
-  </header>
+    <div class="services-marquee services-marquee--vertical services-marquee--left">
+      <div class="services-marquee__track" data-services-marquee-track data-marquee-axis="y" data-marquee-direction="up"></div>
+    </div>
+    <div class="services-marquee services-marquee--vertical services-marquee--right">
+      <div class="services-marquee__track" data-services-marquee-track data-marquee-axis="y" data-marquee-direction="down"></div>
+    </div>
+  </div>
 
   <main id="main">
-    <section class="page-hero fade-in">
-      <div class="container container--narrow">
-        <p class="eyebrow">Services</p>
-        <h1>Coffee, wherever the moment finds you.</h1>
-        <p class="lead">Every package includes our full mobile setup, skilled baristas, and specialty-grade coffee sourced from Valor Coffee.</p>
+    <div class="services-opening fade-in">
+      <div class="services-opening__content">
+        <div class="services-brand-banner fade-in">
+          <a href="/" class="services-brand-banner__home" aria-label="Jude — Home">
+            <img src="/images/logo-cream.png" alt="" class="services-brand-banner__jude" width="480" height="192">
+            <span class="services-brand-banner__forall tagline-underline">Is For All</span>
+          </a>
+        </div>
+
+        <section class="section-heading section-heading--services fade-in">
+          <div class="container">
+            <h2 class="story-title tagline-underline story-section-heading">What we do</h2>
+          </div>
+        </section>
+      </div>
+
+      <button type="button" class="services-scroll-arrow" aria-label="Scroll to services">
+        <img
+          src="/images/services-scroll-arrow.png?v=3"
+          alt=""
+          class="services-scroll-arrow__img"
+          width="612"
+          height="936"
+          decoding="async"
+        >
+      </button>
+    </div>
+
+    <section class="split-panel split-panel--weddings fade-in">
+      <div class="split-panel__content">
+        <div class="split-panel__inner">
+          <h3 class="story-title tagline-underline story-section-heading">Weddings</h3>
+          <p class="story-split-copy">From the first toast to the last dance — specialty coffee for your guests, all night long. One or two drinks per person, served with the same care as everything else you've planned.</p>
+          <a href="/contact.html" class="text-link">Get in touch</a>
+        </div>
+      </div>
+      <div class="split-panel__media">
+        <img src="/images/popup.png" alt="Wedding coffee service" loading="lazy" width="800" height="600">
       </div>
     </section>
 
-    <section class="section fade-in" id="weddings">
-      <div class="container">
-        <div class="section-header">
-          <h2>Weddings</h2>
-          <p>Your guests deserve more than a urn in the corner.</p>
+    <section class="split-panel split-panel--reverse split-panel--blue fade-in">
+      <div class="split-panel__content">
+        <div class="split-panel__inner">
+          <h3 class="story-title tagline-underline story-section-heading">Corporate events</h3>
+          <p class="story-split-copy">Elevate your next meeting, launch, or company gathering. We set up on site, serve barista-crafted coffee, and handle everything so you can focus on your people.</p>
+          <a href="/contact.html" class="text-link">Get in touch</a>
         </div>
-        <div class="pricing-grid">
-          <article class="pricing-card">
-            <h3>One Drink</h3>
-            <p class="pricing-amount">$1,000</p>
-            <p class="pricing-detail">One specialty drink per guest, all night</p>
-            <ul class="pricing-features">
-              <li>Full mobile cart setup</li>
-              <li>Professional barista service</li>
-              <li>Espresso, drip, and seasonal options</li>
-              <li>House-made syrups included</li>
-            </ul>
-          </article>
-          <article class="pricing-card pricing-card--featured">
-            <h3>Two Drinks</h3>
-            <p class="pricing-amount">$1,700</p>
-            <p class="pricing-detail">Two specialty drinks per guest, all night</p>
-            <ul class="pricing-features">
-              <li>Full mobile cart setup</li>
-              <li>Professional barista service</li>
-              <li>Espresso, drip, and seasonal options</li>
-              <li>House-made syrups included</li>
-            </ul>
-          </article>
-        </div>
+      </div>
+      <div class="split-panel__media">
+        <img src="/images/barista.png" alt="Barista preparing espresso" loading="lazy" width="800" height="600">
       </div>
     </section>
 
-    <section class="section section--alt fade-in" id="corporate">
-      <div class="container">
-        <div class="section-header">
-          <h2>Corporate Events</h2>
-          <p>Impress clients, energize teams, elevate the ordinary.</p>
+    <section class="split-panel split-panel--services-last fade-in">
+      <div class="split-panel__content">
+        <div class="split-panel__inner">
+          <h3 class="story-title tagline-underline story-section-heading">Pop-ups</h3>
+          <p class="story-split-copy">Markets, festivals, private parties — wherever good coffee belongs. We adapt to the space and bring the full cart experience with us.</p>
+          <a href="/contact.html" class="text-link">Get in touch</a>
         </div>
-        <div class="pricing-grid pricing-grid--single">
-          <article class="pricing-card">
-            <h3>Hourly Rate</h3>
-            <p class="pricing-amount">$350<span class="pricing-unit">/hr</span></p>
-            <p class="pricing-detail">2-hour minimum</p>
-            <ul class="pricing-features">
-              <li>Ideal for meetings, launches, and office events</li>
-              <li>Flexible menu tailored to your group</li>
-              <li>Setup and breakdown included</li>
-            </ul>
-          </article>
-        </div>
+      </div>
+      <div class="split-panel__media">
+        <img src="/images/cart.png" alt="Jude mobile coffee cart" loading="lazy" width="800" height="600">
       </div>
     </section>
 
-    <section class="section fade-in" id="popups">
-      <div class="container">
-        <div class="section-header">
-          <h2>Pop-up Events</h2>
-          <p>Markets, festivals, private gatherings — we adapt to the space.</p>
-        </div>
-        <div class="pricing-grid pricing-grid--single">
-          <article class="pricing-card">
-            <h3>Event Minimum</h3>
-            <p class="pricing-amount">$600</p>
-            <p class="pricing-detail">Starting rate for pop-up bookings</p>
-            <ul class="pricing-features">
-              <li>Perfect for farmers markets and community events</li>
-              <li>Custom menu available upon request</li>
-              <li>Travel within Central Florida included</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section--cta section--cta-blue fade-in">
+    <section class="section section--services-close section--cta section--cta-blue fade-in">
       <div class="illus-wrap illus-wrap--cta" aria-hidden="true">
         <img src="/images/illus-cart-green.png" alt="">
       </div>
-      <div class="container container--narrow text-center">
-        <h2>Let's plan your event.</h2>
-        <p class="lead">Share the details and we'll put together a quote.</p>
-        <a href="/contact.html" class="btn">Book now</a>
+      <div class="container container--prose text-center">
+        <h2 class="chapter-title">Ready when you are.</h2>
+        <p>Tell us about your event. We'll handle the coffee.</p>
+        <a href="/contact.html" class="btn">Get in touch</a>
       </div>
     </section>
   </main>
