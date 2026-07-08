@@ -4,76 +4,86 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Book Jude Coffee for your wedding, corporate event, or pop-up in Lakeland, Florida.">
-  <title>Contact — Jude Coffee</title>
+  <title>Book — Jude Coffee</title>
   <link rel="icon" href="/images/favicon.png" type="image/png" sizes="32x32">
   <link rel="icon" href="/images/icon-mug-48.png" type="image/png" sizes="48x48">
   <link rel="apple-touch-icon" href="/images/icon-mug-180.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/styles.css?v=20250628aaj">
+  <link rel="stylesheet" href="/css/mobile.css?v=20250628mob4">
 </head>
 <body class="page-contact">
   <a href="#main" class="skip-link">Skip to content</a>
 
   <main id="main">
-    <a href="/" class="contact-brand-hero fade-in" aria-label="Jude is for all — Home">
-      <img src="/images/logo-cream.png" alt="" class="contact-brand-hero__jude" width="320" height="128">
-      <span class="contact-brand-hero__forall">is for all</span>
-    </a>
-
-    <section class="page-hero page-hero--contact fade-in">
-      <div class="container container--narrow">
-        <p class="eyebrow">Contact</p>
-        <h1>Let's talk about your event.</h1>
-        <p class="lead">Fill out the form below or book directly through our scheduling widget. We typically respond within 24 hours.</p>
+    <section class="contact-hero" aria-label="Book Jude Coffee">
+      <div class="contact-hero__media" aria-hidden="true">
+        <video class="contact-hero__video" autoplay muted loop playsinline disablepictureinpicture preload="metadata">
+          <source src="/videos/book-hero.mp4" type="video/mp4">
+          <source src="/videos/book-hero.mov" type="video/quicktime">
+        </video>
+        <div class="contact-hero__shade"></div>
+        <div class="contact-hero__grain"></div>
+      </div>
+      <a href="/" class="contact-hero__logo logo" aria-label="Jude — Home">
+        <img src="/images/logo-cream.png" alt="" class="logo-img logo-img--cream" width="120" height="48">
+      </a>
+      <div class="contact-hero__content container container--narrow">
+        <p class="contact-hero__eyebrow">Book</p>
+        <h1 class="contact-hero__title">Let's talk about<br>your event.</h1>
+        <p class="contact-hero__lead">Request a quote, check availability, and tell us what you're planning. We typically respond within 24 hours.</p>
       </div>
     </section>
 
-    <section class="section fade-in">
+    <section class="section section--contact-book fade-in">
       <div class="container">
-        <div class="contact-layout">
-          <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" id="name" name="name" required autocomplete="name">
+        <div class="contact-layout contact-layout--book">
+          <div class="contact-booking">
+            <h2 class="contact-booking__title">Request a quote</h2>
+            <p class="contact-booking__lead">Use our booking form to share your event details and get a custom quote from the Jude team.</p>
+            <div class="booking-widget">
+              <div class="booking-widget__viewport" id="flashquotes-widget" data-form-id="cmqftz2vj0001jv0424m1k88t"></div>
             </div>
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" required autocomplete="email">
-            </div>
-            <div class="form-group">
-              <label for="event-type">Event type</label>
-              <select id="event-type" name="event_type" required>
-                <option value="" disabled selected>Select one</option>
-                <option value="wedding">Wedding</option>
-                <option value="corporate">Corporate event</option>
-                <option value="popup">Pop-up / market</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="date">Event date</label>
-              <input type="date" id="date" name="event_date">
-            </div>
-            <div class="form-group">
-              <label for="guests">Estimated guests</label>
-              <input type="number" id="guests" name="guest_count" min="1" placeholder="e.g. 150">
-            </div>
-            <div class="form-group form-group--full">
-              <label for="message">Tell us about your event</label>
-              <textarea id="message" name="message" rows="5" required placeholder="Venue, timing, anything we should know..."></textarea>
-            </div>
-            <button type="submit" class="btn">Send message</button>
-          </form>
+          </div>
 
           <aside class="contact-aside">
-            <h2>Or book directly</h2>
-            <p>Check availability and request a quote through our booking platform.</p>
-            <div class="booking-widget" id="flashquotes-widget">
-              <!-- Flashquotes booking widget embed goes here -->
-              <p class="widget-placeholder">Booking widget coming soon</p>
-            </div>
+            <h2>Or send a message</h2>
+            <p>Prefer email? Fill out the form below and we'll get back to you.</p>
+            <form class="contact-form contact-form--stacked" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required autocomplete="email">
+              </div>
+              <div class="form-group">
+                <label for="event-type">Event type</label>
+                <select id="event-type" name="event_type" required>
+                  <option value="" disabled selected>Select one</option>
+                  <option value="wedding">Wedding</option>
+                  <option value="corporate">Corporate event</option>
+                  <option value="popup">Pop-up / market</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="date">Event date</label>
+                <input type="date" id="date" name="event_date">
+              </div>
+              <div class="form-group">
+                <label for="guests">Estimated guests</label>
+                <input type="number" id="guests" name="guest_count" min="1" placeholder="e.g. 150">
+              </div>
+              <div class="form-group form-group--full">
+                <label for="message">Tell us about your event</label>
+                <textarea id="message" name="message" rows="5" required placeholder="Venue, timing, anything we should know..."></textarea>
+              </div>
+              <button type="submit" class="btn">Send message</button>
+            </form>
             <div class="contact-info">
               <p>Follow us on Instagram for updates and behind-the-scenes.</p>
               <a href="https://instagram.com/judeisforall" target="_blank" rel="noopener noreferrer" class="text-link">@judeisforall</a>
@@ -89,12 +99,25 @@
       <div class="footer-bar__contact">
         <p class="footer-bar__name">Jude Coffee</p>
         <p class="footer-bar__location">Lakeland, FL 33801</p>
-        <a href="mailto:Jordan@judeforall.com" class="footer-bar__link">Jordan@judeforall.com</a>
+        <a href="mailto:Caleb@judeforall.com" class="footer-bar__link">Caleb@judeforall.com</a>
         <a href="tel:+12536919308" class="footer-bar__link">(253) 691-9308</a>
       </div>
     </div>
   </footer>
 
   <script src="/js/main.js"></script>
+  <script src="/js/flashquotes-embed.js"></script>
+  <script>
+    (function () {
+      var video = document.querySelector('.contact-hero__video');
+      if (!video) return;
+      video.play().catch(function () {
+        document.addEventListener('click', function playOnce() {
+          video.play().catch(function () {});
+          document.removeEventListener('click', playOnce);
+        }, { once: true });
+      });
+    })();
+  </script>
 </body>
 </html>

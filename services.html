@@ -11,7 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/styles.css?v=20250628zu">
+  <link rel="stylesheet" href="/css/mobile.css?v=20250628mob4">
 </head>
 <body class="page-services">
   <a href="#main" class="skip-link">Skip to content</a>
@@ -44,25 +45,31 @@
           </div>
         </section>
       </div>
-
-      <button type="button" class="services-scroll-arrow" aria-label="Scroll to services">
-        <img
-          src="/images/services-scroll-arrow.png?v=3"
-          alt=""
-          class="services-scroll-arrow__img"
-          width="612"
-          height="936"
-          decoding="async"
-        >
-      </button>
     </div>
+
+    <button type="button" class="services-scroll-arrow" aria-label="Scroll to services">
+      <img
+        src="/images/services-scroll-arrow.png?v=5"
+        alt=""
+        class="services-scroll-arrow__img"
+        width="612"
+        height="936"
+        decoding="async"
+      >
+    </button>
 
     <section class="split-panel split-panel--weddings fade-in">
       <div class="split-panel__content">
         <div class="split-panel__inner">
           <h3 class="story-title tagline-underline story-section-heading">Weddings</h3>
-          <p class="story-split-copy">From the first toast to the last dance — specialty coffee for your guests, all night long. One or two drinks per person, served with the same care as everything else you've planned.</p>
-          <a href="/contact.html" class="text-link">Get in touch</a>
+          <a href="/contact.html" class="split-panel__copy-row" aria-label="Get in touch about weddings">
+            <p class="story-split-copy">From the first toast to the last dance — specialty coffee for your guests, all night long. One or two drinks per person, served with the same care as everything else you've planned.</p>
+            <span class="split-panel__action-arrow" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 20 20" fill="none">
+                <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </a>
         </div>
       </div>
       <div class="split-panel__media">
@@ -70,12 +77,18 @@
       </div>
     </section>
 
-    <section class="split-panel split-panel--reverse split-panel--blue fade-in">
+    <section class="split-panel split-panel--reverse fade-in">
       <div class="split-panel__content">
         <div class="split-panel__inner">
           <h3 class="story-title tagline-underline story-section-heading">Corporate events</h3>
-          <p class="story-split-copy">Elevate your next meeting, launch, or company gathering. We set up on site, serve barista-crafted coffee, and handle everything so you can focus on your people.</p>
-          <a href="/contact.html" class="text-link">Get in touch</a>
+          <a href="/contact.html" class="split-panel__copy-row" aria-label="Get in touch about corporate events">
+            <p class="story-split-copy">Elevate your next meeting, launch, or company gathering. We set up on site, serve barista-crafted coffee, and handle everything so you can focus on your people.</p>
+            <span class="split-panel__action-arrow" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 20 20" fill="none">
+                <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </a>
         </div>
       </div>
       <div class="split-panel__media">
@@ -87,8 +100,14 @@
       <div class="split-panel__content">
         <div class="split-panel__inner">
           <h3 class="story-title tagline-underline story-section-heading">Pop-ups</h3>
-          <p class="story-split-copy">Markets, festivals, private parties — wherever good coffee belongs. We adapt to the space and bring the full cart experience with us.</p>
-          <a href="/contact.html" class="text-link">Get in touch</a>
+          <a href="/contact.html" class="split-panel__copy-row" aria-label="Get in touch about pop-ups">
+            <p class="story-split-copy">Markets, festivals, private parties — wherever good coffee belongs. We adapt to the space and bring the full cart experience with us.</p>
+            <span class="split-panel__action-arrow" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 20 20" fill="none">
+                <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </a>
         </div>
       </div>
       <div class="split-panel__media">
@@ -96,32 +115,23 @@
       </div>
     </section>
 
-    <section class="section section--services-close section--cta section--cta-blue fade-in">
-      <div class="illus-wrap illus-wrap--cta" aria-hidden="true">
-        <img src="/images/illus-cart-green.png" alt="">
+    <section class="section section--services-close section--cta section--video-cta fade-in">
+      <div class="media-backdrop" aria-hidden="true">
+        <video class="media-backdrop__video" autoplay muted loop playsinline disablepictureinpicture preload="metadata">
+          <source src="/videos/book-hero.mp4" type="video/mp4">
+          <source src="/videos/book-hero.mov" type="video/quicktime">
+        </video>
+        <div class="media-backdrop__shade"></div>
+        <div class="media-backdrop__grain"></div>
       </div>
       <div class="container container--prose text-center">
-        <h2 class="chapter-title">Ready when you are.</h2>
+        <h2 class="story-title tagline-underline story-section-heading">Ready when you are.</h2>
         <p>Tell us about your event. We'll handle the coffee.</p>
         <a href="/contact.html" class="btn">Get in touch</a>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="footer-bar">
-      <div class="footer-bar__contact">
-        <p class="footer-bar__name">Jude Coffee</p>
-        <p class="footer-bar__location">Lakeland, FL 33801</p>
-        <a href="mailto:Jordan@judeforall.com" class="footer-bar__link">Jordan@judeforall.com</a>
-        <a href="tel:+12536919308" class="footer-bar__link">(253) 691-9308</a>
-      </div>
-      <a href="/" class="footer-bar__logo" aria-label="Jude — Home">
-        <img src="/images/logo-cream.png" alt="" class="footer-logo-mark" width="200" height="80">
-      </a>
-    </div>
-  </footer>
-
-  <script src="/js/main.js"></script>
+  <script src="/js/main.js?v=20250628zq"></script>
 </body>
 </html>

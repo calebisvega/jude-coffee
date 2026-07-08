@@ -11,7 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500;9..40,600&family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/styles.css?v=20250628aam">
+  <link rel="stylesheet" href="/css/mobile.css?v=20250628mob4">
 </head>
 <body class="page-home">
   <a href="#main" class="skip-link">Skip to content</a>
@@ -52,10 +53,6 @@
   <a href="#our-story" class="hero-about-peek" aria-label="Read our story">
     <img src="/images/illus-mug-green.png" alt="" class="hero-about-peek__img" width="200" height="280">
   </a>
-
-  <aside class="page-index" id="page-index" aria-hidden="true">
-    <span class="page-index__number" id="page-index-number">1</span>
-  </aside>
 
   <main id="main">
     <section class="hero hero--minimal home-snap-page" data-snap-page="0" aria-label="Introduction">
@@ -99,118 +96,64 @@
             <img src="/images/beans.png" alt="" class="hero-collage__photo is-active">
             <img src="/images/popup.png" alt="" class="hero-collage__photo">
           </div>
-          <a href="/about.html" class="hero-collage__about story-title story-title--on-media tagline-underline">Our Story</a>
+          <a href="#our-story" class="hero-collage__about story-title story-title--on-media tagline-underline">Our Story</a>
         </div>
       </div>
     </section>
 
     <section id="our-story" class="section section--story home-snap-page fade-in" data-snap-page="1">
       <div class="story-editorial">
-        <figure class="story-editorial__figure">
-          <img src="/images/story-cart.png" alt="Jude mobile coffee cart with magazines and espresso equipment" class="story-editorial__image" width="900" height="1200" loading="lazy">
-        </figure>
-        <div class="story-editorial__copy">
-          <div class="story-accordion is-compressed" id="story-accordion" data-story-accordion>
-            <button type="button" class="story-accordion__trigger" id="story-accordion-trigger" aria-expanded="false" aria-controls="story-accordion-panel">
-              <span class="story-title tagline-underline story-accordion__label story-section-heading">Our Story</span>
-              <span class="story-accordion__icon" aria-hidden="true">
+        <div class="story-column story-column--about">
+          <div class="story-accordion is-compressed" id="about-accordion" data-about-accordion>
+            <button type="button" class="story-accordion__trigger" id="about-accordion-trigger" data-about-accordion-trigger aria-expanded="false" aria-controls="about-accordion-panel" aria-label="Expand about us">
+              <span class="story-title tagline-underline story-section-heading">About us</span>
+              <span class="story-accordion__icon story-accordion__icon--right" aria-hidden="true">
                 <svg width="12" height="12" viewBox="0 0 12 12" focusable="false">
-                  <path d="M2 4.25 6 8.25 10 4.25" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M4.25 2 8.25 6 4.25 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
               </span>
             </button>
-            <div id="story-accordion-panel" class="story-accordion__panel" role="region" aria-labelledby="story-accordion-trigger">
-              <div class="story-accordion__panel-inner">
-                <p>In 2022, Jude was founded by Jordan and Kelsey Willcox in sunny Lakeland, Florida. From its inception, Jude has been designed to be a third place for community to gather and to embody a spirit of familial celebration by serving beautiful coffees with a heart of intentioned hospitality.</p>
-                <p>Since then, David &amp; Caleb have inherited this treasure of a coffee company. In the past years, we've been serving Coffee under a similar sensibility with Dumb Coffee, our last venture in hospitality.</p>
+            <div id="about-accordion-panel" class="story-accordion__panel" role="region" aria-labelledby="about-accordion-trigger">
+              <div class="story-accordion__panel-inner story-accordion__panel-inner--columns3">
+                <div class="story-accordion__col">
+                  <p><span class="story-about-lead">In 2022, Jude was founded by Jordan and Kelsey Willcox in sunny Lakeland, Florida.</span> From its inception, Jude has been designed to be a mobile third place for people to gather.</p>
+                  <p>Since then, David &amp; Caleb have inherited this treasure of a coffee company. In the past years, we've<br>been serving coffee under a similar sensibility with Dumb Coffee, our<br>last venture in hospitality.</p>
+                </div>
+                <div class="story-accordion__col">
+                  <p>Whether you're a roaster with loads of experience or this is your first time trying to order a drink with a long Italian based name, we're here for you.</p>
+                  <p>We'll try our best to have a dialogue that leads to you experiencing the depth and kindness of others. We may not know all the correct answers, and that's okay, (everybody knows <span class="story-misspell">capppucccino</span> is incredibly difficult<br>to spell.)</p>
+                </div>
+                <div class="story-accordion__col">
+                  <p>We believe that both genuine care and others-centered hospitality are a large part of what makes us better humans.</p>
+                  <p>In an age where deep ties are fading and neighbors have grown farther estranged, our little pocket of Central Florida needs a reason to hang out and get to know each other. In fear of this sounding like a grand manifesto, we'd like to simply introduce Jude this way.<br><span class="story-tagline">Jude for all.</span></p>
+                </div>
               </div>
             </div>
           </div>
-          <div class="story-about">
-            <p class="story-about__title story-title tagline-underline story-section-heading" role="heading" aria-level="2">About us</p>
-            <p>Whether you're a roaster, a coffee producer with loads of experience or this is your first time trying to order a drink with a long Italian based name, we're here for you. We'll try our best to have a dialogue that leads to you experiencing the beauty and kindness of others. We may not know all the correct answers, and that's okay, (everybody knows <span class="story-misspell">capppucccino</span> is incredibly difficult to spell.)</p>
-            <p>We believe that both genuine care and others-centered hospitality are a large part of what makes us better humans. We believe that in an age where deep ties are fading and neighbors have grown farther estranged now more than ever our little pocket of Central Florida needs a reason to hang out and get to know each other. In fear of this sounding like a grand manifesto, we'd like to simply introduce Jude this way.</p>
-            <p class="story-tagline">Jude for all.</p>
-          </div>
         </div>
+        <figure class="story-editorial__figure">
+          <img src="/images/story-cart.png" alt="Jude mobile coffee cart with magazines and espresso equipment" class="story-editorial__image" width="900" height="1200" loading="lazy">
+        </figure>
       </div>
     </section>
 
-    <div class="home-snap-page home-snap-page--work" data-snap-page="2">
-    <section class="section-heading fade-in">
+    <div class="home-snap-page home-snap-page--close" data-snap-page="2">
+    <section class="section section--home-close section--cta section--cta-blue fade-in">
       <div class="container">
-        <h2 class="section-heading__title">What we do</h2>
-      </div>
-    </section>
-
-    <section class="split-panel fade-in">
-      <div class="split-panel__content">
-        <div class="split-panel__inner">
-          <h3>Weddings</h3>
-          <p>From the first toast to the last dance — specialty coffee for your guests, all night long. One or two drinks per person, served with the same care as everything else you've planned.</p>
-          <a href="/services.html#weddings" class="text-link">View packages</a>
-        </div>
-      </div>
-      <div class="split-panel__media">
-        <img src="/images/popup.png" alt="Wedding coffee service" loading="lazy" width="800" height="600">
-      </div>
-    </section>
-
-    <section class="split-panel split-panel--reverse split-panel--blue fade-in">
-      <div class="split-panel__content">
-        <div class="split-panel__inner">
-          <h3>Corporate events</h3>
-          <p>Elevate your next meeting, launch, or company gathering. We set up on site, serve barista-crafted coffee, and handle everything so you can focus on your people.</p>
-          <a href="/services.html#corporate" class="text-link">View rates</a>
-        </div>
-      </div>
-      <div class="split-panel__media">
-        <img src="/images/barista.png" alt="Barista preparing espresso" loading="lazy" width="800" height="600">
-      </div>
-    </section>
-
-    <section class="split-panel fade-in">
-      <div class="split-panel__content">
-        <div class="split-panel__inner">
-          <h3>Pop-ups</h3>
-          <p>Markets, festivals, private parties — wherever good coffee belongs. We adapt to the space and bring the full cart experience with us.</p>
-          <a href="/services.html#popups" class="text-link">Learn more</a>
-        </div>
-      </div>
-      <div class="split-panel__media">
-        <img src="/images/cart.png" alt="Jude mobile coffee cart" loading="lazy" width="800" height="600">
-      </div>
-    </section>
-    </div>
-
-    <div class="home-snap-page home-snap-page--close" data-snap-page="3">
-    <section class="section-heading section-heading--spaced fade-in">
-      <div class="container">
-        <h2 class="section-heading__title">
+        <h2 class="section-heading__title section--home-close__heading">
           <a href="https://instagram.com/judeisforall" target="_blank" rel="noopener noreferrer" class="heading-link">@judeisforall</a>
         </h2>
-      </div>
-    </section>
-
-    <section class="section section--instagram fade-in">
-      <div class="container">
         <div class="instagram-grid" aria-label="Recent photos from Jude">
           <img src="/images/prep.png" alt="Espresso preparation" loading="lazy" width="400" height="400">
           <img src="/images/beans.png" alt="Fresh coffee beans" loading="lazy" width="400" height="400">
           <img src="/images/team.png" alt="Caleb and David at the Jude cart" loading="lazy" width="400" height="400">
           <img src="/images/barista.png" alt="Behind the bar" loading="lazy" width="400" height="400">
         </div>
-      </div>
-    </section>
-
-    <section class="section section--cta section--cta-blue fade-in">
-      <div class="illus-wrap illus-wrap--cta" aria-hidden="true">
-        <img src="/images/illus-cart-green.png" alt="">
-      </div>
-      <div class="container container--prose text-center">
-        <h2 class="chapter-title">Ready when you are.</h2>
-        <p>Tell us about your event. We'll handle the coffee.</p>
-        <a href="/contact.html" class="btn">Get in touch</a>
+        <div class="section--home-close__cta container--prose text-center">
+          <h2 class="story-title tagline-underline story-section-heading">Ready when you are.</h2>
+          <p>Tell us about your event. We'll handle the coffee.</p>
+          <a href="/contact.html" class="btn">Get in touch</a>
+        </div>
       </div>
     </section>
 
@@ -219,7 +162,7 @@
         <div class="footer-bar__contact">
           <p class="footer-bar__name">Jude Coffee</p>
           <p class="footer-bar__location">Lakeland, FL 33801</p>
-          <a href="mailto:Jordan@judeforall.com" class="footer-bar__link">Jordan@judeforall.com</a>
+          <a href="mailto:Caleb@judeforall.com" class="footer-bar__link">Caleb@judeforall.com</a>
           <a href="tel:+12536919308" class="footer-bar__link">(253) 691-9308</a>
         </div>
         <a href="/" class="footer-bar__logo" aria-label="Jude — Home">

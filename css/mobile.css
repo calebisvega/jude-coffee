@@ -1,0 +1,618 @@
+/* Mobile layout — max-width 768px only; desktop styles unchanged */
+
+@media (max-width: 768px) {
+  /* --------------------------------------------------------------------------
+     Shared
+     -------------------------------------------------------------------------- */
+
+  :root {
+    --page-gutter: clamp(1rem, 4.5vw, 1.35rem);
+  }
+
+  body:not(.page-home) {
+    --story-section-title-size: clamp(0.8125rem, 2.2vw, 0.9375rem);
+    --story-copy-size: clamp(0.875rem, 2.4vw, 0.9375rem);
+  }
+
+  .page-home {
+    --story-copy-size: clamp(0.8125rem, 2.35vw, 0.875rem);
+  }
+
+  body:not(.page-home):not(.page-menu) .section {
+    padding-block: clamp(2.5rem, 7vw, 3.25rem);
+  }
+
+  body:not(.page-home):not(.page-menu) .section--about {
+    padding-top: clamp(1.75rem, 5vw, 2.5rem);
+  }
+
+  .chapter-title {
+    font-size: clamp(1.5rem, 5.5vw, 1.875rem);
+    margin-bottom: 1.25rem;
+  }
+
+  .container {
+    padding-inline: var(--page-gutter);
+  }
+
+  /* --------------------------------------------------------------------------
+     Home
+     -------------------------------------------------------------------------- */
+
+  .page-home .hero-about-peek {
+    display: none;
+  }
+
+  /* Shorter hero — brings “Coffee Anywhere” up */
+  .page-home .home-snap-page {
+    min-height: 58dvh;
+  }
+
+  .page-home .hero--minimal {
+    min-height: 58dvh;
+    padding-top: calc(var(--header-height) + 0.45rem);
+  }
+
+  .page-home .hero--minimal .hero-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    min-height: clamp(11rem, 36dvh, 15rem);
+    padding-bottom: 0.25rem;
+  }
+
+  .page-home .hero-tagline__word--bl,
+  .page-home .hero-tagline__word--br {
+    bottom: calc(var(--home-tagline-from-edge-bottom) + 1.35rem);
+  }
+
+  /* Four-piece collage — even top/bottom spacing */
+  .page-home .hero-collage {
+    position: relative;
+    inset: auto;
+    transform: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+      "tl tr"
+      "bl br";
+    gap: clamp(0.5rem, 2.8vw, 0.7rem);
+    width: min(78vw, 17.5rem);
+    height: min(78vw, 17.5rem);
+    margin: 0 auto;
+    align-self: center;
+    flex-shrink: 0;
+  }
+
+  .page-home .hero-collage__piece {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: 1;
+    transform: rotate(var(--piece-r, 0deg)) !important;
+  }
+
+  .page-home .hero-collage__piece:hover {
+    transform: rotate(var(--piece-r, 0deg)) !important;
+    --piece-scale: 1;
+  }
+
+  .page-home .hero-collage__piece--a {
+    grid-area: bl;
+    --piece-r: -4deg;
+  }
+
+  .page-home .hero-collage__piece--b {
+    grid-area: tl;
+    --piece-r: -3deg;
+  }
+
+  .page-home .hero-collage__piece--c {
+    grid-area: br;
+    --piece-r: 3deg;
+  }
+
+  .page-home .hero-collage__piece--d {
+    grid-area: tr;
+    display: block;
+    --piece-r: -2deg;
+  }
+
+  .page-home .hero-collage__piece--e {
+    display: none;
+  }
+
+  /* Our Story — always visible on mobile */
+  .page-home .hero-collage__about {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 30;
+  }
+
+  /* Brand moment — centered cream logo */
+  .page-home .hero-brand-logo {
+    align-items: center;
+    justify-content: center;
+  }
+
+  body.page-home.is-tagline-brand .hero-brand-logo__img {
+    height: clamp(4.5rem, 18vw, 6.5rem);
+  }
+
+  /* About Us — no image, legible copy, always expanded */
+  .page-home .section--story.home-snap-page {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
+    padding: calc(var(--header-height) + 0.75rem) var(--page-gutter) clamp(2.25rem, 6vw, 3rem);
+  }
+
+  .page-home .story-editorial {
+    position: relative;
+    inset: auto;
+    display: block;
+    width: 100%;
+    min-height: 0;
+    padding: 0;
+    bottom: auto;
+  }
+
+  .page-home .story-editorial__figure {
+    display: none;
+  }
+
+  .page-home .story-column--about {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .page-home .story-column--about .story-accordion {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .page-home .story-column--about .story-accordion__trigger {
+    width: 100%;
+    margin-bottom: 0.85rem;
+    pointer-events: none;
+  }
+
+  .page-home .story-column--about .story-accordion__icon {
+    display: none;
+  }
+
+  .page-home .story-column--about .story-accordion__panel {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    max-width: none;
+    grid-template-rows: 1fr !important;
+    opacity: 1 !important;
+    pointer-events: auto;
+  }
+
+  .page-home .story-column--about .story-accordion.is-open .story-accordion__panel-inner,
+  .page-home .story-column--about .story-accordion__panel-inner {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .page-home .story-column--about .story-accordion__panel-inner p:not(.story-tagline) {
+    font-family: var(--font-sans);
+    font-size: clamp(0.8125rem, 2.35vw, 0.875rem);
+    font-weight: 400;
+    line-height: 1.55;
+    letter-spacing: 0.01em;
+    color: var(--charcoal);
+  }
+
+  .page-home .story-column--about .story-accordion__panel-inner {
+    max-height: none;
+    overflow: visible;
+    opacity: 1;
+    padding-top: 0;
+  }
+
+  .page-home .story-accordion__panel-inner--columns3 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    max-width: none;
+    height: auto;
+  }
+
+  .page-home .story-column--about .story-accordion__panel-inner .story-tagline {
+    display: block;
+    text-align: center;
+    margin-top: 0.65rem;
+    font-size: clamp(0.875rem, 2.5vw, 0.9375rem);
+    font-weight: 700;
+  }
+
+  .page-home .section--home-close .instagram-grid {
+    gap: 0.5rem;
+  }
+
+  /* --------------------------------------------------------------------------
+     About
+     -------------------------------------------------------------------------- */
+
+  body:not(.page-home) .section--story:first-of-type {
+    padding-top: calc(var(--header-height) + 0.5rem);
+  }
+
+  body:not(.page-home) .section--story:first-of-type .story-editorial__copy {
+    padding-top: 0.5rem;
+  }
+
+  body:not(.page-home) .story-editorial {
+    gap: 1rem;
+    width: 100%;
+  }
+
+  body:not(.page-home) .story-editorial__figure {
+    width: min(62%, 11rem);
+    margin-inline: auto;
+  }
+
+  body:not(.page-home) .story-editorial__copy {
+    max-width: none;
+  }
+
+  body:not(.page-home) .story-editorial__copy .story-title {
+    margin-bottom: 0.85rem;
+  }
+
+  .section--vision {
+    padding-block: clamp(2.5rem, 7vw, 3.25rem);
+  }
+
+  .section--vision p.story-title {
+    margin-bottom: 1.1rem;
+  }
+
+  .section--vision p:not(.story-title) {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    margin-bottom: 1rem;
+  }
+
+  .illus-wrap--vision,
+  .illus-wrap--cta {
+    display: none;
+  }
+
+  .team-hero {
+    margin-bottom: 1.75rem;
+    max-height: 14rem;
+  }
+
+  .team-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+  }
+
+  .team-grid {
+    gap: 1.5rem;
+  }
+
+  .team-grid--bios {
+    grid-template-columns: 1fr;
+  }
+
+  .equipment-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .equipment-card {
+    padding: 1.15rem 0 1.25rem;
+  }
+
+  body:not(.page-home):not(.page-services) .split-panel__content {
+    padding: 1.75rem var(--page-gutter) 2rem;
+  }
+
+  body:not(.page-home):not(.page-services) .split-panel__media {
+    min-height: 11rem;
+    aspect-ratio: 16 / 9;
+  }
+
+  body:not(.page-home):not(.page-services) .split-panel__inner h3 {
+    font-size: clamp(1.35rem, 5vw, 1.65rem);
+    margin-bottom: 0.65rem;
+  }
+
+  body:not(.page-home):not(.page-services) .split-panel__inner p {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    margin-bottom: 0.85rem;
+  }
+
+  /* --------------------------------------------------------------------------
+     Menu
+     -------------------------------------------------------------------------- */
+
+  .page-menu .site-header {
+    position: relative;
+    height: auto;
+    min-height: 0;
+    background: #000;
+    border-bottom: none;
+  }
+
+  .page-menu .header-inner {
+    padding: 0.85rem var(--page-gutter) 1.15rem;
+  }
+
+  .page-menu .logo {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    display: block;
+    width: fit-content;
+    margin-inline: auto;
+  }
+
+  .page-menu .logo-img,
+  .page-menu .site-header.is-scrolled .logo-img {
+    height: clamp(3.25rem, 9vw, 3.75rem);
+  }
+
+  .page-menu .section--menu-asset {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.75rem;
+    min-height: 0;
+    padding: 0.35rem var(--page-gutter) clamp(2.5rem, 8vw, 3.5rem);
+    overflow: hidden;
+  }
+
+  .page-menu .menu-editorial {
+    order: 1;
+    padding: 0;
+    pointer-events: auto;
+  }
+
+  .page-menu .menu-editorial__lead {
+    display: block;
+    margin-bottom: 0.65rem;
+    font-size: clamp(0.625rem, 2.8vw, 0.75rem);
+    letter-spacing: 0.12em;
+    line-height: 1.4;
+  }
+
+  .page-menu .menu-editorial__body {
+    font-size: clamp(1.125rem, 4.8vw, 1.5rem);
+    line-height: 1.18;
+    letter-spacing: -0.03em;
+    hyphens: none;
+  }
+
+  .page-menu .menu-asset-drag {
+    position: relative;
+    left: auto !important;
+    top: auto !important;
+    order: 2;
+    align-self: center;
+    width: min(72vw, 14rem);
+    margin-top: 0.25rem;
+    transform: none !important;
+    cursor: default;
+    touch-action: auto;
+  }
+
+  .page-menu .menu-asset {
+    width: 100%;
+    animation: none;
+    transform: rotate(-3deg);
+  }
+
+  .page-menu .menu-asset-drift {
+    animation: none;
+  }
+
+  /* --------------------------------------------------------------------------
+     Contact
+     -------------------------------------------------------------------------- */
+
+  .contact-hero {
+    min-height: clamp(15rem, 38dvh, 20rem);
+    padding: calc(var(--header-height) + 0.75rem) var(--page-gutter) 1.75rem;
+  }
+
+  .contact-hero__logo .logo-img--cream {
+    height: clamp(2.25rem, 8vw, 2.75rem);
+  }
+
+  .contact-hero__eyebrow {
+    font-size: 0.75rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .contact-hero__title {
+    font-size: clamp(2rem, 9vw, 2.75rem);
+    margin-bottom: 0.85rem;
+  }
+
+  .contact-hero__lead {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .section--contact-book {
+    padding-block: clamp(2rem, 6vw, 2.75rem);
+    overflow-x: hidden;
+  }
+
+  .page-contact .contact-layout,
+  .page-contact .contact-booking {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .page-contact .booking-widget {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+    overflow: hidden;
+  }
+
+  .page-contact .booking-widget__viewport {
+    width: 100% !important;
+    max-width: 100%;
+    margin-inline: auto;
+    overflow: hidden;
+  }
+
+  .contact-booking__title {
+    font-size: clamp(1.5rem, 5.5vw, 1.75rem);
+  }
+
+  .contact-booking__lead {
+    font-size: 0.9375rem;
+    margin-bottom: 1rem;
+  }
+
+  .contact-aside {
+    margin-top: 0.5rem;
+  }
+
+  .contact-aside .contact-info {
+    margin-top: 1.25rem;
+  }
+
+  /* --------------------------------------------------------------------------
+     Services
+     -------------------------------------------------------------------------- */
+
+  .page-services {
+    --services-opening-pad-top: 0.75rem;
+    --services-opening-min-height: auto;
+    --services-marquee-size: 1.125rem;
+    --services-marquee-radius: 0.625rem;
+    --services-brand-scale: 0.52;
+    --services-jude-scale: 1;
+    --services-forall-scale: 0.72;
+    --services-brand-gap: 0.4rem;
+    --services-arrow-height: 0;
+    --services-arrow-overlap: 0;
+    --services-split-panel-height: 11.5rem;
+  }
+
+  .page-services .services-opening__content {
+    min-height: 0;
+    padding-bottom: 0.25rem;
+  }
+
+  .page-services .services-scroll-arrow {
+    display: none;
+  }
+
+  .page-services .services-opening {
+    min-height: 0;
+    padding-bottom: 0.5rem;
+  }
+
+  .page-services .services-brand-banner {
+    gap: 0.65rem;
+    padding-inline: var(--page-gutter);
+    justify-content: center;
+  }
+
+  .page-services .services-brand-banner__home {
+    justify-content: center;
+  }
+
+  .page-services .services-brand-banner .logo-img {
+    height: clamp(3rem, 10vw, 3.5rem);
+  }
+
+  .page-services .services-marquee-frame {
+    margin-top: 0.35rem;
+  }
+
+  .page-services .services-marquee__phrase {
+    font-size: clamp(0.875rem, 3.2vw, 1.0625rem);
+  }
+
+  .page-services .section-heading--services {
+    padding-inline: var(--page-gutter);
+  }
+
+  .page-services .section-heading--services .story-title {
+    font-size: clamp(0.875rem, 3vw, 1rem);
+  }
+
+  .page-services .split-panel__content {
+    padding: 1.65rem var(--page-gutter) 1.85rem;
+  }
+
+  .page-services .split-panel__inner h3.story-section-heading {
+    font-size: clamp(1.25rem, 4.8vw, 1.5rem);
+    margin-bottom: 0.55rem;
+  }
+
+  .page-services .split-panel__inner .story-split-copy {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .page-services .split-panel__media {
+    min-height: var(--services-split-panel-height);
+    aspect-ratio: 16 / 9;
+  }
+
+  .page-services .section--video-cta {
+    min-height: clamp(14rem, 42dvh, 18rem);
+  }
+
+  .page-services .section--video-cta .story-title {
+    font-size: clamp(1.35rem, 5.5vw, 1.65rem);
+  }
+
+  .page-services .section--cta .illus-wrap {
+    display: none;
+  }
+
+  .page-services .section--services-close {
+    min-height: auto;
+    padding-block: clamp(2rem, 6vw, 2.75rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-menu .menu-editorial__body {
+    font-size: clamp(1rem, 4.4vw, 1.25rem);
+  }
+}
+
+@media (min-width: 520px) and (max-width: 768px) {
+  .page-home .story-accordion__panel-inner--columns3 {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1rem;
+  }
+
+  .page-home .story-accordion__panel-inner--columns3 .story-accordion__col:last-child {
+    grid-column: 1 / -1;
+  }
+}
