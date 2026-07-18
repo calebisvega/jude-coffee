@@ -1,10 +1,7 @@
-/about /about.html 200
-/about/ /about.html 200
-/services /services.html 200
-/services/ /services.html 200
-/menu /menu.html 200
-/menu/ /menu.html 200
-/contact /contact.html 200
-/contact/ /contact.html 200
-/book /contact.html 301
-/book/ /contact.html 301
+# Intentionally empty of page rewrites.
+# Cloudflare Pages already maps /menu → menu.html and redirects
+# /menu.html → /menu. A 200 rewrite to *.html creates a redirect loop.
+#
+# Keep only non-conflicting shortcuts below:
+/book /contact 301
+/book/ /contact 301
