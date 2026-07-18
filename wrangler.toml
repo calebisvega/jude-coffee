@@ -1,7 +1,0 @@
-name = "jude-coffee"
-compatibility_date = "2024-11-01"
-pages_build_output_dir = "."
-
-[assets]
-html_handling = "none"
-not_found_handling = "404-page"
