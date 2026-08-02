@@ -175,11 +175,19 @@
     }
   });
 
-  // Hero photo rotation — no duplicate images visible at once
+  // Hero photo rotation — desktop: multi-stack; mobile: single-frame flip of all media
   var photoStacks = Array.prototype.slice.call(
     document.querySelectorAll('.hero-collage__piece--photo')
   );
+  var collagePieces = Array.prototype.slice.call(
+    document.querySelectorAll('.hero-collage__piece')
+  );
   var flipInterval = 6500;
+  var mobileFlipInterval = 4200;
+  var homeMobileQuery = window.matchMedia('(max-width: 768px)');
+  var desktopFlipTimers = [];
+  var mobileFlipTimer = null;
+  var mobileSlideIndex = 0;
 
   function photoSrc(photo) {
     return photo.getAttribute('src');
@@ -243,15 +251,99 @@
     return true;
   }
 
-  if (photoStacks.length && !prefersReducedMotion) {
+  function clearDesktopFlipTimers() {
+    desktopFlipTimers.forEach(function (id) {
+      clearTimeout(id);
+      clearInterval(id);
+    });
+    desktopFlipTimers = [];
+  }
+
+  function stopMobileFlip() {
+    if (mobileFlipTimer) {
+      clearInterval(mobileFlipTimer);
+      mobileFlipTimer = null;
+    }
+    collagePieces.forEach(function (piece) {
+      piece.classList.remove('is-mobile-slide-active');
+    });
+  }
+
+  function getMobileSlides() {
+    var slides = [];
+    var usedSrc = {};
+
+    collagePieces.forEach(function (piece) {
+      if (piece.classList.contains('hero-collage__piece--video')) {
+        slides.push({ piece: piece, photo: null });
+        return;
+      }
+
+      Array.prototype.forEach.call(
+        piece.querySelectorAll('.hero-collage__photo'),
+        function (photo) {
+          var src = photoSrc(photo);
+          if (!src || usedSrc[src]) return;
+          usedSrc[src] = true;
+          slides.push({ piece: piece, photo: photo });
+        }
+      );
+    });
+
+    return slides;
+  }
+
+  function showMobileSlide(slides, index) {
+    if (!slides.length) return;
+    var slide = slides[index % slides.length];
+
+    collagePieces.forEach(function (piece) {
+      piece.classList.toggle('is-mobile-slide-active', piece === slide.piece);
+    });
+
+    if (slide.photo) {
+      setActivePhoto(slide.piece, slide.photo);
+    }
+
+    if (!slide.photo && collageVideo && !prefersReducedMotion) {
+      var playPromise = collageVideo.play();
+      if (playPromise && playPromise.catch) {
+        playPromise.catch(function () {});
+      }
+    }
+  }
+
+  function startMobileFlip() {
+    stopMobileFlip();
+    clearDesktopFlipTimers();
+
+    var slides = getMobileSlides();
+    if (!slides.length) return;
+
+    mobileSlideIndex = 0;
+    showMobileSlide(slides, mobileSlideIndex);
+
+    if (prefersReducedMotion || slides.length < 2) return;
+
+    mobileFlipTimer = setInterval(function () {
+      mobileSlideIndex = (mobileSlideIndex + 1) % slides.length;
+      showMobileSlide(slides, mobileSlideIndex);
+    }, mobileFlipInterval);
+  }
+
+  function startDesktopFlip() {
+    stopMobileFlip();
+    clearDesktopFlipTimers();
     ensureUniqueInitialState();
+
+    if (prefersReducedMotion || !photoStacks.length) return;
 
     photoStacks.forEach(function (stack, stackIndex) {
       var photos = stack.querySelectorAll('.hero-collage__photo');
       if (photos.length < 2) return;
 
-      setTimeout(function () {
-        setInterval(function () {
+      var startId = setTimeout(function () {
+        var intervalId = setInterval(function () {
           if (!flipStack(stack)) {
             photoStacks.some(function (otherStack) {
               if (otherStack === stack) return false;
@@ -260,10 +352,28 @@
             flipStack(stack);
           }
         }, flipInterval);
+        desktopFlipTimers.push(intervalId);
       }, stackIndex * 900);
+
+      desktopFlipTimers.push(startId);
     });
-  } else if (photoStacks.length) {
-    ensureUniqueInitialState();
+  }
+
+  function syncHeroMediaFlip() {
+    if (homeMobileQuery.matches) {
+      startMobileFlip();
+    } else {
+      startDesktopFlip();
+    }
+  }
+
+  if (collagePieces.length) {
+    syncHeroMediaFlip();
+    if (homeMobileQuery.addEventListener) {
+      homeMobileQuery.addEventListener('change', syncHeroMediaFlip);
+    } else if (homeMobileQuery.addListener) {
+      homeMobileQuery.addListener(syncHeroMediaFlip);
+    }
   }
 
   // Tagline hover — sage + cream brand moment (home)
@@ -312,7 +422,7 @@
       });
     });
 
-    var headerLogo = document.querySelector('.site-header--home .logo');
+    var headerLogo = document.querySelector('.hero-scroll-logo') || document.querySelector('.site-header--home .logo');
     var homeMobileQuery = window.matchMedia('(max-width: 768px)');
 
     function isHomeMobileLayout() {
@@ -379,6 +489,7 @@
     document.addEventListener('pointerdown', function (e) {
       if (!document.body.classList.contains('is-tagline-brand')) return;
       if (e.target.closest('[data-tagline-brand]')) return;
+      if (e.target.closest('.hero-scroll-logo')) return;
       if (e.target.closest('.site-header--home .logo')) return;
       setTaglineBrandActive(false);
     });
@@ -403,7 +514,6 @@
   // Our Story — keep link clickable while moving from collage to peek illustration
   var ourStoryLink = document.querySelector('.hero-collage__about');
   var aboutPeek = document.querySelector('.hero-about-peek');
-  var collagePieces = document.querySelectorAll('.hero-collage__piece');
   var heroCollage = document.querySelector('.hero-collage');
 
   if (ourStoryLink) {
@@ -476,27 +586,21 @@
     }
   }
 
-  // Our Story snap page — reset accordion + scroll when landing on page
+  // Our Story snap page — reset copy scroll when landing on page
   window.resetStorySnapView = function () {
-    var aboutPanelEl = document.querySelector(
-      '#our-story [data-about-accordion] .story-accordion__panel-inner'
-    );
+    var aboutColumnsEl = document.querySelector('#our-story .story-about__columns');
 
-    if (aboutPanelEl) {
-      aboutPanelEl.scrollTop = 0;
-    }
-    if (
-      typeof window.collapseAboutAccordion === 'function' &&
-      !window.matchMedia('(max-width: 768px)').matches
-    ) {
-      window.collapseAboutAccordion();
-    } else if (typeof syncMobileAboutAccordion === 'function') {
-      syncMobileAboutAccordion();
+    if (aboutColumnsEl) {
+      aboutColumnsEl.scrollTop = 0;
     }
   };
 
-  // Home page — full-page scroll snap (after hero)
-  if (document.body.classList.contains('page-home') && !prefersReducedMotion) {
+  // Home page — full-page scroll snap (after hero; desktop only)
+  if (
+    document.body.classList.contains('page-home') &&
+    !prefersReducedMotion &&
+    !window.matchMedia('(max-width: 768px)').matches
+  ) {
     var snapPages = Array.prototype.slice.call(
       document.querySelectorAll('[data-snap-page]')
     );
@@ -507,16 +611,10 @@
     var wheelAccumulator = 0;
     var wheelResetTimer = null;
 
-    var aboutPanelInner = document.getElementById('our-story')
-      ? document.querySelector('#our-story [data-about-accordion] .story-accordion__panel-inner')
-      : null;
-    var aboutAccordionEl = document.querySelector('#our-story [data-about-accordion]');
+    var aboutColumnsEl = document.querySelector('#our-story .story-about__columns');
 
     function storyScrollTarget() {
-      if (aboutAccordionEl && aboutAccordionEl.classList.contains('is-open') && aboutPanelInner) {
-        return aboutPanelInner;
-      }
-      return null;
+      return aboutColumnsEl || null;
     }
 
     function storyCopyCanScrollDown() {
@@ -869,64 +967,7 @@
     }
   }
 
-  // About us — expand upward in story section
-  var aboutAccordion = document.querySelector('#our-story [data-about-accordion]');
-
-  function bindStoryColumnAccordion(accordion) {
-    if (!accordion) return null;
-
-    var trigger = accordion.querySelector('.story-accordion__trigger');
-
-    function setOpen(open) {
-      accordion.classList.toggle('is-open', open);
-      accordion.classList.toggle('is-compressed', !open);
-      if (trigger) {
-        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
-      }
-    }
-
-    function collapse() {
-      setOpen(false);
-    }
-
-    if (trigger) {
-      trigger.addEventListener('click', function (e) {
-        if (window.matchMedia('(max-width: 768px)').matches) {
-          e.preventDefault();
-          return;
-        }
-        e.preventDefault();
-        e.stopPropagation();
-        setOpen(!accordion.classList.contains('is-open'));
-      });
-    }
-
-    collapse();
-    return collapse;
-  }
-
-  var collapseAboutAccordion = bindStoryColumnAccordion(aboutAccordion);
-
-  if (collapseAboutAccordion) {
-    window.collapseAboutAccordion = collapseAboutAccordion;
-  }
-
-  function syncMobileAboutAccordion() {
-    var mobileAboutQuery = window.matchMedia('(max-width: 768px)');
-    if (!aboutAccordion || !mobileAboutQuery.matches) return;
-
-    aboutAccordion.classList.add('is-open');
-    aboutAccordion.classList.remove('is-compressed');
-    var aboutTrigger = aboutAccordion.querySelector('.story-accordion__trigger');
-    if (aboutTrigger) {
-      aboutTrigger.setAttribute('aria-expanded', 'true');
-    }
-  }
-
-  syncMobileAboutAccordion();
-  if (typeof window.matchMedia('(max-width: 768px)').addEventListener === 'function') {
-    window.matchMedia('(max-width: 768px)').addEventListener('change', syncMobileAboutAccordion);
-  }
+  // Home about copy is always visible (no accordion)
 
   function goToHomeTop() {
     if (typeof window.homeGoToSnapPage === 'function') {
@@ -990,6 +1031,45 @@
     });
   });
 
+  // Services / home marquees — shared phrase builder
+  var servicesMarqueePhrases = [
+    'weddings',
+    'private parties',
+    'Bar Mitzvah',
+    'teacher appreciation',
+    'birthdays',
+    'product launch',
+    'rodeos',
+    'conferences',
+    'baby shower',
+    'Secret Society hangout',
+    'executive meeting',
+    'pool party',
+    'gator wrestling competition',
+    'bachelorette trip',
+    'run club',
+    'grand opening',
+    'world domination'
+  ];
+
+  function buildServicesMarqueeItems(phrases, passes) {
+    var html = '';
+    var count = passes || 2;
+
+    for (var p = 0; p < count; p++) {
+      phrases.forEach(function (phrase) {
+        html += '<span class="services-marquee__phrase">' + phrase + '</span>';
+        html += '<span class="services-marquee__sep" aria-hidden="true">·</span>';
+      });
+    }
+
+    return html;
+  }
+
+  document.querySelectorAll('[data-services-marquee-track]').forEach(function (track) {
+    track.innerHTML = buildServicesMarqueeItems(servicesMarqueePhrases, 2);
+  });
+
   // Services page — multi-direction marquee frame
   if (document.body.classList.contains('page-services')) {
     document.documentElement.style.overscrollBehavior = 'none';
@@ -1009,44 +1089,6 @@
     window.addEventListener('scroll', clampServicesScroll, { passive: true });
     window.addEventListener('resize', clampServicesScroll);
     clampServicesScroll();
-
-    var servicesMarqueePhrases = [
-      'weddings',
-      'private parties',
-      'Bar Mitzvah',
-      'teacher appreciation',
-      'birthdays',
-      'product launch',
-      'rodeos',
-      'conferences',
-      'baby shower',
-      'Secret Society hangout',
-      'executive meeting',
-      'pool party',
-      'gator wrestling competition',
-      'bachelorette trip',
-      'run club',
-      'grand opening',
-      'world domination'
-    ];
-
-    function buildServicesMarqueeItems(phrases, passes) {
-      var html = '';
-      var count = passes || 2;
-
-      for (var p = 0; p < count; p++) {
-        phrases.forEach(function (phrase) {
-          html += '<span class="services-marquee__phrase">' + phrase + '</span>';
-          html += '<span class="services-marquee__sep" aria-hidden="true">·</span>';
-        });
-      }
-
-      return html;
-    }
-
-    document.querySelectorAll('[data-services-marquee-track]').forEach(function (track) {
-      track.innerHTML = buildServicesMarqueeItems(servicesMarqueePhrases, 2);
-    });
 
     // Arrow PNG (612×936): tail ≈ (28,28), tip ≈ y=907 — used for precise layout
     var ARROW_IMG_W = 612;

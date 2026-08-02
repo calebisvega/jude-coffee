@@ -268,39 +268,27 @@ p:last-child {
   justify-content: center;
 }
 
+/* Home has no fixed site header — Jude lives in the hero and scrolls away */
 .site-header--home {
-  height: auto;
-  min-height: auto;
-  border-bottom: none;
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow: none;
-  transition: none;
+  display: none;
 }
 
-.site-header--home.is-scrolled {
-  min-height: auto;
-  height: auto;
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+/* Coffee / Anytime — pinned to the viewport */
+.home-fixed-taglines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 300;
+  pointer-events: none;
 }
 
-.site-header--home .header-inner {
-  max-width: none;
-  padding-inline: 0;
-}
-
-.header-inner--brand {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: var(--home-logo-height);
-  padding-top: var(--home-top-inset);
-  padding-bottom: var(--hero-frame-gutter);
+.home-fixed-taglines .header-tagline {
+  position: fixed !important;
+  top: var(--home-tagline-from-edge-top) !important;
+  z-index: 301;
+  pointer-events: auto;
+  transform: translateY(-50%);
 }
 
 .header-tagline {
@@ -317,24 +305,6 @@ p:last-child {
   color: var(--sage);
   pointer-events: auto;
   transform: translateY(-50%);
-}
-
-.site-header--home.is-scrolled .header-tagline {
-  transform: translateY(-50%);
-}
-
-.header-inner--brand .logo {
-  position: fixed;
-  top: var(--home-logo-center-y);
-  left: 50%;
-  z-index: 102;
-  flex-shrink: 0;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.35s var(--ease), visibility 0.35s var(--ease);
-}
-
-.site-header--home.is-scrolled .header-inner--brand .logo {
-  transform: translate(-50%, -50%);
 }
 
 .header-tagline .tagline-trigger,
@@ -434,19 +404,25 @@ body.is-header-anywhere .hero-tagline__word--br {
   height: 4rem;
 }
 
-.site-header--home .logo-img {
-  height: var(--home-logo-height);
+/* Jude logo — inside hero, scrolls with the page */
+.page-home .hero-scroll-logo {
+  position: absolute;
+  top: var(--home-logo-center-y);
+  left: 50%;
+  z-index: 6;
+  transform: translate(-50%, -50%);
   transition: opacity 0.35s var(--ease), visibility 0.35s var(--ease);
 }
 
-.site-header--home.is-scrolled .logo-img {
+.page-home .hero-scroll-logo .logo-img {
   height: var(--home-logo-height);
+  width: auto;
 }
 
 /* Hero — Minimal
    ========================================================================== */
 
-.site-header--home ~ #main .hero--minimal {
+.page-home .hero--minimal {
   padding-top: calc(var(--header-height) + var(--hero-frame-gutter));
 }
 
@@ -761,14 +737,6 @@ body.is-tagline-brand .hero--minimal {
   transition: background-color 0s;
 }
 
-body.is-tagline-brand .site-header--home {
-  background: var(--sage);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border-bottom: none;
-  transition: background 0s;
-}
-
 body.is-tagline-brand [data-tagline-brand],
 body.is-tagline-brand [data-tagline-brand] .tagline-reveal a {
   color: var(--cream);
@@ -778,7 +746,7 @@ body.is-tagline-brand [data-tagline-brand] .tagline-reveal a:hover {
   color: var(--off-white);
 }
 
-body.is-tagline-brand .site-header--home .logo {
+body.is-tagline-brand .hero-scroll-logo {
   opacity: 0;
   visibility: hidden;
   transition: none;
@@ -806,6 +774,7 @@ body.is-tagline-brand h1.hero-tagline--corners {
   .hero-about-peek,
   .hero-collage__piece,
   .hero-collage__about,
+  .hero-scroll-logo,
   .header-inner--brand .logo {
     transition-duration: 0.01ms;
   }
@@ -1031,14 +1000,16 @@ h1.hero-tagline--corners {
   height: auto;
   max-height: none;
   --story-figure-width: clamp(15.5rem, 46vw, 24rem);
-  --story-about-panel-gap: 0.57rem;
-  --story-about-trigger-height: 1.3rem;
   --story-block-height: calc(var(--story-figure-width) * 4 / 3);
   --story-panel-height: var(--story-block-height);
   --story-figure-height: var(--story-block-height);
-  --story-stack-width: clamp(9.5rem, 18vw, 13.5rem);
+  --story-label-width: max-content;
+  --story-about-gap: clamp(1rem, 2.25vw, 1.75rem);
+  --story-about-title-size: clamp(0.6875rem, 0.95vw, 0.8125rem);
+  --story-about-copy-size: clamp(0.6875rem, 0.95vw, 0.8125rem);
   --story-panel-gap: clamp(0.75rem, 2.5vw, 1.5rem);
-  --story-panel-width: calc(100vw - (var(--hero-frame-gutter) * 2) - var(--story-figure-width) - var(--story-panel-gap));
+  --story-column-gap: clamp(1.35rem, 2.85vw, 2.35rem);
+  --story-copy-width: calc(100vw - (var(--hero-frame-gutter) * 2) - var(--story-figure-width) - var(--story-panel-gap));
   padding-top: calc(var(--header-height) + 1rem);
   box-sizing: border-box;
 }
@@ -1046,7 +1017,7 @@ h1.hero-tagline--corners {
 .page-home .story-editorial__figure {
   position: absolute;
   right: 0;
-  bottom: calc(var(--story-about-trigger-height) + var(--story-about-panel-gap));
+  bottom: 0;
   width: var(--story-figure-width);
   height: var(--story-figure-height);
   margin: 0;
@@ -1059,192 +1030,92 @@ h1.hero-tagline--corners {
   object-fit: cover;
 }
 
-.page-home .story-column {
+.page-home .story-about {
   position: absolute;
   left: 0;
-  width: var(--story-stack-width);
-  min-height: 0;
-}
-
-.page-home .story-column--about {
   bottom: 0;
-  height: 0;
-  overflow: visible;
-  z-index: 2;
-}
-
-.page-home .story-column .story-accordion {
-  position: relative;
-  display: block;
-  width: max-content;
-  min-width: var(--story-stack-width);
-}
-
-.page-home .story-column--about .story-accordion {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-}
-
-.page-home .story-column .story-accordion__trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.2rem;
-  width: max-content;
-  max-width: 100%;
-  margin: 0;
-  padding: 0.125rem 0;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 2;
-  text-align: left;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.page-home .story-column .story-accordion.is-compressed .story-accordion__trigger,
-.page-home .story-column .story-accordion.is-open .story-accordion__trigger {
-  margin: 0;
-}
-
-.page-home .story-column .story-accordion__panel {
-  position: absolute;
-  bottom: calc(100% + var(--story-about-panel-gap));
-  left: 0;
-  width: var(--story-panel-width);
-  max-width: min(var(--story-panel-width), calc(100vw - (var(--hero-frame-gutter) * 2) - var(--story-figure-width) - 2rem));
+  width: var(--story-copy-width);
+  height: var(--story-panel-height);
   display: grid;
-  grid-template-rows: 0fr;
-  min-width: 0;
-  min-height: 0;
+  grid-template-columns: var(--story-label-width) minmax(0, 1fr);
+  column-gap: var(--story-about-gap);
+  align-items: start;
+  z-index: 2;
+}
+
+.page-home .story-about__label {
   margin: 0;
-  opacity: 0;
+  padding: 0;
+  color: var(--charcoal);
+  font-family: var(--font-sans);
+  font-size: var(--story-about-copy-size);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.page-home .story-about__label.tagline-underline::after {
   pointer-events: none;
-  z-index: 1;
-  transition: grid-template-rows 0.45s var(--ease), opacity 0.35s var(--ease);
+  bottom: -0.12em;
+  height: 1px;
+  background-color: currentColor;
 }
 
-.page-home .story-column .story-accordion.is-open .story-accordion__panel {
-  grid-template-rows: 1fr;
-  opacity: 1;
-  pointer-events: auto;
-  margin-bottom: 0;
-}
-
-.page-home .story-column--about .story-accordion.is-open .story-accordion__panel {
-  z-index: 5;
-}
-
-.page-home .story-column .story-accordion__trigger .story-section-heading {
-  margin: 0;
+.page-home .story-about__columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--story-column-gap);
+  height: 100%;
   min-width: 0;
-}
-
-.page-home .story-column .story-accordion__trigger .tagline-underline::after {
-  pointer-events: none;
-}
-
-.page-home .story-column .story-accordion__icon--right {
-  width: 0.75rem;
-  height: 0.75rem;
-  transform: rotate(0deg);
-  pointer-events: none;
-}
-
-.page-home .story-column .story-accordion.is-open .story-accordion__icon--right {
-  transform: rotate(-90deg);
-}
-
-.page-home .story-column .story-accordion__icon--right svg path {
-  stroke-width: 2.5;
-}
-
-.page-home .story-column .story-accordion__panel-inner {
-  overflow: hidden;
-  min-height: 0;
-}
-
-.page-home .story-column .story-accordion.is-open .story-accordion__panel-inner {
+  align-items: start;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  padding-bottom: 0.65rem;
+  line-height: 1.5;
 }
 
-.page-home .story-column--about .story-accordion.is-open .story-accordion__panel-inner {
-  height: var(--story-panel-height);
-  max-height: var(--story-panel-height);
-  padding-bottom: 0;
-}
-
-.page-home .story-accordion__panel-inner--columns3 {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(0.85rem, 2vw, 1.5rem);
-  height: var(--story-panel-height);
-  align-items: stretch;
-  max-width: min(var(--story-panel-width), 46rem);
-}
-
-.page-home .story-accordion__col {
+.page-home .story-about__col {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 0.5rem;
+  gap: 0.75em;
   min-width: 0;
   min-height: 0;
 }
 
-.page-home .story-accordion__panel-inner .story-about-lead {
+.page-home .story-about__columns .story-about-lead {
   display: inline;
   text-decoration: underline;
-  text-decoration-thickness: max(1px, 0.03em);
-  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
   text-decoration-color: currentColor;
 }
 
-.page-home .story-column--about .story-accordion__panel-inner {
-  line-height: 1.28;
-}
-
-.page-home .story-column--about .story-accordion__panel-inner .story-tagline {
+.page-home .story-about__columns .story-tagline {
   display: inline;
   margin-bottom: 0;
-}
-
-.page-home .story-column--about .story-accordion__panel-inner p:not(.story-tagline) {
-  font-size: clamp(0.6rem, calc(var(--story-figure-width) * 0.033), 0.75rem);
-}
-
-.page-home .story-column--about .story-accordion__panel-inner p {
-  line-height: inherit;
-  margin-bottom: 0.5rem;
-}
-
-.page-home .story-column .story-accordion__panel-inner p {
-  margin-bottom: 0.75rem;
-}
-
-.page-home .story-column .story-accordion__panel-inner p:last-child {
-  margin-bottom: 0;
-}
-
-.page-home .story-column .story-accordion__panel-inner p:not(.story-tagline) {
   font-family: var(--font-sans);
-  font-size: var(--story-copy-size);
-  font-weight: 500;
-  line-height: 1.65;
-  letter-spacing: 0.01em;
-  color: var(--charcoal);
-}
-
-.page-home .story-column .story-accordion__panel-inner .story-tagline {
-  font-family: var(--font-tagline);
-  font-size: var(--story-copy-size);
+  font-size: inherit;
   font-weight: 700;
   font-style: normal;
   color: var(--charcoal);
-  margin-bottom: 0.75rem;
+}
+
+.page-home .story-about__columns p {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--story-about-copy-size);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--charcoal);
+  text-wrap: pretty;
+}
+
+.page-home .story-about__columns p:last-child {
+  margin-bottom: 0;
 }
 
 .story-accordion__trigger {
@@ -1333,6 +1204,12 @@ h1.hero-tagline--corners {
 
 .page-home .story-about .story-section-heading {
   display: block;
+  margin-bottom: 0;
+  font-family: var(--font-sans);
+  font-size: var(--story-about-copy-size);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
 }
 
 .story-editorial {
@@ -1370,19 +1247,6 @@ h1.hero-tagline--corners {
 
 .story-editorial__copy .story-title {
   font-size: var(--story-section-title-size);
-  margin-bottom: 1.25rem;
-}
-
-.page-home .story-column .story-section-heading {
-  font-family: var(--font-tagline);
-  font-size: var(--story-section-title-size);
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: 0;
-  margin-bottom: 0;
-}
-
-.page-home .story-about .story-section-heading {
   margin-bottom: 1.25rem;
 }
 
@@ -1604,6 +1468,19 @@ body:not(.page-home) .section--story:first-of-type .story-editorial__copy {
   padding-bottom: clamp(4rem, 10vw, 7rem);
 }
 
+/* Home services swipe — mobile only */
+.page-home .section--home-services {
+  display: none;
+}
+
+.page-home .section--home-close {
+  --home-close-top-gap: clamp(6.5rem, 16vh, 11rem);
+  background: var(--off-white);
+  min-height: 120dvh;
+  padding-top: calc(var(--home-tagline-from-edge-top) + var(--home-close-top-gap));
+  padding-bottom: clamp(6rem, 14vw, 10rem);
+}
+
 .section--home-close .section--home-close__heading {
   margin-bottom: clamp(1.25rem, 3vw, 1.75rem);
 }
@@ -1637,13 +1514,13 @@ body:not(.page-home) .section--story:first-of-type .story-editorial__copy {
 }
 
 .section--home-close .section--home-close__cta .btn {
-  background: var(--cream);
-  color: var(--charcoal);
+  background: var(--sage);
+  color: var(--cream);
   transition: background 0.2s var(--ease), color 0.2s var(--ease);
 }
 
 .section--home-close .section--home-close__cta .btn:hover {
-  background: var(--sage);
+  background: var(--sage-dark);
   color: var(--cream);
 }
 
@@ -3514,42 +3391,10 @@ html:has(.page-services) {
     --home-logo-nudge-y: 0.4375rem;
   }
 
-  .page-home .story-accordion__panel-inner--columns3 {
+  /* Home mobile layout lives in mobile.css — keep vars only here */
+  .page-home .story-about__columns {
     grid-template-columns: 1fr;
     height: auto;
-  }
-
-  .page-home .story-column--about .story-accordion.is-open .story-accordion__panel-inner {
-    height: auto;
-    max-height: min(38dvh, calc(70dvh - var(--header-height) - 12rem));
-  }
-
-  /* Home — shorter mobile snap pages (desktop unchanged) */
-  .page-home .home-snap-page {
-    min-height: 72dvh;
-  }
-
-  .page-home .hero--minimal {
-    min-height: 72dvh;
-    padding-top: calc(var(--header-height) + 0.65rem);
-  }
-
-  .page-home .hero--minimal .hero-inner {
-    min-height: clamp(14rem, 44dvh, 20rem);
-  }
-
-  .page-home .section--story.home-snap-page {
-    height: 70dvh;
-    min-height: 70dvh;
-    max-height: 70dvh;
-  }
-
-  .page-home .story-editorial {
-    --story-figure-width: clamp(9rem, 36vw, 11.5rem);
-    --story-about-trigger-height: 1.2rem;
-    --story-about-panel-gap: 0.45rem;
-    padding-top: calc(var(--header-height) + 0.5rem);
-    bottom: calc(var(--hero-frame-gutter) * 0.65);
   }
 
   .page-home .home-snap-page--close {
@@ -3557,8 +3402,10 @@ html:has(.page-services) {
   }
 
   .page-home .section--home-close {
-    padding-top: clamp(2rem, 5vw, 2.75rem);
-    padding-bottom: clamp(2.5rem, 6vw, 3.5rem);
+    --home-close-top-gap: clamp(4rem, 12vh, 7rem);
+    min-height: auto;
+    padding-top: calc(var(--home-tagline-from-edge-top) + var(--home-close-top-gap));
+    padding-bottom: clamp(3.5rem, 8vw, 5rem);
   }
 
   .page-home .section--home-close .instagram-grid {
