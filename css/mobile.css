@@ -7,6 +7,7 @@
 
   :root {
     --page-gutter: clamp(1rem, 4.5vw, 1.35rem);
+    --footer-simple-font-size: 0.6875rem;
   }
 
   body:not(.page-home) {
@@ -17,20 +18,29 @@
   .page-home {
     --story-copy-size: 0.6875rem;
     --story-about-copy-size: 0.6875rem;
-    --mobile-hero-edge: clamp(1.1rem, 3.5vw, 1.5rem);
     --mobile-piece-radius: clamp(0.7rem, 3vw, 1.05rem);
-    /* Shared edge margin for Coffee Anytime / Anywhere + image */
     --page-gutter: 18px;
     --mobile-piece-inset: var(--page-gutter);
-    --mobile-piece-height: 430px;
-    --mobile-piece-object-position: 50% 40%;
+    --mobile-piece-object-position: 50% 50%;
     --mobile-piece-r: 0deg;
     --mobile-piece-overlay: rgba(20, 32, 22, 0.34);
-    --home-logo-height: clamp(4.75rem, 11.5vw, 5.25rem);
-    --home-logo-nudge-y: 0.5rem;
-    --mobile-logo-gap: 28px;
-    --mobile-logo-top-min: 72px;
-    --mobile-hero-lift: 12px;
+    --home-logo-height: clamp(3.15rem, 11.5vw, 4rem);
+    --home-logo-nudge-y: 0;
+    /* Matching inset for Coffee Anytime (top) and Coffee Anywhere (bottom) */
+    --mobile-edge-pad: var(--page-gutter);
+    --mobile-brand-row-gap: 0.55rem;
+    --mobile-tagline-stack-gap: 0.45rem;
+    --mobile-image-max-height: min(52dvh, 24rem);
+    --mobile-hero-media-width: calc(100% - (var(--mobile-piece-inset) * 2));
+    /* Home mid dial-ins — scale/position to match reference mockup */
+    --home-hero-pad-top: 0;
+    --home-logo-width-fill: 1.15; /* compensates transparent side padding in Artboard 1.png */
+    --home-logo-shift-y: -3.5rem; /* pull logo up (PNG has top transparent padding) */
+    --home-mid-bottom: 10.75rem;
+    --home-nav-size: clamp(1.65rem, 8vw, 2.1rem);
+    --home-cart-fr: 1.15fr;
+    --home-cart-aspect: 5 / 3.5;
+    --home-nav-underline-hang: 0.14em;
   }
 
   body:not(.page-home):not(.page-menu) .section {
@@ -51,7 +61,7 @@
   }
 
   /* --------------------------------------------------------------------------
-     Home — mobile hero: one tall rounded image, Coffee Anywhere on first screen
+     Home — Jude top, cart + nav mid, footer bottom (locked viewport)
      -------------------------------------------------------------------------- */
 
   .page-home .hero-about-peek {
@@ -69,255 +79,169 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
+    align-items: stretch;
+    justify-content: flex-start;
     width: 100%;
-    padding-top: var(--mobile-logo-top-min);
-    padding-bottom: 0;
+    padding: var(--home-hero-pad-top, 0.35rem) var(--page-gutter) 1rem;
+    box-sizing: border-box;
+    background: #fff;
   }
 
-  /* Jude — sits just above Coffee Anytime */
+  .page-home .hero--minimal .hero-inner {
+    display: contents;
+  }
+
+  .page-home .hero-collage,
+  .page-home .home-fixed-taglines,
+  .page-home h1.hero-tagline--corners .hero-tagline__word {
+    display: none !important;
+  }
+
+  .page-home h1.hero-tagline--corners {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   .page-home .hero-scroll-logo {
     position: relative;
     top: auto;
     left: auto;
     transform: none;
-    flex: 0 0 auto;
-    align-self: center;
-    width: max-content;
-    max-width: 100%;
-    margin: 0 0 var(--mobile-logo-gap);
-    z-index: 6;
-  }
-
-  .page-home .hero--minimal .hero-inner {
-    flex: 0 0 auto;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows:
-      auto
-      var(--mobile-hero-edge)
-      auto
-      var(--mobile-hero-edge)
-      auto;
-    align-content: stretch;
-    align-items: stretch;
-    justify-items: stretch;
-    min-height: 0;
-    min-width: 0;
+    order: 1;
     width: 100%;
     max-width: none;
-    padding-inline: 0;
-    padding-bottom: calc(var(--mobile-hero-edge) + var(--mobile-hero-lift));
-    gap: 0;
+    align-self: stretch;
+    margin: var(--home-logo-shift-y, 0) 0 0;
+    z-index: 6;
+    pointer-events: auto;
+    line-height: 0;
   }
 
-  /* Coffee / Anytime — directly above the image */
-  .page-home .home-fixed-taglines {
-    position: relative;
-    top: auto;
-    left: auto;
-    right: auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: baseline;
-    width: 100%;
-    margin: 0;
-    padding-inline: var(--page-gutter);
-    grid-row: 1;
-    pointer-events: none;
-    z-index: 2;
+  .page-home .hero-scroll-logo .logo-img--desktop {
+    display: block !important;
+    width: calc(100% * var(--home-logo-width-fill, 1.15));
+    max-width: none;
+    height: auto;
+    margin-left: calc((1 - var(--home-logo-width-fill, 1.15)) * 50%);
+    object-fit: contain;
+    object-position: center top;
   }
 
-  .page-home .home-fixed-taglines .header-tagline {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    transform: none !important;
-    pointer-events: none;
-  }
-
-  .page-home .home-fixed-taglines .header-tagline--left {
-    grid-column: 1;
-    grid-row: 1;
-    justify-self: start;
-    text-align: left;
-  }
-
-  .page-home .home-fixed-taglines .header-tagline--right {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: end;
-    text-align: right;
-  }
-
-  /* Coffee Anytime / Anywhere — plain type on mobile, not menus */
-  .page-home .home-fixed-taglines .tagline-reveal,
-  .page-home h1.hero-tagline--corners .tagline-reveal {
+  .page-home .hero-scroll-logo .logo-img--mobile,
+  .page-home .hero-scroll-logo .logo-img.logo-img--mobile {
     display: none !important;
   }
 
-  .page-home .home-fixed-taglines .tagline-trigger,
-  .page-home h1.hero-tagline--corners .tagline-trigger {
-    cursor: default;
-    pointer-events: none;
-  }
-
-  /* Coffee / Anywhere — bottom of screen */
-  .page-home h1.hero-tagline--corners {
-    position: relative;
-    inset: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    width: 100%;
-    margin: 0;
-    padding-inline: var(--page-gutter);
-    grid-row: 5;
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  .page-home .hero-tagline__word--bl,
-  .page-home .hero-tagline__word--br {
-    position: relative;
-    inset: auto;
-    left: auto;
-    right: auto;
-    bottom: auto;
-    transform: none;
-    pointer-events: none;
-  }
-
-  /* Single frame — all desktop media flip here */
-  .page-home .hero-collage {
-    position: relative;
-    inset: auto;
-    transform: none;
-    display: block;
+  .page-home .home-mid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    align-items: stretch;
+    column-gap: 0;
     width: 100%;
     max-width: none;
-    height: var(--mobile-piece-height);
-    max-height: var(--mobile-piece-height);
-    margin: 0;
-    padding-inline: 0;
     align-self: stretch;
-    flex: 0 0 auto;
+    margin-top: auto;
+    margin-bottom: var(--home-mid-bottom);
+    order: 2;
     min-height: 0;
-    grid-row: 3;
   }
 
-  .page-home .hero-collage::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: var(--mobile-piece-inset);
-    right: var(--mobile-piece-inset);
-    z-index: 15;
-    border-radius: var(--mobile-piece-radius);
-    background: var(--mobile-piece-overlay);
-    pointer-events: none;
-  }
-
-  .page-home .hero-collage__piece {
-    position: absolute !important;
-    top: 0 !important;
-    left: var(--mobile-piece-inset) !important;
-    right: var(--mobile-piece-inset) !important;
-    bottom: 0 !important;
-    width: auto !important;
-    height: auto !important;
-    max-height: none;
-    min-height: 0;
-    aspect-ratio: unset;
-    border-radius: var(--mobile-piece-radius);
-    transform: none !important;
-    --piece-x: 0;
-    --piece-y: 0;
-    --piece-r: 0deg;
-    --piece-scale: 1;
-    z-index: 1;
-    box-shadow: none;
-    overflow: hidden;
+  .page-home .home-mobile-cart {
     display: block !important;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity 1.1s var(--ease, ease), visibility 1.1s var(--ease, ease);
-  }
-
-  .page-home .hero-collage__piece.is-mobile-slide-active {
-    opacity: 1;
-    visibility: visible;
-    z-index: 2;
-  }
-
-  .page-home .hero-collage__piece:hover {
-    transform: none !important;
-    --piece-scale: 1;
-    --piece-x: 0;
-    --piece-y: 0;
-    z-index: 1;
-  }
-
-  .page-home .hero-collage__piece.is-mobile-slide-active:hover {
-    z-index: 2;
-  }
-
-  .page-home .hero-collage__piece::after {
-    display: none;
-  }
-
-  .page-home .hero-collage__piece img,
-  .page-home .hero-collage__piece video {
-    object-fit: cover;
-    object-position: var(--mobile-piece-object-position);
-  }
-
-  .page-home .hero-collage__piece--a,
-  .page-home .hero-collage__piece--b,
-  .page-home .hero-collage__piece--c,
-  .page-home .hero-collage__piece--d,
-  .page-home .hero-collage__piece--e {
-    display: block !important;
-  }
-
-  .page-home a.hero-collage__about.story-title {
-    display: inline-block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 30;
-    transform: translate(-50%, -50%);
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
+    width: 100%;
+    max-width: none;
+    height: auto;
     margin: 0;
     padding: 0;
+    aspect-ratio: var(--home-cart-aspect, 5 / 3.5);
+    max-height: none;
+    overflow: hidden;
     border-radius: 0;
-    background: transparent;
-    color: var(--off-white);
-    font-family: var(--font-tagline);
-    font-size: clamp(0.9375rem, 3.8vw, 1.0625rem);
-    font-weight: 500;
-    line-height: 1.2;
-    letter-spacing: 0;
-    text-decoration: none;
-    white-space: nowrap;
-    box-shadow: none;
+    justify-self: stretch;
   }
 
-  .page-home a.hero-collage__about.tagline-underline::after {
+  .page-home .home-mobile-cart__img {
     display: block;
-    background: var(--off-white);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 48% 70%;
+    transform: none;
+    transform-origin: 48% 70%;
   }
 
-  .page-home a.hero-collage__about.story-title:hover,
-  .page-home a.hero-collage__about.story-title:focus-visible {
-    color: var(--off-white);
-    background: transparent;
+  .page-home .home-mobile-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0;
+    width: max-content;
+    max-width: 100%;
+    /* Cart alone sizes the row; nav fills that height so Menu top == cart top */
+    height: 0;
+    min-height: 100%;
+    align-self: stretch;
+    justify-self: start;
+    margin: 0;
+    padding: 0 0 0 clamp(0.65rem, 3vw, 1rem);
+    border: none;
+    box-sizing: border-box;
+    aspect-ratio: auto;
+    z-index: 2;
+  }
+
+  .page-home .home-mobile-nav__link {
+    display: inline-block;
+    margin: 0;
+    padding: 0 0 var(--home-nav-underline-hang, 0.14em);
+    border: none;
+    font-family: var(--font-tagline);
+    font-size: var(--home-nav-size);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0;
+    color: var(--sage);
+    text-decoration: none;
+    text-align: left;
+    white-space: nowrap;
+    pointer-events: auto;
+    box-sizing: border-box;
+    text-box: trim-start cap alphabetic;
+  }
+
+  .page-home .home-mobile-nav__link.tagline-underline::after {
+    display: block;
+    bottom: 0;
+    height: max(2px, 0.05em);
+    background: var(--sage);
+  }
+
+  .page-home .home-mobile-footer {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    order: 3;
+    z-index: 2;
+    color: var(--sage);
+  }
+
+  .page-home .home-mobile-footer__tagline.tagline-underline::after {
+    background: currentColor;
   }
 
   /* Brand moment — centered cream logo */
@@ -330,13 +254,9 @@
     height: clamp(4.5rem, 18vw, 6.5rem);
   }
 
-  /* About Us — pushed down below the hero */
+  /* About Us — removed on mobile */
   .page-home .section--story.home-snap-page {
-    height: auto;
-    min-height: 0;
-    max-height: none;
-    overflow: visible;
-    padding: clamp(4rem, 12vw, 5.5rem) var(--page-gutter) clamp(2.25rem, 6vw, 3rem);
+    display: none !important;
   }
 
   .page-home .story-editorial {
@@ -645,7 +565,7 @@
   }
 
   .page-menu .header-inner {
-    padding: 0.85rem var(--page-gutter) 1.15rem;
+    padding: 0.55rem var(--page-gutter) 0.65rem;
   }
 
   .page-menu .logo {
@@ -654,67 +574,90 @@
     left: auto;
     transform: none;
     display: block;
-    width: fit-content;
+    width: min(30vw, 6.85rem);
+    max-width: 100%;
     margin-inline: auto;
   }
 
   .page-menu .logo-img,
   .page-menu .site-header.is-scrolled .logo-img {
-    height: clamp(3.25rem, 9vw, 3.75rem);
+    width: 100%;
+    height: auto;
   }
 
   .page-menu .section--menu-asset {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1.75rem;
-    min-height: 0;
-    padding: 0.35rem var(--page-gutter) clamp(2.5rem, 8vw, 3.5rem);
+    position: relative;
+    display: block;
+    min-height: calc(100dvh - 5.5rem);
+    padding: 0;
     overflow: hidden;
   }
 
   .page-menu .menu-editorial {
-    order: 1;
-    padding: 0;
-    pointer-events: auto;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    order: unset;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+    padding: 0.5rem var(--page-gutter) 6.15rem;
+    pointer-events: none;
+    overflow: hidden;
   }
 
   .page-menu .menu-editorial__lead {
-    display: block;
-    margin-bottom: 0.65rem;
-    font-size: clamp(0.625rem, 2.8vw, 0.75rem);
-    letter-spacing: 0.12em;
-    line-height: 1.4;
+    display: none;
   }
 
   .page-menu .menu-editorial__body {
-    font-size: clamp(1.125rem, 4.8vw, 1.5rem);
-    line-height: 1.18;
-    letter-spacing: -0.03em;
-    hyphens: none;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: 100%;
+    margin: 0;
+    padding-bottom: 0.28em; /* keep descenders (g/y/p) inside the clip box */
+    font-size: 1rem;
+    line-height: 0.84;
+    letter-spacing: -0.05em;
+    text-align: left;
+    overflow: visible;
   }
 
   .page-menu .menu-asset-drag {
-    position: relative;
-    left: auto !important;
-    top: auto !important;
-    order: 2;
-    align-self: center;
-    width: min(72vw, 14rem);
-    margin-top: 0.25rem;
-    transform: none !important;
-    cursor: default;
-    touch-action: auto;
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    z-index: 2;
+    order: unset;
+    align-self: auto;
+    width: min(42vw, 9.5rem);
+    margin-top: 0;
+    transform: translate(-50%, -50%);
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .page-menu .menu-asset-drag.is-dragging {
+    cursor: grabbing;
   }
 
   .page-menu .menu-asset {
     width: 100%;
+    height: auto;
     animation: none;
     transform: rotate(-3deg);
+    pointer-events: none;
   }
 
   .page-menu .menu-asset-drift {
     animation: none;
+  }
+
+  .page-menu .site-footer {
+    position: relative;
+    z-index: 3;
   }
 
   /* --------------------------------------------------------------------------
@@ -727,7 +670,7 @@
   }
 
   .contact-hero__logo .logo-img--cream {
-    height: clamp(2.25rem, 8vw, 2.75rem);
+    height: var(--home-logo-height);
   }
 
   .contact-hero__eyebrow {
@@ -772,124 +715,45 @@
   }
 
   .contact-booking__title {
-    font-size: clamp(1.5rem, 5.5vw, 1.75rem);
+    font-size: clamp(2.125rem, 8vw, 2.75rem);
+  }
+
+  .contact-aside .contact-booking__title {
+    font-size: clamp(1.125rem, 4.5vw, 1.375rem);
   }
 
   .contact-booking__lead {
     font-size: 0.9375rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
   }
 
   .contact-aside {
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
   }
 
   .contact-aside .contact-info {
-    margin-top: 1.25rem;
+    margin-top: 0.75rem;
+  }
+
+  .page-contact .contact-hero {
+    min-height: clamp(22rem, 52vh, 30rem);
+    padding-top: clamp(6rem, 14vh, 8rem);
   }
 
   /* --------------------------------------------------------------------------
-     Services
+     Services — single-screen stage
      -------------------------------------------------------------------------- */
 
-  .page-services {
-    --services-opening-pad-top: 0.75rem;
-    --services-opening-min-height: auto;
-    --services-marquee-size: 1.125rem;
-    --services-marquee-radius: 0.625rem;
-    --services-brand-scale: 0.52;
-    --services-jude-scale: 1;
-    --services-forall-scale: 0.72;
-    --services-brand-gap: 0.4rem;
-    --services-arrow-height: 0;
-    --services-arrow-overlap: 0;
-    --services-split-panel-height: 11.5rem;
-  }
-
-  .page-services .services-opening__content {
+  .page-services .site-header {
     min-height: 0;
-    padding-bottom: 0.25rem;
   }
 
-  .page-services .services-scroll-arrow {
-    display: none;
+  .page-services .header-inner {
+    padding: 0.55rem var(--page-gutter) 0.65rem;
   }
 
-  .page-services .services-opening {
-    min-height: 0;
-    padding-bottom: 0.5rem;
-  }
-
-  .page-services .services-brand-banner {
-    gap: 0.65rem;
-    padding-inline: var(--page-gutter);
-    justify-content: center;
-  }
-
-  .page-services .services-brand-banner__home {
-    justify-content: center;
-  }
-
-  .page-services .services-brand-banner .logo-img {
-    height: clamp(3rem, 10vw, 3.5rem);
-  }
-
-  .page-services .services-marquee-frame {
-    margin-top: 0.35rem;
-  }
-
-  .page-services .services-marquee__phrase {
-    font-size: clamp(0.875rem, 3.2vw, 1.0625rem);
-  }
-
-  .page-services .section-heading--services {
-    padding-inline: var(--page-gutter);
-  }
-
-  .page-services .section-heading--services .story-title {
-    font-size: clamp(0.875rem, 3vw, 1rem);
-  }
-
-  .page-services .split-panel__content {
-    padding: 1.65rem var(--page-gutter) 1.85rem;
-  }
-
-  .page-services .split-panel__inner h3.story-section-heading {
-    font-size: clamp(1.25rem, 4.8vw, 1.5rem);
-    margin-bottom: 0.55rem;
-  }
-
-  .page-services .split-panel__inner .story-split-copy {
-    font-size: 0.9375rem;
-    line-height: 1.6;
-  }
-
-  .page-services .split-panel__media {
-    min-height: var(--services-split-panel-height);
-    aspect-ratio: 16 / 9;
-  }
-
-  .page-services .section--video-cta {
-    min-height: clamp(14rem, 42dvh, 18rem);
-  }
-
-  .page-services .section--video-cta .story-title {
-    font-size: clamp(1.35rem, 5.5vw, 1.65rem);
-  }
-
-  .page-services .section--cta .illus-wrap {
-    display: none;
-  }
-
-  .page-services .section--services-close {
-    min-height: auto;
-    padding-block: clamp(2rem, 6vw, 2.75rem);
-  }
-}
-
-@media (max-width: 480px) {
-  .page-menu .menu-editorial__body {
-    font-size: clamp(1rem, 4.4vw, 1.25rem);
+  .page-services .logo {
+    width: min(30vw, 6.85rem);
   }
 }
 

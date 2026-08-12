@@ -5,6 +5,33 @@
     history.scrollRestoration = 'manual';
   }
 
+  var mobileLockMq = window.matchMedia('(max-width: 768px)');
+
+  function syncMobilePageLocks() {
+    var isMobile = mobileLockMq.matches;
+    var isHome = document.body.classList.contains('page-home');
+    var canLock =
+      isHome ||
+      document.body.classList.contains('page-menu') ||
+      document.body.classList.contains('page-about');
+
+    document.documentElement.classList.toggle('is-home-locked', isMobile && isHome);
+    document.documentElement.classList.toggle('is-page-locked', isMobile && canLock);
+    document.body.classList.toggle('is-home-locked', isMobile && isHome);
+    document.body.classList.toggle('is-page-locked', isMobile && canLock);
+
+    var locked = document.body.classList.contains('is-home-locked') || document.body.classList.contains('is-page-locked');
+    document.documentElement.style.overflow = locked ? 'hidden' : '';
+    document.body.style.overflow = locked ? 'hidden' : '';
+  }
+
+  syncMobilePageLocks();
+  if (typeof mobileLockMq.addEventListener === 'function') {
+    mobileLockMq.addEventListener('change', syncMobilePageLocks);
+  } else if (typeof mobileLockMq.addListener === 'function') {
+    mobileLockMq.addListener(syncMobilePageLocks);
+  }
+
   function resetHomeScroll() {
     if (!document.body.classList.contains('page-home')) return;
     window.scrollTo(0, 0);
@@ -15,12 +42,16 @@
 
   resetHomeScroll();
   window.addEventListener('pageshow', function (e) {
+    syncMobilePageLocks();
     resetHomeScroll();
     if (e.persisted) {
       requestAnimationFrame(resetHomeScroll);
     }
   });
-  window.addEventListener('load', resetHomeScroll);
+  window.addEventListener('load', function () {
+    syncMobilePageLocks();
+    resetHomeScroll();
+  });
 
   // Current year in footer (if present)
   var yearEl = document.getElementById('year');
@@ -361,7 +392,9 @@
 
   function syncHeroMediaFlip() {
     if (homeMobileQuery.matches) {
-      startMobileFlip();
+      /* Mobile uses text nav instead of collage flip-through */
+      stopMobileFlip();
+      clearDesktopFlipTimers();
     } else {
       startDesktopFlip();
     }
@@ -595,9 +628,10 @@
     }
   };
 
-  // Home page — full-page scroll snap (after hero; desktop only)
+  // Home page — full-page scroll snap (after hero; desktop only; skipped when locked)
   if (
     document.body.classList.contains('page-home') &&
+    !document.body.classList.contains('is-home-locked') &&
     !prefersReducedMotion &&
     !window.matchMedia('(max-width: 768px)').matches
   ) {
@@ -825,7 +859,10 @@
 
     window.homeGoToSnapPage = goToPage;
     resetHomeScroll();
-  } else if (document.body.classList.contains('page-home')) {
+  } else if (
+    document.body.classList.contains('page-home') &&
+    !document.body.classList.contains('is-home-locked')
+  ) {
     var snapPagesReduced = Array.prototype.slice.call(
       document.querySelectorAll('[data-snap-page]')
     );
@@ -859,21 +896,120 @@
     updateScrollPageState();
   }
 
-  // Menu page — draggable menu + idle motion (desktop only)
+  // Menu page — draggable menu over editorial type (desktop + mobile)
   if (document.body.classList.contains('page-menu')) {
     var menuDrag = document.getElementById('menu-asset-drag');
     var menuSection = document.querySelector('.section--menu-asset');
-    var menuMobileQuery = window.matchMedia('(max-width: 768px)');
+    var menuEditorial = document.querySelector('.menu-editorial');
+    var menuEditorialBody = document.querySelector('.menu-editorial__body');
 
-    function isMenuMobileLayout() {
-      return menuMobileQuery.matches;
+    function fitMenuEditorialType() {
+      if (!menuEditorial || !menuEditorialBody) return;
+
+      // Desktop keeps the original large type CSS — only fit on mobile locked menu
+      if (!window.matchMedia('(max-width: 768px)').matches) {
+        menuEditorialBody.style.fontSize = '';
+        menuEditorialBody.style.letterSpacing = '';
+        menuEditorialBody.style.textAlign = '';
+        menuEditorialBody.style.width = '';
+        return;
+      }
+
+      var availableHeight = menuEditorial.clientHeight;
+      var availableWidth = menuEditorial.clientWidth;
+      if (availableHeight <= 0 || availableWidth <= 0) return;
+
+      // Prefer a solid bottom-weighted block; leave slack for descenders (g/y/p)
+      var targetHeight = Math.floor(availableHeight * 0.84);
+      var minPx = 10;
+      var maxPx = Math.min(240, Math.round(availableHeight * 0.5));
+      var editorialBottom = menuEditorial.getBoundingClientRect().bottom;
+
+      menuEditorialBody.style.width = '100%';
+      menuEditorialBody.style.textAlign = 'left';
+      menuEditorialBody.style.letterSpacing = '';
+
+      function lastLineFillRatio() {
+        var range = document.createRange();
+        range.selectNodeContents(menuEditorialBody);
+        var rects = range.getClientRects();
+        if (!rects.length) return 1;
+        return rects[rects.length - 1].width / availableWidth;
+      }
+
+      function overflowsEditorial() {
+        var range = document.createRange();
+        range.selectNodeContents(menuEditorialBody);
+        var rects = range.getClientRects();
+        if (!rects.length) return menuEditorialBody.scrollHeight > targetHeight;
+        var last = rects[rects.length - 1];
+        // Extra 2px slack so glyph margins don't kiss the clip edge
+        return last.bottom > editorialBottom - 2 || menuEditorialBody.scrollHeight > targetHeight;
+      }
+
+      function scoreSize(px, tracking) {
+        menuEditorialBody.style.fontSize = px + 'px';
+        menuEditorialBody.style.letterSpacing = tracking;
+
+        if (overflowsEditorial()) {
+          return -1;
+        }
+
+        var fill = menuEditorialBody.scrollHeight / targetHeight;
+        var lastFill = lastLineFillRatio();
+        // Penalize orphans (short last line)
+        if (lastFill < 0.45) {
+          return fill * 0.3 + lastFill * 0.25;
+        }
+        return fill * 0.65 + Math.min(lastFill, 1) * 0.35;
+      }
+
+      var lo = minPx;
+      var hi = maxPx;
+      var maxFit = minPx;
+
+      while (lo <= hi) {
+        var mid = Math.floor((lo + hi) / 2);
+        menuEditorialBody.style.fontSize = mid + 'px';
+        menuEditorialBody.style.letterSpacing = '-0.05em';
+        if (!overflowsEditorial()) {
+          maxFit = mid;
+          lo = mid + 1;
+        } else {
+          hi = mid - 1;
+        }
+      }
+
+      var bestPx = maxFit;
+      var bestTrack = '-0.05em';
+      var bestScore = -1;
+      var trackOpts = ['-0.06em', '-0.05em', '-0.04em', '-0.03em'];
+      var windowStart = Math.max(minPx, maxFit - 20);
+
+      for (var px = windowStart; px <= maxFit; px++) {
+        for (var t = 0; t < trackOpts.length; t++) {
+          var s = scoreSize(px, trackOpts[t]);
+          if (s > bestScore) {
+            bestScore = s;
+            bestPx = px;
+            bestTrack = trackOpts[t];
+          }
+        }
+      }
+
+      menuEditorialBody.style.fontSize = bestPx + 'px';
+      menuEditorialBody.style.letterSpacing = bestTrack;
     }
 
-    function resetMenuMobilePosition() {
-      if (!menuDrag) return;
-      menuDrag.style.left = '';
-      menuDrag.style.top = '';
-      menuDrag.style.transform = '';
+    if (menuEditorial && menuEditorialBody) {
+      window.addEventListener('load', fitMenuEditorialType);
+      window.addEventListener('resize', fitMenuEditorialType);
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(fitMenuEditorialType);
+      }
+
+      requestAnimationFrame(fitMenuEditorialType);
     }
 
     if (menuDrag && menuSection) {
@@ -881,7 +1017,6 @@
       var menuPointerId = null;
       var menuGrabOffsetX = 0;
       var menuGrabOffsetY = 0;
-      var menuPositioned = false;
 
       function placeMenu(x, y) {
         var maxX = Math.max(0, menuSection.clientWidth - menuDrag.offsetWidth);
@@ -889,33 +1024,28 @@
         menuDrag.style.left = Math.min(Math.max(0, x), maxX) + 'px';
         menuDrag.style.top = Math.min(Math.max(0, y), maxY) + 'px';
         menuDrag.style.transform = 'none';
-        menuPositioned = true;
       }
 
       function defaultMenuPosition() {
         placeMenu(
           (menuSection.clientWidth - menuDrag.offsetWidth) / 2,
-          menuSection.clientHeight * 0.52 - menuDrag.offsetHeight / 2
+          Math.max(0, menuSection.clientHeight * 0.42 - menuDrag.offsetHeight / 2)
         );
       }
 
       function initMenuPosition() {
-        if (isMenuMobileLayout()) {
-          resetMenuMobilePosition();
-          return;
-        }
         defaultMenuPosition();
       }
 
       window.addEventListener('load', initMenuPosition);
       window.addEventListener('resize', function () {
+        fitMenuEditorialType();
         if (!menuDragging) {
           initMenuPosition();
         }
       });
 
       menuDrag.addEventListener('pointerdown', function (e) {
-        if (isMenuMobileLayout()) return;
         if (e.button !== 0) return;
 
         menuDragging = true;
@@ -979,6 +1109,7 @@
 
   function isHomePageLink(href) {
     if (!href || href.charAt(0) === '#') return false;
+    if (/^(mailto|tel|sms):/i.test(href)) return false;
 
     try {
       var resolved = new URL(href, window.location.href);
@@ -1034,8 +1165,10 @@
   // Services / home marquees — shared phrase builder
   var servicesMarqueePhrases = [
     'weddings',
+    'corporate events',
+    'pop-ups',
+    'Bar Mitzvahs',
     'private parties',
-    'Bar Mitzvah',
     'teacher appreciation',
     'birthdays',
     'product launch',
@@ -1070,141 +1203,80 @@
     track.innerHTML = buildServicesMarqueeItems(servicesMarqueePhrases, 2);
   });
 
-  // Services page — multi-direction marquee frame
+  // Services page — “Jude for ____” blank rotator
   if (document.body.classList.contains('page-services')) {
-    document.documentElement.style.overscrollBehavior = 'none';
+    var blankHost = document.querySelector('[data-services-blank]');
+    var blankWord = document.querySelector('[data-services-blank-word]');
+    var blankIndex = 0;
+    var blankTimer = null;
+    var blankHoldMs = 3200;
+    var blankFadeMs = 1600;
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    document.querySelectorAll('.page-services .fade-in').forEach(function (el) {
-      el.classList.add('is-visible');
-    });
+    function setBlankPhrase(nextIndex) {
+      if (!blankWord || !servicesMarqueePhrases.length) return;
+      blankIndex =
+        ((nextIndex % servicesMarqueePhrases.length) + servicesMarqueePhrases.length) %
+        servicesMarqueePhrases.length;
+      var nextPhrase = servicesMarqueePhrases[blankIndex];
 
-    function clampServicesScroll() {
-      var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      if (maxScroll < 0) maxScroll = 0;
-      if (window.scrollY > maxScroll) {
-        window.scrollTo(0, maxScroll);
+      if (prefersReducedMotion.matches) {
+        blankWord.textContent = nextPhrase;
+        blankWord.classList.add('is-active');
+        blankWord.classList.remove('is-leaving');
+        return;
+      }
+
+      blankWord.classList.add('is-leaving');
+      blankWord.classList.remove('is-active');
+
+      window.setTimeout(function () {
+        blankWord.textContent = nextPhrase;
+        blankWord.classList.remove('is-leaving');
+        // Force reflow so the enter fade always plays
+        void blankWord.offsetWidth;
+        blankWord.classList.add('is-active');
+      }, blankFadeMs);
+    }
+
+    function stopBlankFlip() {
+      if (blankTimer) {
+        window.clearInterval(blankTimer);
+        blankTimer = null;
       }
     }
 
-    window.addEventListener('scroll', clampServicesScroll, { passive: true });
-    window.addEventListener('resize', clampServicesScroll);
-    clampServicesScroll();
-
-    // Arrow PNG (612×936): tail ≈ (28,28), tip ≈ y=907 — used for precise layout
-    var ARROW_IMG_W = 612;
-    var ARROW_IMG_H = 936;
-    var ARROW_TAIL_Y_FRAC = 28 / ARROW_IMG_H;
-    var ARROW_TAIL_X_FRAC = 28 / ARROW_IMG_W;
-    var ARROW_TIP_Y_FRAC = 907 / ARROW_IMG_H;
-    var ARROW_ASPECT = ARROW_IMG_W / ARROW_IMG_H;
-
-    function measureServicesCssLength(root, customProp, dimension) {
-      var axis = dimension === 'width' ? 'left' : 'top';
-      var probe = document.createElement('div');
-      probe.style.cssText =
-        'position:absolute;visibility:hidden;pointer-events:none;' +
-        axis +
-        ':var(' +
-        customProp +
-        ');width:1px;height:1px';
-      root.appendChild(probe);
-      var rootRect = root.getBoundingClientRect();
-      var probeRect = probe.getBoundingClientRect();
-      var px =
-        dimension === 'width'
-          ? probeRect.left - rootRect.left
-          : probeRect.top - rootRect.top;
-      root.removeChild(probe);
-      return px;
+    function startBlankFlip() {
+      stopBlankFlip();
+      if (!blankWord || servicesMarqueePhrases.length < 2) return;
+      blankTimer = window.setInterval(function () {
+        setBlankPhrase(blankIndex + 1);
+      }, blankHoldMs + blankFadeMs);
     }
 
-    function layoutServicesArrow() {
-      var root = document.querySelector('.page-services');
-      var main = document.getElementById('main');
-      var forall = document.querySelector('.services-brand-banner__forall');
-      var arrow = document.querySelector('.services-scroll-arrow');
-      var weddingsImg = document.querySelector('.split-panel--weddings .split-panel__media img');
-
-      if (!root || !main || !forall || !arrow || !weddingsImg) return;
-
-      var mainRect = main.getBoundingClientRect();
-      var forallRect = forall.getBoundingClientRect();
-      var imgRect = weddingsImg.getBoundingClientRect();
-      var gap = measureServicesCssLength(main, '--services-arrow-gap-after-all', 'width');
-      var shiftRight = measureServicesCssLength(main, '--services-arrow-shift-right', 'width');
-      var lift = measureServicesCssLength(main, '--services-arrow-lift', 'height');
-      var tipInset = measureServicesCssLength(main, '--services-arrow-tip-inset', 'height');
-      var scale =
-        parseFloat(getComputedStyle(root).getPropertyValue('--services-arrow-scale')) || 1;
-
-      if (forallRect.width < 1 || imgRect.height < 1) return;
-
-      var tailX = forallRect.right - mainRect.left + gap + shiftRight;
-      var tailY =
-        forallRect.top - mainRect.top + forallRect.height * 0.34 - lift;
-      var tipY = imgRect.top - mainRect.top + tipInset;
-      var span = ARROW_TIP_Y_FRAC - ARROW_TAIL_Y_FRAC;
-      var baseHeight = (tipY - tailY) / span;
-      var height = baseHeight * scale;
-      if (!isFinite(height) || height < 80) return;
-
-      var top = tailY - height * ARROW_TAIL_Y_FRAC;
-      var imgWidth = height * ARROW_ASPECT;
-      var left = tailX - imgWidth * ARROW_TAIL_X_FRAC;
-
-      root.style.setProperty('--services-arrow-top', top + 'px');
-      root.style.setProperty('--services-arrow-left', left + 'px');
-      root.style.setProperty('--services-arrow-width', imgWidth + 'px');
-      root.style.setProperty('--services-arrow-height', height + 'px');
-      arrow.dataset.positioned = 'true';
+    if (typeof prefersReducedMotion.addEventListener === 'function') {
+      prefersReducedMotion.addEventListener('change', startBlankFlip);
+    } else if (typeof prefersReducedMotion.addListener === 'function') {
+      prefersReducedMotion.addListener(startBlankFlip);
     }
 
-    function scheduleServicesArrowLayout() {
-      requestAnimationFrame(function () {
-        layoutServicesArrow();
-        requestAnimationFrame(layoutServicesArrow);
-      });
+    if (blankWord && servicesMarqueePhrases.length) {
+      blankWord.textContent = servicesMarqueePhrases[0];
+      blankWord.classList.add('is-active');
     }
 
-    scheduleServicesArrowLayout();
-    window.addEventListener('resize', scheduleServicesArrowLayout);
-    window.addEventListener('load', scheduleServicesArrowLayout);
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(scheduleServicesArrowLayout);
+    if (blankHost) {
+      blankHost.style.minWidth =
+        Math.max.apply(
+          null,
+          servicesMarqueePhrases.map(function (phrase) {
+            return phrase.length;
+          })
+        ) +
+        'ch';
     }
 
-    var weddingsImgEl = document.querySelector('.split-panel--weddings .split-panel__media img');
-    if (weddingsImgEl) {
-      if (weddingsImgEl.complete) {
-        scheduleServicesArrowLayout();
-      } else {
-        weddingsImgEl.addEventListener('load', scheduleServicesArrowLayout);
-      }
-    }
-
-    if (typeof ResizeObserver !== 'undefined') {
-      var servicesArrowObserver = new ResizeObserver(scheduleServicesArrowLayout);
-      var observeArrowTarget = document.querySelector('.services-opening');
-      var observeBrandTarget = document.querySelector('.services-brand-banner');
-      var observeMediaTarget = document.querySelector('.split-panel--weddings .split-panel__media');
-      if (observeArrowTarget) servicesArrowObserver.observe(observeArrowTarget);
-      if (observeBrandTarget) servicesArrowObserver.observe(observeBrandTarget);
-      if (observeMediaTarget) servicesArrowObserver.observe(observeMediaTarget);
-    }
-
-    function scrollToServicesWeddings() {
-      var servicesScrollTarget = document.querySelector('.split-panel--weddings');
-      if (!servicesScrollTarget) return;
-      var targetY =
-        servicesScrollTarget.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
-    }
-
-    var servicesScrollHint = document.querySelector('.services-scroll-arrow');
-
-    if (servicesScrollHint) {
-      servicesScrollHint.addEventListener('click', scrollToServicesWeddings);
-    }
+    startBlankFlip();
   }
 
   window.resetHomePageState = function () {
