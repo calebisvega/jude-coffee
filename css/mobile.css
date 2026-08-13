@@ -84,7 +84,7 @@
     width: 100%;
     padding: var(--home-hero-pad-top, 0.35rem) var(--page-gutter) 1rem;
     box-sizing: border-box;
-    background: #fff;
+    background: var(--off-white);
   }
 
   .page-home .hero--minimal .hero-inner {
@@ -458,6 +458,35 @@
      About
      -------------------------------------------------------------------------- */
 
+  .page-about .site-header {
+    position: relative;
+    height: auto;
+    min-height: 0;
+    background: transparent;
+    border-bottom: none;
+  }
+
+  .page-about .header-inner {
+    padding: var(--page-logo-pad-top) var(--page-gutter) var(--page-logo-pad-bottom);
+  }
+
+  .page-about .logo {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    display: block;
+    width: var(--page-logo-width);
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  .page-about .logo-img,
+  .page-about .site-header.is-scrolled .logo-img {
+    width: 100%;
+    height: auto;
+  }
+
   body:not(.page-home) .section--story:first-of-type {
     padding-top: calc(var(--header-height) + 0.5rem);
   }
@@ -565,7 +594,7 @@
   }
 
   .page-menu .header-inner {
-    padding: 0.55rem var(--page-gutter) 0.65rem;
+    padding: var(--page-logo-pad-top) var(--page-gutter) var(--page-logo-pad-bottom);
   }
 
   .page-menu .logo {
@@ -574,7 +603,7 @@
     left: auto;
     transform: none;
     display: block;
-    width: min(30vw, 6.85rem);
+    width: var(--page-logo-width);
     max-width: 100%;
     margin-inline: auto;
   }
@@ -722,9 +751,18 @@
     font-size: clamp(1.125rem, 4.5vw, 1.375rem);
   }
 
-  .contact-booking__lead {
-    font-size: 0.9375rem;
-    margin-bottom: 0.75rem;
+  .page-contact--simple:not(.page-reach-out) .contact-booking__lead {
+    display: none;
+  }
+
+  .page-contact--simple:not(.page-reach-out) .section--contact-book {
+    padding-top: 0.75rem;
+    padding-block: 0.75rem 0.5rem;
+  }
+
+  .page-contact--simple:not(.page-reach-out) .contact-booking__title {
+    font-size: clamp(1.5rem, 6.5vw, 2rem);
+    margin-bottom: 0.35rem;
   }
 
   .contact-aside {
@@ -741,19 +779,328 @@
   }
 
   /* --------------------------------------------------------------------------
-     Services — single-screen stage
+     Services — locked mobile stage (desktop unchanged)
      -------------------------------------------------------------------------- */
 
-  .page-services .site-header {
+  .page-services {
+    --services-marquee-size: 0;
+    --services-marquee-path-inset: 0.75rem;
+    --services-marquee-radius: 2.75rem;
+    --services-mobile-inner-radius: var(--services-marquee-radius);
+    --services-marquee-type-opacity: 0.62;
+    background: #000;
+  }
+
+  .page-services .services-desktop,
+  .page-services .services-scroll-arrow {
+    display: none !important;
+  }
+
+  .page-services .services-mobile {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    position: relative;
+    justify-content: flex-start;
+    align-items: stretch;
     min-height: 0;
+    height: 100%;
+    gap: 0;
+    padding: var(--page-logo-pad-top) 0 var(--page-logo-pad-bottom);
+    box-sizing: border-box;
   }
 
-  .page-services .header-inner {
-    padding: 0.55rem var(--page-gutter) 0.65rem;
+  .page-services #main {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    height: auto;
+    overflow: hidden;
+    padding: 0 var(--page-gutter) 0.55rem;
   }
 
-  .page-services .logo {
-    width: min(30vw, 6.85rem);
+  /* Body provides sage; fixed panel would cover the footer */
+  .page-services #main::before,
+  .page-services #main::after {
+    display: none;
+  }
+
+  .page-services > .services-marquee-frame {
+    display: none;
+  }
+
+  .page-services .site-footer {
+    display: block !important;
+    position: relative;
+    z-index: 5;
+    flex: 0 0 auto;
+    width: 100%;
+    background: #000;
+    color: var(--cream);
+  }
+
+  .page-services .footer-bar.footer-bar--simple {
+    background: transparent;
+    color: var(--cream);
+  }
+
+  .page-services .footer-bar__tagline.tagline-underline::after {
+    background: var(--cream);
+  }
+
+  .page-services .services-mobile__logo {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    display: block;
+    flex: 0 0 auto;
+    width: var(--page-logo-width);
+    max-width: 100%;
+    height: auto;
+    margin-inline: auto;
+    margin-bottom: 0;
+    line-height: 0;
+    pointer-events: auto;
+  }
+
+  .page-services .services-mobile__logo-img,
+  .page-services .services-mobile__logo img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .page-services .services-mobile__overlay {
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 3.5rem 2.65rem 3.75rem;
+    box-sizing: border-box;
+    pointer-events: none;
+    border-radius: 0;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.28);
+  }
+
+  .page-services .services-mobile__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+  }
+
+  .page-services .services-mobile__title {
+    margin: 0;
+    font-family: var(--font-tagline);
+    font-size: clamp(1.4rem, 6.5vw, 1.9rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--cream);
+    text-shadow: 0 1px 10px rgba(30, 50, 32, 0.45);
+  }
+
+  .page-services .services-mobile__title.tagline-underline::after {
+    background: var(--cream);
+    height: max(2px, 0.05em);
+    width: 72%;
+    right: auto;
+  }
+
+  .page-services .services-mobile__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .page-services .services-mobile__item {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--cream);
+    text-align: left;
+    cursor: pointer;
+    opacity: 0.38;
+    transform: translate3d(0, 0, 0);
+    transition:
+      opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: auto;
+    text-shadow: 0 1px 10px rgba(30, 50, 32, 0.45);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .page-services .services-mobile__item.is-active {
+    opacity: 1;
+    transform: translate3d(0.4rem, 0, 0);
+  }
+
+  .page-services .services-mobile__item:focus-visible {
+    outline: 2px solid var(--cream);
+    outline-offset: 4px;
+  }
+
+  .page-services .services-mobile__item.is-active .services-mobile__name {
+    animation: services-mobile-name-settle 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .page-services .services-mobile__name {
+    display: inline-block;
+    font-family: var(--font-tagline);
+    font-size: clamp(1.4rem, 6.5vw, 1.9rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: 0;
+    color: inherit;
+  }
+
+  .page-services .services-mobile__name.tagline-underline::after {
+    display: none;
+  }
+
+  @keyframes services-mobile-name-settle {
+    from {
+      opacity: 0.45;
+      transform: translate3d(0, 0.28em, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-services .services-mobile__item {
+      transition: none;
+      transform: none;
+    }
+
+    .page-services .services-mobile__item.is-active {
+      transform: none;
+    }
+
+    .page-services .services-mobile__item.is-active .services-mobile__name {
+      animation: none;
+    }
+  }
+
+  .page-services .services-mobile__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    width: auto;
+    max-width: 100%;
+    margin: 0;
+    padding: 0.75rem 1.25rem;
+    box-sizing: border-box;
+    font-family: var(--font-display);
+    font-size: clamp(0.8125rem, 3.4vw, 0.9375rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    color: var(--cream);
+    background: transparent;
+    border: 1.5px solid var(--cream);
+    border-radius: 0.85rem;
+    pointer-events: auto;
+    cursor: pointer;
+    box-shadow: none;
+    transition: transform 0.25s var(--ease), background 0.25s var(--ease), color 0.25s var(--ease);
+  }
+
+  .page-services .services-mobile__cta:hover,
+  .page-services .services-mobile__cta:focus-visible {
+    background: rgba(244, 247, 238, 0.12);
+    color: var(--cream);
+    transform: translateY(-1px);
+  }
+
+  .page-services .services-mobile__cta:focus-visible {
+    outline: 2px solid var(--cream);
+    outline-offset: 3px;
+  }
+
+  .page-services .services-mobile__stage {
+    --services-mobile-radius: var(--services-marquee-radius);
+    --services-mobile-stage-height: 82dvh;
+    position: relative;
+    flex: 0 1 auto;
+    width: 100%;
+    height: var(--services-mobile-stage-height);
+    max-height: calc(100% - 3.5rem);
+    min-height: 0;
+    margin-top: auto;
+    margin-bottom: 1.15rem;
+    border-radius: var(--services-mobile-radius);
+    overflow: hidden;
+    background: #000;
+    isolation: isolate;
+    transform: translateZ(0);
+  }
+
+  .page-services .services-mobile__marquee-frame {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: 0;
+  }
+
+  .page-services .services-mobile__path-marquee {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+  }
+
+  .page-services .services-mobile__media {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    border-radius: 0;
+    background: #000;
+  }
+
+  .page-services .services-mobile__slide {
+    position: absolute;
+    inset: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transition: opacity 1.6s ease;
+  }
+
+  .page-services .services-mobile__slide.is-active {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-menu .menu-editorial__body {
+    font-size: clamp(1rem, 4.4vw, 1.25rem);
   }
 }
 

@@ -10,15 +10,20 @@
   function syncMobilePageLocks() {
     var isMobile = mobileLockMq.matches;
     var isHome = document.body.classList.contains('page-home');
-    var canLock =
+    var isContactPage = document.body.classList.contains('page-contact');
+    var canLockMobile =
       isHome ||
       document.body.classList.contains('page-menu') ||
-      document.body.classList.contains('page-about');
+      document.body.classList.contains('page-about') ||
+      document.body.classList.contains('page-services') ||
+      isContactPage;
+    // Contact pages (Book us + Reach out) stay viewport-locked on all breakpoints.
+    var pageLocked = (isMobile && canLockMobile) || isContactPage;
 
     document.documentElement.classList.toggle('is-home-locked', isMobile && isHome);
-    document.documentElement.classList.toggle('is-page-locked', isMobile && canLock);
+    document.documentElement.classList.toggle('is-page-locked', pageLocked);
     document.body.classList.toggle('is-home-locked', isMobile && isHome);
-    document.body.classList.toggle('is-page-locked', isMobile && canLock);
+    document.body.classList.toggle('is-page-locked', pageLocked);
 
     var locked = document.body.classList.contains('is-home-locked') || document.body.classList.contains('is-page-locked');
     document.documentElement.style.overflow = locked ? 'hidden' : '';
@@ -1203,80 +1208,496 @@
     track.innerHTML = buildServicesMarqueeItems(servicesMarqueePhrases, 2);
   });
 
-  // Services page — “Jude for ____” blank rotator
+  // Services page — multi-direction marquee frame
   if (document.body.classList.contains('page-services')) {
-    var blankHost = document.querySelector('[data-services-blank]');
-    var blankWord = document.querySelector('[data-services-blank-word]');
-    var blankIndex = 0;
-    var blankTimer = null;
-    var blankHoldMs = 3200;
-    var blankFadeMs = 1600;
+    document.documentElement.style.overscrollBehavior = 'none';
+
+    document.querySelectorAll('.page-services .fade-in').forEach(function (el) {
+      el.classList.add('is-visible');
+    });
+
+    // Mobile stage — stacked titles + slow image flip
+    var servicesItems = Array.prototype.slice.call(
+      document.querySelectorAll('.services-mobile [data-services-slide]')
+    );
+    var servicesSlides = Array.prototype.slice.call(
+      document.querySelectorAll('.services-mobile [data-services-slide-img]')
+    );
+    var servicesIndex = 0;
+    var servicesTimer = null;
+    var servicesIntervalMs = 5500;
     var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    function setBlankPhrase(nextIndex) {
-      if (!blankWord || !servicesMarqueePhrases.length) return;
-      blankIndex =
-        ((nextIndex % servicesMarqueePhrases.length) + servicesMarqueePhrases.length) %
-        servicesMarqueePhrases.length;
-      var nextPhrase = servicesMarqueePhrases[blankIndex];
+    function setServicesSlide(nextIndex) {
+      if (!servicesSlides.length) return;
+      servicesIndex =
+        ((nextIndex % servicesSlides.length) + servicesSlides.length) % servicesSlides.length;
 
-      if (prefersReducedMotion.matches) {
-        blankWord.textContent = nextPhrase;
-        blankWord.classList.add('is-active');
-        blankWord.classList.remove('is-leaving');
+      servicesItems.forEach(function (item, i) {
+        var active = i === servicesIndex;
+        item.classList.toggle('is-active', active);
+        if (active) {
+          item.setAttribute('aria-current', 'true');
+          // Retrigger settle animation on each selection / auto-flip
+          var name = item.querySelector('.services-mobile__name');
+          if (name) {
+            name.style.animation = 'none';
+            void name.offsetWidth;
+            name.style.animation = '';
+          }
+        } else {
+          item.removeAttribute('aria-current');
+        }
+      });
+
+      servicesSlides.forEach(function (slide, i) {
+        slide.classList.toggle('is-active', i === servicesIndex);
+      });
+    }
+
+    function stopServicesFlip() {
+      if (servicesTimer) {
+        window.clearInterval(servicesTimer);
+        servicesTimer = null;
+      }
+    }
+
+    function startServicesFlip() {
+      stopServicesFlip();
+      if (!mobileLockMq.matches || prefersReducedMotion.matches || servicesSlides.length < 2) {
         return;
       }
-
-      blankWord.classList.add('is-leaving');
-      blankWord.classList.remove('is-active');
-
-      window.setTimeout(function () {
-        blankWord.textContent = nextPhrase;
-        blankWord.classList.remove('is-leaving');
-        // Force reflow so the enter fade always plays
-        void blankWord.offsetWidth;
-        blankWord.classList.add('is-active');
-      }, blankFadeMs);
+      servicesTimer = window.setInterval(function () {
+        setServicesSlide(servicesIndex + 1);
+      }, servicesIntervalMs);
     }
 
-    function stopBlankFlip() {
-      if (blankTimer) {
-        window.clearInterval(blankTimer);
-        blankTimer = null;
+    servicesItems.forEach(function (item) {
+      item.addEventListener('click', function () {
+        var idx = parseInt(item.getAttribute('data-services-slide'), 10);
+        if (isNaN(idx)) return;
+        setServicesSlide(idx);
+        startServicesFlip();
+      });
+    });
+
+    if (typeof prefersReducedMotion.addEventListener === 'function') {
+      prefersReducedMotion.addEventListener('change', startServicesFlip);
+    } else if (typeof prefersReducedMotion.addListener === 'function') {
+      prefersReducedMotion.addListener(startServicesFlip);
+    }
+
+    mobileLockMq.addEventListener
+      ? mobileLockMq.addEventListener('change', startServicesFlip)
+      : mobileLockMq.addListener && mobileLockMq.addListener(startServicesFlip);
+
+    setServicesSlide(0);
+    startServicesFlip();
+
+    // Continuous path marquee — canvas glyphs along rounded bevel (no SVG textPath seam)
+    (function initServicesPathMarquee() {
+      var stage = document.querySelector('.services-mobile__stage');
+      var canvas = document.querySelector('[data-services-path-marquee-canvas]');
+      if (!stage || !canvas || !canvas.getContext) return;
+
+      var ctx = canvas.getContext('2d');
+      var svgNS = 'http://www.w3.org/2000/svg';
+      var measurePath = document.createElementNS(svgNS, 'path');
+      var offset = 0;
+      var pathLen = 0;
+      var rafId = 0;
+      var lastTs = 0;
+      var speedPxPerSec = 9;
+      var resizeTimer = null;
+      var phrase = '';
+      var fontSize = 11;
+      var cream = '#F4F7EE';
+      var typeOpacity = 0.62;
+      var dpr = 1;
+      var charWidths = null;
+
+      function readPxVar(name, fallback) {
+        var probe = document.createElement('div');
+        probe.style.cssText =
+          'position:absolute;visibility:hidden;pointer-events:none;width:var(' +
+          name +
+          ');height:1px;';
+        stage.appendChild(probe);
+        var px = probe.getBoundingClientRect().width;
+        stage.removeChild(probe);
+        return px > 0 ? px : fallback;
+      }
+
+      function roundedRectPath(w, h, radius, inset) {
+        var x = inset;
+        var y = inset;
+        var rw = Math.max(0, w - inset * 2);
+        var rh = Math.max(0, h - inset * 2);
+        var r = Math.max(0, Math.min(radius - inset, rw / 2, rh / 2));
+        // Start mid-bottom — seam sits under the CTA where it's least noticeable
+        var midX = x + rw / 2;
+        return (
+          'M ' +
+          midX +
+          ',' +
+          (y + rh) +
+          ' H ' +
+          (x + r) +
+          ' A ' +
+          r +
+          ',' +
+          r +
+          ' 0 0 1 ' +
+          x +
+          ',' +
+          (y + rh - r) +
+          ' V ' +
+          (y + r) +
+          ' A ' +
+          r +
+          ',' +
+          r +
+          ' 0 0 1 ' +
+          (x + r) +
+          ',' +
+          y +
+          ' H ' +
+          (x + rw - r) +
+          ' A ' +
+          r +
+          ',' +
+          r +
+          ' 0 0 1 ' +
+          (x + rw) +
+          ',' +
+          (y + r) +
+          ' V ' +
+          (y + rh - r) +
+          ' A ' +
+          r +
+          ',' +
+          r +
+          ' 0 0 1 ' +
+          (x + rw - r) +
+          ',' +
+          (y + rh) +
+          ' H ' +
+          midX
+        );
+      }
+
+      function buildPhrase() {
+        var unit = '';
+        servicesMarqueePhrases.forEach(function (item) {
+          unit += item.toUpperCase() + '   ·   ';
+        });
+        return unit;
+      }
+
+      function setFont() {
+        ctx.font =
+          '700 ' + fontSize + 'px Inter, system-ui, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = cream;
+        ctx.globalAlpha = typeOpacity;
+      }
+
+      function draw() {
+        var w = canvas.width;
+        var h = canvas.height;
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.globalAlpha = 1;
+        ctx.clearRect(0, 0, w, h);
+        if (pathLen < 8 || !phrase) return;
+
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        setFont();
+
+        var traveled = 0;
+        var charIndex = 0;
+        var guard = 0;
+        var maxChars = 4000;
+        var prevAngle = null;
+
+        while (traveled < pathLen && guard < maxChars) {
+          var ch = phrase.charAt(charIndex % phrase.length);
+          var chWidth =
+            charWidths && charWidths[ch] != null
+              ? charWidths[ch]
+              : ctx.measureText(ch).width;
+          if (chWidth < 0.01) chWidth = fontSize * 0.35;
+
+          var pos = (offset + traveled) % pathLen;
+          var p1 = measurePath.getPointAtLength(pos);
+          var sample = Math.min(1.5, Math.max(0.75, chWidth * 0.4));
+          var angle;
+          if (pos + sample <= pathLen) {
+            var p2 = measurePath.getPointAtLength(pos + sample);
+            angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+          } else if (pos - sample >= 0) {
+            var p0 = measurePath.getPointAtLength(pos - sample);
+            angle = Math.atan2(p1.y - p0.y, p1.x - p0.x);
+          } else {
+            var p3 = measurePath.getPointAtLength((pos + sample) % pathLen);
+            angle = Math.atan2(p3.y - p1.y, p3.x - p1.x);
+          }
+
+          // Soften abrupt corner turns
+          if (prevAngle != null) {
+            var delta = angle - prevAngle;
+            while (delta > Math.PI) delta -= Math.PI * 2;
+            while (delta < -Math.PI) delta += Math.PI * 2;
+            angle = prevAngle + delta * 0.55;
+          }
+          prevAngle = angle;
+
+          ctx.save();
+          ctx.translate(p1.x, p1.y);
+          ctx.rotate(angle);
+          ctx.fillText(ch, 0, 0);
+          ctx.restore();
+
+          traveled += chWidth;
+          charIndex += 1;
+          guard += 1;
+        }
+      }
+
+      function layout() {
+        if (!mobileLockMq.matches) {
+          stopAnim();
+          ctx && ctx.clearRect(0, 0, canvas.width, canvas.height);
+          return;
+        }
+
+        var rect = stage.getBoundingClientRect();
+        var w = rect.width;
+        var h = rect.height;
+        if (w < 8 || h < 8) return;
+
+        var outerR = readPxVar(
+          '--services-mobile-radius',
+          readPxVar('--services-marquee-radius', 44)
+        );
+        var inset = readPxVar('--services-marquee-path-inset', 11.2);
+        fontSize = Math.max(7, inset * 0.48);
+
+        try {
+          cream =
+            getComputedStyle(stage).getPropertyValue('--cream').trim() || '#F4F7EE';
+        } catch (err) {
+          cream = '#F4F7EE';
+        }
+
+        var opacityRaw = getComputedStyle(stage)
+          .getPropertyValue('--services-marquee-type-opacity')
+          .trim();
+        var opacityNum = parseFloat(opacityRaw);
+        typeOpacity = isFinite(opacityNum) ? opacityNum : 0.62;
+
+        dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+
+        var d = roundedRectPath(w, h, outerR, inset);
+        measurePath.setAttribute('d', d);
+        try {
+          pathLen = measurePath.getTotalLength();
+        } catch (err) {
+          pathLen = 0;
+        }
+        if (!pathLen) return;
+
+        phrase = buildPhrase();
+        setFont();
+        charWidths = Object.create(null);
+        for (var ci = 0; ci < phrase.length; ci++) {
+          var c = phrase.charAt(ci);
+          if (charWidths[c] == null) {
+            charWidths[c] = ctx.measureText(c).width;
+          }
+        }
+        if (offset > pathLen) offset = offset % pathLen;
+
+        draw();
+
+        if (!prefersReducedMotion.matches) {
+          startAnim();
+        } else {
+          stopAnim();
+        }
+      }
+
+      function tick(ts) {
+        if (!lastTs) lastTs = ts;
+        var dt = Math.min(0.032, (ts - lastTs) / 1000);
+        lastTs = ts;
+        if (pathLen > 0) {
+          offset += speedPxPerSec * dt;
+          if (offset >= pathLen) offset -= pathLen;
+          draw();
+        }
+        rafId = window.requestAnimationFrame(tick);
+      }
+
+      function startAnim() {
+        if (rafId || prefersReducedMotion.matches) return;
+        lastTs = 0;
+        rafId = window.requestAnimationFrame(tick);
+      }
+
+      function stopAnim() {
+        if (!rafId) return;
+        window.cancelAnimationFrame(rafId);
+        rafId = 0;
+        lastTs = 0;
+      }
+
+      function scheduleLayout() {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(layout, 60);
+      }
+
+      layout();
+
+      if (typeof ResizeObserver === 'function') {
+        var ro = new ResizeObserver(scheduleLayout);
+        ro.observe(stage);
+      } else {
+        window.addEventListener('resize', scheduleLayout);
+      }
+
+      mobileLockMq.addEventListener
+        ? mobileLockMq.addEventListener('change', layout)
+        : mobileLockMq.addListener && mobileLockMq.addListener(layout);
+
+      if (typeof prefersReducedMotion.addEventListener === 'function') {
+        prefersReducedMotion.addEventListener('change', layout);
+      } else if (typeof prefersReducedMotion.addListener === 'function') {
+        prefersReducedMotion.addListener(layout);
+      }
+    })();
+
+    // Arrow PNG (612×936): tail ≈ (28,28), tip ≈ y=907 — used for precise layout
+    var ARROW_IMG_W = 612;
+    var ARROW_IMG_H = 936;
+    var ARROW_TAIL_Y_FRAC = 28 / ARROW_IMG_H;
+    var ARROW_TAIL_X_FRAC = 28 / ARROW_IMG_W;
+    var ARROW_TIP_Y_FRAC = 907 / ARROW_IMG_H;
+    var ARROW_ASPECT = ARROW_IMG_W / ARROW_IMG_H;
+
+    function measureServicesCssLength(root, customProp, dimension) {
+      var axis = dimension === 'width' ? 'left' : 'top';
+      var probe = document.createElement('div');
+      probe.style.cssText =
+        'position:absolute;visibility:hidden;pointer-events:none;' +
+        axis +
+        ':var(' +
+        customProp +
+        ');width:1px;height:1px';
+      root.appendChild(probe);
+      var rootRect = root.getBoundingClientRect();
+      var probeRect = probe.getBoundingClientRect();
+      var px =
+        dimension === 'width'
+          ? probeRect.left - rootRect.left
+          : probeRect.top - rootRect.top;
+      root.removeChild(probe);
+      return px;
+    }
+
+    function layoutServicesArrow() {
+      if (mobileLockMq.matches) return;
+
+      var root = document.querySelector('.page-services');
+      var main = document.getElementById('main');
+      var forall = document.querySelector('.services-brand-banner__forall');
+      var arrow = document.querySelector('.services-scroll-arrow');
+      var weddingsImg = document.querySelector('.split-panel--weddings .split-panel__media img');
+
+      if (!root || !main || !forall || !arrow || !weddingsImg) return;
+
+      var mainRect = main.getBoundingClientRect();
+      var forallRect = forall.getBoundingClientRect();
+      var imgRect = weddingsImg.getBoundingClientRect();
+      var gap = measureServicesCssLength(main, '--services-arrow-gap-after-all', 'width');
+      var shiftRight = measureServicesCssLength(main, '--services-arrow-shift-right', 'width');
+      var lift = measureServicesCssLength(main, '--services-arrow-lift', 'height');
+      var tipInset = measureServicesCssLength(main, '--services-arrow-tip-inset', 'height');
+      var scale =
+        parseFloat(getComputedStyle(root).getPropertyValue('--services-arrow-scale')) || 1;
+
+      if (forallRect.width < 1 || imgRect.height < 1) return;
+
+      var tailX = forallRect.right - mainRect.left + gap + shiftRight;
+      var tailY =
+        forallRect.top - mainRect.top + forallRect.height * 0.34 - lift;
+      var tipY = imgRect.top - mainRect.top + tipInset;
+      var span = ARROW_TIP_Y_FRAC - ARROW_TAIL_Y_FRAC;
+      var baseHeight = (tipY - tailY) / span;
+      var height = baseHeight * scale;
+      if (!isFinite(height) || height < 80) return;
+
+      var top = tailY - height * ARROW_TAIL_Y_FRAC;
+      var imgWidth = height * ARROW_ASPECT;
+      var left = tailX - imgWidth * ARROW_TAIL_X_FRAC;
+
+      root.style.setProperty('--services-arrow-top', top + 'px');
+      root.style.setProperty('--services-arrow-left', left + 'px');
+      root.style.setProperty('--services-arrow-width', imgWidth + 'px');
+      root.style.setProperty('--services-arrow-height', height + 'px');
+      arrow.dataset.positioned = 'true';
+    }
+
+    function scheduleServicesArrowLayout() {
+      requestAnimationFrame(function () {
+        layoutServicesArrow();
+        requestAnimationFrame(layoutServicesArrow);
+      });
+    }
+
+    scheduleServicesArrowLayout();
+    window.addEventListener('resize', scheduleServicesArrowLayout);
+    window.addEventListener('load', scheduleServicesArrowLayout);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(scheduleServicesArrowLayout);
+    }
+
+    var weddingsImgEl = document.querySelector('.split-panel--weddings .split-panel__media img');
+    if (weddingsImgEl) {
+      if (weddingsImgEl.complete) {
+        scheduleServicesArrowLayout();
+      } else {
+        weddingsImgEl.addEventListener('load', scheduleServicesArrowLayout);
       }
     }
 
-    function startBlankFlip() {
-      stopBlankFlip();
-      if (!blankWord || servicesMarqueePhrases.length < 2) return;
-      blankTimer = window.setInterval(function () {
-        setBlankPhrase(blankIndex + 1);
-      }, blankHoldMs + blankFadeMs);
+    if (typeof ResizeObserver !== 'undefined') {
+      var servicesArrowObserver = new ResizeObserver(scheduleServicesArrowLayout);
+      var observeArrowTarget = document.querySelector('.services-opening');
+      var observeBrandTarget = document.querySelector('.services-brand-banner');
+      var observeMediaTarget = document.querySelector('.split-panel--weddings .split-panel__media');
+      if (observeArrowTarget) servicesArrowObserver.observe(observeArrowTarget);
+      if (observeBrandTarget) servicesArrowObserver.observe(observeBrandTarget);
+      if (observeMediaTarget) servicesArrowObserver.observe(observeMediaTarget);
     }
 
-    if (typeof prefersReducedMotion.addEventListener === 'function') {
-      prefersReducedMotion.addEventListener('change', startBlankFlip);
-    } else if (typeof prefersReducedMotion.addListener === 'function') {
-      prefersReducedMotion.addListener(startBlankFlip);
+    function scrollToServicesWeddings() {
+      var servicesScrollTarget = document.querySelector('.split-panel--weddings');
+      if (!servicesScrollTarget) return;
+      var targetY =
+        servicesScrollTarget.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
     }
 
-    if (blankWord && servicesMarqueePhrases.length) {
-      blankWord.textContent = servicesMarqueePhrases[0];
-      blankWord.classList.add('is-active');
-    }
+    var servicesScrollHint = document.querySelector('.services-scroll-arrow');
 
-    if (blankHost) {
-      blankHost.style.minWidth =
-        Math.max.apply(
-          null,
-          servicesMarqueePhrases.map(function (phrase) {
-            return phrase.length;
-          })
-        ) +
-        'ch';
+    if (servicesScrollHint) {
+      servicesScrollHint.addEventListener('click', scrollToServicesWeddings);
     }
-
-    startBlankFlip();
   }
 
   window.resetHomePageState = function () {
@@ -1293,4 +1714,17 @@
       window.setTaglineBrandInactive();
     }
   };
+
+  /* Reach out — slow photo crossfade behind the form */
+  if (document.body.classList.contains('page-reach-out')) {
+    var reachPhotos = document.querySelectorAll('.reach-out-stage__photo');
+    if (reachPhotos.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var reachIndex = 0;
+      window.setInterval(function () {
+        reachPhotos[reachIndex].classList.remove('is-active');
+        reachIndex = (reachIndex + 1) % reachPhotos.length;
+        reachPhotos[reachIndex].classList.add('is-active');
+      }, 9000);
+    }
+  }
 })();
