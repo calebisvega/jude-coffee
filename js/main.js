@@ -5,6 +5,38 @@
     history.scrollRestoration = 'manual';
   }
 
+  var mobileLockMq = window.matchMedia('(max-width: 768px)');
+
+  function syncMobilePageLocks() {
+    var isMobile = mobileLockMq.matches;
+    var isHome = document.body.classList.contains('page-home');
+    var isContactPage = document.body.classList.contains('page-contact');
+    var canLockMobile =
+      isHome ||
+      document.body.classList.contains('page-menu') ||
+      document.body.classList.contains('page-about') ||
+      document.body.classList.contains('page-services') ||
+      isContactPage;
+    // Contact pages (Book us + Reach out) stay viewport-locked on all breakpoints.
+    var pageLocked = (isMobile && canLockMobile) || isContactPage;
+
+    document.documentElement.classList.toggle('is-home-locked', isMobile && isHome);
+    document.documentElement.classList.toggle('is-page-locked', pageLocked);
+    document.body.classList.toggle('is-home-locked', isMobile && isHome);
+    document.body.classList.toggle('is-page-locked', pageLocked);
+
+    var locked = document.body.classList.contains('is-home-locked') || document.body.classList.contains('is-page-locked');
+    document.documentElement.style.overflow = locked ? 'hidden' : '';
+    document.body.style.overflow = locked ? 'hidden' : '';
+  }
+
+  syncMobilePageLocks();
+  if (typeof mobileLockMq.addEventListener === 'function') {
+    mobileLockMq.addEventListener('change', syncMobilePageLocks);
+  } else if (typeof mobileLockMq.addListener === 'function') {
+    mobileLockMq.addListener(syncMobilePageLocks);
+  }
+
   function resetHomeScroll() {
     if (!document.body.classList.contains('page-home')) return;
     window.scrollTo(0, 0);
@@ -15,12 +47,16 @@
 
   resetHomeScroll();
   window.addEventListener('pageshow', function (e) {
+    syncMobilePageLocks();
     resetHomeScroll();
     if (e.persisted) {
       requestAnimationFrame(resetHomeScroll);
     }
   });
-  window.addEventListener('load', resetHomeScroll);
+  window.addEventListener('load', function () {
+    syncMobilePageLocks();
+    resetHomeScroll();
+  });
 
   // Current year in footer (if present)
   var yearEl = document.getElementById('year');
@@ -175,11 +211,19 @@
     }
   });
 
-  // Hero photo rotation — no duplicate images visible at once
+  // Hero photo rotation — desktop: multi-stack; mobile: single-frame flip of all media
   var photoStacks = Array.prototype.slice.call(
     document.querySelectorAll('.hero-collage__piece--photo')
   );
+  var collagePieces = Array.prototype.slice.call(
+    document.querySelectorAll('.hero-collage__piece')
+  );
   var flipInterval = 6500;
+  var mobileFlipInterval = 4200;
+  var homeMobileQuery = window.matchMedia('(max-width: 768px)');
+  var desktopFlipTimers = [];
+  var mobileFlipTimer = null;
+  var mobileSlideIndex = 0;
 
   function photoSrc(photo) {
     return photo.getAttribute('src');
@@ -243,15 +287,99 @@
     return true;
   }
 
-  if (photoStacks.length && !prefersReducedMotion) {
+  function clearDesktopFlipTimers() {
+    desktopFlipTimers.forEach(function (id) {
+      clearTimeout(id);
+      clearInterval(id);
+    });
+    desktopFlipTimers = [];
+  }
+
+  function stopMobileFlip() {
+    if (mobileFlipTimer) {
+      clearInterval(mobileFlipTimer);
+      mobileFlipTimer = null;
+    }
+    collagePieces.forEach(function (piece) {
+      piece.classList.remove('is-mobile-slide-active');
+    });
+  }
+
+  function getMobileSlides() {
+    var slides = [];
+    var usedSrc = {};
+
+    collagePieces.forEach(function (piece) {
+      if (piece.classList.contains('hero-collage__piece--video')) {
+        slides.push({ piece: piece, photo: null });
+        return;
+      }
+
+      Array.prototype.forEach.call(
+        piece.querySelectorAll('.hero-collage__photo'),
+        function (photo) {
+          var src = photoSrc(photo);
+          if (!src || usedSrc[src]) return;
+          usedSrc[src] = true;
+          slides.push({ piece: piece, photo: photo });
+        }
+      );
+    });
+
+    return slides;
+  }
+
+  function showMobileSlide(slides, index) {
+    if (!slides.length) return;
+    var slide = slides[index % slides.length];
+
+    collagePieces.forEach(function (piece) {
+      piece.classList.toggle('is-mobile-slide-active', piece === slide.piece);
+    });
+
+    if (slide.photo) {
+      setActivePhoto(slide.piece, slide.photo);
+    }
+
+    if (!slide.photo && collageVideo && !prefersReducedMotion) {
+      var playPromise = collageVideo.play();
+      if (playPromise && playPromise.catch) {
+        playPromise.catch(function () {});
+      }
+    }
+  }
+
+  function startMobileFlip() {
+    stopMobileFlip();
+    clearDesktopFlipTimers();
+
+    var slides = getMobileSlides();
+    if (!slides.length) return;
+
+    mobileSlideIndex = 0;
+    showMobileSlide(slides, mobileSlideIndex);
+
+    if (prefersReducedMotion || slides.length < 2) return;
+
+    mobileFlipTimer = setInterval(function () {
+      mobileSlideIndex = (mobileSlideIndex + 1) % slides.length;
+      showMobileSlide(slides, mobileSlideIndex);
+    }, mobileFlipInterval);
+  }
+
+  function startDesktopFlip() {
+    stopMobileFlip();
+    clearDesktopFlipTimers();
     ensureUniqueInitialState();
+
+    if (prefersReducedMotion || !photoStacks.length) return;
 
     photoStacks.forEach(function (stack, stackIndex) {
       var photos = stack.querySelectorAll('.hero-collage__photo');
       if (photos.length < 2) return;
 
-      setTimeout(function () {
-        setInterval(function () {
+      var startId = setTimeout(function () {
+        var intervalId = setInterval(function () {
           if (!flipStack(stack)) {
             photoStacks.some(function (otherStack) {
               if (otherStack === stack) return false;
@@ -260,10 +388,30 @@
             flipStack(stack);
           }
         }, flipInterval);
+        desktopFlipTimers.push(intervalId);
       }, stackIndex * 900);
+
+      desktopFlipTimers.push(startId);
     });
-  } else if (photoStacks.length) {
-    ensureUniqueInitialState();
+  }
+
+  function syncHeroMediaFlip() {
+    if (homeMobileQuery.matches) {
+      /* Mobile uses text nav instead of collage flip-through */
+      stopMobileFlip();
+      clearDesktopFlipTimers();
+    } else {
+      startDesktopFlip();
+    }
+  }
+
+  if (collagePieces.length) {
+    syncHeroMediaFlip();
+    if (homeMobileQuery.addEventListener) {
+      homeMobileQuery.addEventListener('change', syncHeroMediaFlip);
+    } else if (homeMobileQuery.addListener) {
+      homeMobileQuery.addListener(syncHeroMediaFlip);
+    }
   }
 
   // Tagline hover — sage + cream brand moment (home)
@@ -312,7 +460,7 @@
       });
     });
 
-    var headerLogo = document.querySelector('.site-header--home .logo');
+    var headerLogo = document.querySelector('.hero-scroll-logo') || document.querySelector('.site-header--home .logo');
     var homeMobileQuery = window.matchMedia('(max-width: 768px)');
 
     function isHomeMobileLayout() {
@@ -379,6 +527,7 @@
     document.addEventListener('pointerdown', function (e) {
       if (!document.body.classList.contains('is-tagline-brand')) return;
       if (e.target.closest('[data-tagline-brand]')) return;
+      if (e.target.closest('.hero-scroll-logo')) return;
       if (e.target.closest('.site-header--home .logo')) return;
       setTaglineBrandActive(false);
     });
@@ -403,7 +552,6 @@
   // Our Story — keep link clickable while moving from collage to peek illustration
   var ourStoryLink = document.querySelector('.hero-collage__about');
   var aboutPeek = document.querySelector('.hero-about-peek');
-  var collagePieces = document.querySelectorAll('.hero-collage__piece');
   var heroCollage = document.querySelector('.hero-collage');
 
   if (ourStoryLink) {
@@ -476,27 +624,22 @@
     }
   }
 
-  // Our Story snap page — reset accordion + scroll when landing on page
+  // Our Story snap page — reset copy scroll when landing on page
   window.resetStorySnapView = function () {
-    var aboutPanelEl = document.querySelector(
-      '#our-story [data-about-accordion] .story-accordion__panel-inner'
-    );
+    var aboutColumnsEl = document.querySelector('#our-story .story-about__columns');
 
-    if (aboutPanelEl) {
-      aboutPanelEl.scrollTop = 0;
-    }
-    if (
-      typeof window.collapseAboutAccordion === 'function' &&
-      !window.matchMedia('(max-width: 768px)').matches
-    ) {
-      window.collapseAboutAccordion();
-    } else if (typeof syncMobileAboutAccordion === 'function') {
-      syncMobileAboutAccordion();
+    if (aboutColumnsEl) {
+      aboutColumnsEl.scrollTop = 0;
     }
   };
 
-  // Home page — full-page scroll snap (after hero)
-  if (document.body.classList.contains('page-home') && !prefersReducedMotion) {
+  // Home page — full-page scroll snap (after hero; desktop only; skipped when locked)
+  if (
+    document.body.classList.contains('page-home') &&
+    !document.body.classList.contains('is-home-locked') &&
+    !prefersReducedMotion &&
+    !window.matchMedia('(max-width: 768px)').matches
+  ) {
     var snapPages = Array.prototype.slice.call(
       document.querySelectorAll('[data-snap-page]')
     );
@@ -507,16 +650,10 @@
     var wheelAccumulator = 0;
     var wheelResetTimer = null;
 
-    var aboutPanelInner = document.getElementById('our-story')
-      ? document.querySelector('#our-story [data-about-accordion] .story-accordion__panel-inner')
-      : null;
-    var aboutAccordionEl = document.querySelector('#our-story [data-about-accordion]');
+    var aboutColumnsEl = document.querySelector('#our-story .story-about__columns');
 
     function storyScrollTarget() {
-      if (aboutAccordionEl && aboutAccordionEl.classList.contains('is-open') && aboutPanelInner) {
-        return aboutPanelInner;
-      }
-      return null;
+      return aboutColumnsEl || null;
     }
 
     function storyCopyCanScrollDown() {
@@ -727,7 +864,10 @@
 
     window.homeGoToSnapPage = goToPage;
     resetHomeScroll();
-  } else if (document.body.classList.contains('page-home')) {
+  } else if (
+    document.body.classList.contains('page-home') &&
+    !document.body.classList.contains('is-home-locked')
+  ) {
     var snapPagesReduced = Array.prototype.slice.call(
       document.querySelectorAll('[data-snap-page]')
     );
@@ -761,21 +901,120 @@
     updateScrollPageState();
   }
 
-  // Menu page — draggable menu + idle motion (desktop only)
+  // Menu page — draggable menu over editorial type (desktop + mobile)
   if (document.body.classList.contains('page-menu')) {
     var menuDrag = document.getElementById('menu-asset-drag');
     var menuSection = document.querySelector('.section--menu-asset');
-    var menuMobileQuery = window.matchMedia('(max-width: 768px)');
+    var menuEditorial = document.querySelector('.menu-editorial');
+    var menuEditorialBody = document.querySelector('.menu-editorial__body');
 
-    function isMenuMobileLayout() {
-      return menuMobileQuery.matches;
+    function fitMenuEditorialType() {
+      if (!menuEditorial || !menuEditorialBody) return;
+
+      // Desktop keeps the original large type CSS — only fit on mobile locked menu
+      if (!window.matchMedia('(max-width: 768px)').matches) {
+        menuEditorialBody.style.fontSize = '';
+        menuEditorialBody.style.letterSpacing = '';
+        menuEditorialBody.style.textAlign = '';
+        menuEditorialBody.style.width = '';
+        return;
+      }
+
+      var availableHeight = menuEditorial.clientHeight;
+      var availableWidth = menuEditorial.clientWidth;
+      if (availableHeight <= 0 || availableWidth <= 0) return;
+
+      // Prefer a solid bottom-weighted block; leave slack for descenders (g/y/p)
+      var targetHeight = Math.floor(availableHeight * 0.84);
+      var minPx = 10;
+      var maxPx = Math.min(240, Math.round(availableHeight * 0.5));
+      var editorialBottom = menuEditorial.getBoundingClientRect().bottom;
+
+      menuEditorialBody.style.width = '100%';
+      menuEditorialBody.style.textAlign = 'left';
+      menuEditorialBody.style.letterSpacing = '';
+
+      function lastLineFillRatio() {
+        var range = document.createRange();
+        range.selectNodeContents(menuEditorialBody);
+        var rects = range.getClientRects();
+        if (!rects.length) return 1;
+        return rects[rects.length - 1].width / availableWidth;
+      }
+
+      function overflowsEditorial() {
+        var range = document.createRange();
+        range.selectNodeContents(menuEditorialBody);
+        var rects = range.getClientRects();
+        if (!rects.length) return menuEditorialBody.scrollHeight > targetHeight;
+        var last = rects[rects.length - 1];
+        // Extra 2px slack so glyph margins don't kiss the clip edge
+        return last.bottom > editorialBottom - 2 || menuEditorialBody.scrollHeight > targetHeight;
+      }
+
+      function scoreSize(px, tracking) {
+        menuEditorialBody.style.fontSize = px + 'px';
+        menuEditorialBody.style.letterSpacing = tracking;
+
+        if (overflowsEditorial()) {
+          return -1;
+        }
+
+        var fill = menuEditorialBody.scrollHeight / targetHeight;
+        var lastFill = lastLineFillRatio();
+        // Penalize orphans (short last line)
+        if (lastFill < 0.45) {
+          return fill * 0.3 + lastFill * 0.25;
+        }
+        return fill * 0.65 + Math.min(lastFill, 1) * 0.35;
+      }
+
+      var lo = minPx;
+      var hi = maxPx;
+      var maxFit = minPx;
+
+      while (lo <= hi) {
+        var mid = Math.floor((lo + hi) / 2);
+        menuEditorialBody.style.fontSize = mid + 'px';
+        menuEditorialBody.style.letterSpacing = '-0.05em';
+        if (!overflowsEditorial()) {
+          maxFit = mid;
+          lo = mid + 1;
+        } else {
+          hi = mid - 1;
+        }
+      }
+
+      var bestPx = maxFit;
+      var bestTrack = '-0.05em';
+      var bestScore = -1;
+      var trackOpts = ['-0.06em', '-0.05em', '-0.04em', '-0.03em'];
+      var windowStart = Math.max(minPx, maxFit - 20);
+
+      for (var px = windowStart; px <= maxFit; px++) {
+        for (var t = 0; t < trackOpts.length; t++) {
+          var s = scoreSize(px, trackOpts[t]);
+          if (s > bestScore) {
+            bestScore = s;
+            bestPx = px;
+            bestTrack = trackOpts[t];
+          }
+        }
+      }
+
+      menuEditorialBody.style.fontSize = bestPx + 'px';
+      menuEditorialBody.style.letterSpacing = bestTrack;
     }
 
-    function resetMenuMobilePosition() {
-      if (!menuDrag) return;
-      menuDrag.style.left = '';
-      menuDrag.style.top = '';
-      menuDrag.style.transform = '';
+    if (menuEditorial && menuEditorialBody) {
+      window.addEventListener('load', fitMenuEditorialType);
+      window.addEventListener('resize', fitMenuEditorialType);
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(fitMenuEditorialType);
+      }
+
+      requestAnimationFrame(fitMenuEditorialType);
     }
 
     if (menuDrag && menuSection) {
@@ -783,7 +1022,6 @@
       var menuPointerId = null;
       var menuGrabOffsetX = 0;
       var menuGrabOffsetY = 0;
-      var menuPositioned = false;
 
       function placeMenu(x, y) {
         var maxX = Math.max(0, menuSection.clientWidth - menuDrag.offsetWidth);
@@ -791,33 +1029,28 @@
         menuDrag.style.left = Math.min(Math.max(0, x), maxX) + 'px';
         menuDrag.style.top = Math.min(Math.max(0, y), maxY) + 'px';
         menuDrag.style.transform = 'none';
-        menuPositioned = true;
       }
 
       function defaultMenuPosition() {
         placeMenu(
           (menuSection.clientWidth - menuDrag.offsetWidth) / 2,
-          menuSection.clientHeight * 0.52 - menuDrag.offsetHeight / 2
+          Math.max(0, menuSection.clientHeight * 0.42 - menuDrag.offsetHeight / 2)
         );
       }
 
       function initMenuPosition() {
-        if (isMenuMobileLayout()) {
-          resetMenuMobilePosition();
-          return;
-        }
         defaultMenuPosition();
       }
 
       window.addEventListener('load', initMenuPosition);
       window.addEventListener('resize', function () {
+        fitMenuEditorialType();
         if (!menuDragging) {
           initMenuPosition();
         }
       });
 
       menuDrag.addEventListener('pointerdown', function (e) {
-        if (isMenuMobileLayout()) return;
         if (e.button !== 0) return;
 
         menuDragging = true;
@@ -869,64 +1102,7 @@
     }
   }
 
-  // About us — expand upward in story section
-  var aboutAccordion = document.querySelector('#our-story [data-about-accordion]');
-
-  function bindStoryColumnAccordion(accordion) {
-    if (!accordion) return null;
-
-    var trigger = accordion.querySelector('.story-accordion__trigger');
-
-    function setOpen(open) {
-      accordion.classList.toggle('is-open', open);
-      accordion.classList.toggle('is-compressed', !open);
-      if (trigger) {
-        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
-      }
-    }
-
-    function collapse() {
-      setOpen(false);
-    }
-
-    if (trigger) {
-      trigger.addEventListener('click', function (e) {
-        if (window.matchMedia('(max-width: 768px)').matches) {
-          e.preventDefault();
-          return;
-        }
-        e.preventDefault();
-        e.stopPropagation();
-        setOpen(!accordion.classList.contains('is-open'));
-      });
-    }
-
-    collapse();
-    return collapse;
-  }
-
-  var collapseAboutAccordion = bindStoryColumnAccordion(aboutAccordion);
-
-  if (collapseAboutAccordion) {
-    window.collapseAboutAccordion = collapseAboutAccordion;
-  }
-
-  function syncMobileAboutAccordion() {
-    var mobileAboutQuery = window.matchMedia('(max-width: 768px)');
-    if (!aboutAccordion || !mobileAboutQuery.matches) return;
-
-    aboutAccordion.classList.add('is-open');
-    aboutAccordion.classList.remove('is-compressed');
-    var aboutTrigger = aboutAccordion.querySelector('.story-accordion__trigger');
-    if (aboutTrigger) {
-      aboutTrigger.setAttribute('aria-expanded', 'true');
-    }
-  }
-
-  syncMobileAboutAccordion();
-  if (typeof window.matchMedia('(max-width: 768px)').addEventListener === 'function') {
-    window.matchMedia('(max-width: 768px)').addEventListener('change', syncMobileAboutAccordion);
-  }
+  // Home about copy is always visible (no accordion)
 
   function goToHomeTop() {
     if (typeof window.homeGoToSnapPage === 'function') {
@@ -938,6 +1114,7 @@
 
   function isHomePageLink(href) {
     if (!href || href.charAt(0) === '#') return false;
+    if (/^(mailto|tel|sms):/i.test(href)) return false;
 
     try {
       var resolved = new URL(href, window.location.href);
@@ -990,6 +1167,47 @@
     });
   });
 
+  // Services / home marquees — shared phrase builder
+  var servicesMarqueePhrases = [
+    'weddings',
+    'corporate events',
+    'pop-ups',
+    'Bar Mitzvahs',
+    'private parties',
+    'teacher appreciation',
+    'birthdays',
+    'product launch',
+    'rodeos',
+    'conferences',
+    'baby shower',
+    'Secret Society hangout',
+    'executive meeting',
+    'pool party',
+    'gator wrestling competition',
+    'bachelorette trip',
+    'run club',
+    'grand opening',
+    'world domination'
+  ];
+
+  function buildServicesMarqueeItems(phrases, passes) {
+    var html = '';
+    var count = passes || 2;
+
+    for (var p = 0; p < count; p++) {
+      phrases.forEach(function (phrase) {
+        html += '<span class="services-marquee__phrase">' + phrase + '</span>';
+        html += '<span class="services-marquee__sep" aria-hidden="true">·</span>';
+      });
+    }
+
+    return html;
+  }
+
+  document.querySelectorAll('[data-services-marquee-track]').forEach(function (track) {
+    track.innerHTML = buildServicesMarqueeItems(servicesMarqueePhrases, 2);
+  });
+
   // Services page — multi-direction marquee frame
   if (document.body.classList.contains('page-services')) {
     document.documentElement.style.overscrollBehavior = 'none';
@@ -998,55 +1216,370 @@
       el.classList.add('is-visible');
     });
 
-    function clampServicesScroll() {
-      var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      if (maxScroll < 0) maxScroll = 0;
-      if (window.scrollY > maxScroll) {
-        window.scrollTo(0, maxScroll);
+    // Mobile stage — stacked titles + slow image flip
+    var servicesItems = Array.prototype.slice.call(
+      document.querySelectorAll('.services-mobile [data-services-slide]')
+    );
+    var servicesSlides = Array.prototype.slice.call(
+      document.querySelectorAll('.services-mobile [data-services-slide-img]')
+    );
+    var servicesIndex = 0;
+    var servicesTimer = null;
+    var servicesIntervalMs = 5500;
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function setServicesSlide(nextIndex) {
+      if (!servicesSlides.length) return;
+      servicesIndex =
+        ((nextIndex % servicesSlides.length) + servicesSlides.length) % servicesSlides.length;
+
+      servicesItems.forEach(function (item, i) {
+        var active = i === servicesIndex;
+        item.classList.toggle('is-active', active);
+        if (active) {
+          item.setAttribute('aria-current', 'true');
+          // Retrigger settle animation on each selection / auto-flip
+          var name = item.querySelector('.services-mobile__name');
+          if (name) {
+            name.style.animation = 'none';
+            void name.offsetWidth;
+            name.style.animation = '';
+          }
+        } else {
+          item.removeAttribute('aria-current');
+        }
+      });
+
+      servicesSlides.forEach(function (slide, i) {
+        slide.classList.toggle('is-active', i === servicesIndex);
+      });
+    }
+
+    function stopServicesFlip() {
+      if (servicesTimer) {
+        window.clearInterval(servicesTimer);
+        servicesTimer = null;
       }
     }
 
-    window.addEventListener('scroll', clampServicesScroll, { passive: true });
-    window.addEventListener('resize', clampServicesScroll);
-    clampServicesScroll();
-
-    var servicesMarqueePhrases = [
-      'weddings',
-      'private parties',
-      'Bar Mitzvah',
-      'teacher appreciation',
-      'birthdays',
-      'product launch',
-      'rodeos',
-      'conferences',
-      'baby shower',
-      'Secret Society hangout',
-      'executive meeting',
-      'pool party',
-      'gator wrestling competition',
-      'bachelorette trip',
-      'run club',
-      'grand opening',
-      'world domination'
-    ];
-
-    function buildServicesMarqueeItems(phrases, passes) {
-      var html = '';
-      var count = passes || 2;
-
-      for (var p = 0; p < count; p++) {
-        phrases.forEach(function (phrase) {
-          html += '<span class="services-marquee__phrase">' + phrase + '</span>';
-          html += '<span class="services-marquee__sep" aria-hidden="true">·</span>';
-        });
+    function startServicesFlip() {
+      stopServicesFlip();
+      if (!mobileLockMq.matches || prefersReducedMotion.matches || servicesSlides.length < 2) {
+        return;
       }
-
-      return html;
+      servicesTimer = window.setInterval(function () {
+        setServicesSlide(servicesIndex + 1);
+      }, servicesIntervalMs);
     }
 
-    document.querySelectorAll('[data-services-marquee-track]').forEach(function (track) {
-      track.innerHTML = buildServicesMarqueeItems(servicesMarqueePhrases, 2);
+    servicesItems.forEach(function (item) {
+      item.addEventListener('click', function () {
+        var idx = parseInt(item.getAttribute('data-services-slide'), 10);
+        if (isNaN(idx)) return;
+        setServicesSlide(idx);
+        startServicesFlip();
+      });
     });
+
+    if (typeof prefersReducedMotion.addEventListener === 'function') {
+      prefersReducedMotion.addEventListener('change', startServicesFlip);
+    } else if (typeof prefersReducedMotion.addListener === 'function') {
+      prefersReducedMotion.addListener(startServicesFlip);
+    }
+
+    mobileLockMq.addEventListener
+      ? mobileLockMq.addEventListener('change', startServicesFlip)
+      : mobileLockMq.addListener && mobileLockMq.addListener(startServicesFlip);
+
+    setServicesSlide(0);
+    startServicesFlip();
+
+    // Continuous path marquee — canvas glyphs along rounded bevel (no SVG textPath seam)
+    (function initServicesPathMarquee() {
+      var stage = document.querySelector('.services-mobile__stage');
+      var canvas = document.querySelector('[data-services-path-marquee-canvas]');
+      if (!stage || !canvas || !canvas.getContext) return;
+
+      var ctx = canvas.getContext('2d');
+      var svgNS = 'http://www.w3.org/2000/svg';
+      var measurePath = document.createElementNS(svgNS, 'path');
+      var offset = 0;
+      var pathLen = 0;
+      var rafId = 0;
+      var lastTs = 0;
+      var speedPxPerSec = 9;
+      var resizeTimer = null;
+      var phrase = '';
+      var fontSize = 11;
+      var cream = '#F4F7EE';
+      var typeOpacity = 0.62;
+      var dpr = 1;
+      var charWidths = null;
+
+      function readPxVar(name, fallback) {
+        var probe = document.createElement('div');
+        probe.style.cssText =
+          'position:absolute;visibility:hidden;pointer-events:none;width:var(' +
+          name +
+          ');height:1px;';
+        stage.appendChild(probe);
+        var px = probe.getBoundingClientRect().width;
+        stage.removeChild(probe);
+        return px > 0 ? px : fallback;
+      }
+
+      function roundedRectPath(w, h, radius, inset) {
+        var x = inset;
+        var y = inset;
+        var rw = Math.max(0, w - inset * 2);
+        var rh = Math.max(0, h - inset * 2);
+        var r = Math.max(0, Math.min(radius - inset, rw / 2, rh / 2));
+        // Start mid-bottom — seam sits under the CTA where it's least noticeable
+        var midX = x + rw / 2;
+        return (
+          'M ' +
+          midX +
+          ',' +
+          (y + rh) +
+          ' H ' +
+          (x + r) +
+          ' A ' +
+          r +
+          ',' +
+          r +
+          ' 0 0 1 ' +
+          x +
+          ',' +
+          (y + rh - r) +
+          ' V ' +
+          (y + r) +
+          ' A ' +
+          r +
+          ',' +
+          r +
+          ' 0 0 1 ' +
+          (x + r) +
+          ',' +
+          y +
+          ' H ' +
+          (x + rw - r) +
+          ' A ' +
+          r +
+          ',' +
+          r +
+          ' 0 0 1 ' +
+          (x + rw) +
+          ',' +
+          (y + r) +
+          ' V ' +
+          (y + rh - r) +
+          ' A ' +
+          r +
+          ',' +
+          r +
+          ' 0 0 1 ' +
+          (x + rw - r) +
+          ',' +
+          (y + rh) +
+          ' H ' +
+          midX
+        );
+      }
+
+      function buildPhrase() {
+        var unit = '';
+        servicesMarqueePhrases.forEach(function (item) {
+          unit += item.toUpperCase() + '   ·   ';
+        });
+        return unit;
+      }
+
+      function setFont() {
+        ctx.font =
+          '700 ' + fontSize + 'px Inter, system-ui, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = cream;
+        ctx.globalAlpha = typeOpacity;
+      }
+
+      function draw() {
+        var w = canvas.width;
+        var h = canvas.height;
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.globalAlpha = 1;
+        ctx.clearRect(0, 0, w, h);
+        if (pathLen < 8 || !phrase) return;
+
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        setFont();
+
+        var traveled = 0;
+        var charIndex = 0;
+        var guard = 0;
+        var maxChars = 4000;
+        var prevAngle = null;
+
+        while (traveled < pathLen && guard < maxChars) {
+          var ch = phrase.charAt(charIndex % phrase.length);
+          var chWidth =
+            charWidths && charWidths[ch] != null
+              ? charWidths[ch]
+              : ctx.measureText(ch).width;
+          if (chWidth < 0.01) chWidth = fontSize * 0.35;
+
+          var pos = (offset + traveled) % pathLen;
+          var p1 = measurePath.getPointAtLength(pos);
+          var sample = Math.min(1.5, Math.max(0.75, chWidth * 0.4));
+          var angle;
+          if (pos + sample <= pathLen) {
+            var p2 = measurePath.getPointAtLength(pos + sample);
+            angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+          } else if (pos - sample >= 0) {
+            var p0 = measurePath.getPointAtLength(pos - sample);
+            angle = Math.atan2(p1.y - p0.y, p1.x - p0.x);
+          } else {
+            var p3 = measurePath.getPointAtLength((pos + sample) % pathLen);
+            angle = Math.atan2(p3.y - p1.y, p3.x - p1.x);
+          }
+
+          // Soften abrupt corner turns
+          if (prevAngle != null) {
+            var delta = angle - prevAngle;
+            while (delta > Math.PI) delta -= Math.PI * 2;
+            while (delta < -Math.PI) delta += Math.PI * 2;
+            angle = prevAngle + delta * 0.55;
+          }
+          prevAngle = angle;
+
+          ctx.save();
+          ctx.translate(p1.x, p1.y);
+          ctx.rotate(angle);
+          ctx.fillText(ch, 0, 0);
+          ctx.restore();
+
+          traveled += chWidth;
+          charIndex += 1;
+          guard += 1;
+        }
+      }
+
+      function layout() {
+        if (!mobileLockMq.matches) {
+          stopAnim();
+          ctx && ctx.clearRect(0, 0, canvas.width, canvas.height);
+          return;
+        }
+
+        var rect = stage.getBoundingClientRect();
+        var w = rect.width;
+        var h = rect.height;
+        if (w < 8 || h < 8) return;
+
+        var outerR = readPxVar(
+          '--services-mobile-radius',
+          readPxVar('--services-marquee-radius', 44)
+        );
+        var inset = readPxVar('--services-marquee-path-inset', 11.2);
+        fontSize = Math.max(7, inset * 0.48);
+
+        try {
+          cream =
+            getComputedStyle(stage).getPropertyValue('--cream').trim() || '#F4F7EE';
+        } catch (err) {
+          cream = '#F4F7EE';
+        }
+
+        var opacityRaw = getComputedStyle(stage)
+          .getPropertyValue('--services-marquee-type-opacity')
+          .trim();
+        var opacityNum = parseFloat(opacityRaw);
+        typeOpacity = isFinite(opacityNum) ? opacityNum : 0.62;
+
+        dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+
+        var d = roundedRectPath(w, h, outerR, inset);
+        measurePath.setAttribute('d', d);
+        try {
+          pathLen = measurePath.getTotalLength();
+        } catch (err) {
+          pathLen = 0;
+        }
+        if (!pathLen) return;
+
+        phrase = buildPhrase();
+        setFont();
+        charWidths = Object.create(null);
+        for (var ci = 0; ci < phrase.length; ci++) {
+          var c = phrase.charAt(ci);
+          if (charWidths[c] == null) {
+            charWidths[c] = ctx.measureText(c).width;
+          }
+        }
+        if (offset > pathLen) offset = offset % pathLen;
+
+        draw();
+
+        if (!prefersReducedMotion.matches) {
+          startAnim();
+        } else {
+          stopAnim();
+        }
+      }
+
+      function tick(ts) {
+        if (!lastTs) lastTs = ts;
+        var dt = Math.min(0.032, (ts - lastTs) / 1000);
+        lastTs = ts;
+        if (pathLen > 0) {
+          offset += speedPxPerSec * dt;
+          if (offset >= pathLen) offset -= pathLen;
+          draw();
+        }
+        rafId = window.requestAnimationFrame(tick);
+      }
+
+      function startAnim() {
+        if (rafId || prefersReducedMotion.matches) return;
+        lastTs = 0;
+        rafId = window.requestAnimationFrame(tick);
+      }
+
+      function stopAnim() {
+        if (!rafId) return;
+        window.cancelAnimationFrame(rafId);
+        rafId = 0;
+        lastTs = 0;
+      }
+
+      function scheduleLayout() {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(layout, 60);
+      }
+
+      layout();
+
+      if (typeof ResizeObserver === 'function') {
+        var ro = new ResizeObserver(scheduleLayout);
+        ro.observe(stage);
+      } else {
+        window.addEventListener('resize', scheduleLayout);
+      }
+
+      mobileLockMq.addEventListener
+        ? mobileLockMq.addEventListener('change', layout)
+        : mobileLockMq.addListener && mobileLockMq.addListener(layout);
+
+      if (typeof prefersReducedMotion.addEventListener === 'function') {
+        prefersReducedMotion.addEventListener('change', layout);
+      } else if (typeof prefersReducedMotion.addListener === 'function') {
+        prefersReducedMotion.addListener(layout);
+      }
+    })();
 
     // Arrow PNG (612×936): tail ≈ (28,28), tip ≈ y=907 — used for precise layout
     var ARROW_IMG_W = 612;
@@ -1077,6 +1610,8 @@
     }
 
     function layoutServicesArrow() {
+      if (mobileLockMq.matches) return;
+
       var root = document.querySelector('.page-services');
       var main = document.getElementById('main');
       var forall = document.querySelector('.services-brand-banner__forall');
@@ -1179,4 +1714,17 @@
       window.setTaglineBrandInactive();
     }
   };
+
+  /* Reach out — slow photo crossfade behind the form */
+  if (document.body.classList.contains('page-reach-out')) {
+    var reachPhotos = document.querySelectorAll('.reach-out-stage__photo');
+    if (reachPhotos.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var reachIndex = 0;
+      window.setInterval(function () {
+        reachPhotos[reachIndex].classList.remove('is-active');
+        reachIndex = (reachIndex + 1) % reachPhotos.length;
+        reachPhotos[reachIndex].classList.add('is-active');
+      }, 9000);
+    }
+  }
 })();

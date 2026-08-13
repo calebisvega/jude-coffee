@@ -33,11 +33,17 @@
 
   function applyScaledDimensions(contentHeight) {
     var height = Math.min(Math.max(contentHeight, minHeight), maxHeight);
+    var widget = host.closest('.booking-widget');
+    if (widget && widget.clientHeight > 40) {
+      scale = getScale();
+      var fit = Math.floor(widget.clientHeight / scale);
+      height = Math.min(height, Math.max(280, fit));
+    }
     scale = getScale();
 
     iframe.style.height = height + 'px';
-    iframe.style.minHeight = minHeight + 'px';
-    iframe.style.maxHeight = maxHeight + 'px';
+    iframe.style.minHeight = Math.min(minHeight, height) + 'px';
+    iframe.style.maxHeight = height + 'px';
     iframe.style.transform = 'scale(' + scale + ')';
     host.style.width = Math.ceil(cardWidth * scale) + 'px';
     host.style.height = Math.ceil(height * scale) + 'px';

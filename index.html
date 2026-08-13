@@ -11,40 +11,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500;9..40,600&family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css?v=20250628aam">
-  <link rel="stylesheet" href="/css/mobile.css?v=20250628mob4">
+  <link rel="stylesheet" href="/css/styles.css?v=20250802mob106">
+  <link rel="stylesheet" href="/css/mobile.css?v=20250802mob106">
 </head>
 <body class="page-home">
   <a href="#main" class="skip-link">Skip to content</a>
-
-  <header class="site-header site-header--home" id="header">
-    <div class="header-inner header-inner--brand">
-      <div class="header-tagline header-tagline--left" data-tagline-brand="coffee-anytime">
-        <span class="tagline-underline tagline-trigger" tabindex="0">Coffee</span>
-        <span class="tagline-reveal">
-          <a href="/services.html">Services</a>
-          <a href="/menu.html">Menu</a>
-        </span>
-      </div>
-      <a href="/" class="logo" aria-label="Jude — Home" aria-current="page">
-        <img src="/images/logo-transparent.png" alt="" class="logo-img" width="120" height="48">
-      </a>
-      <div class="header-tagline header-tagline--right header-tagline--mode-anytime" data-tagline-brand="coffee-anytime">
-        <span class="tagline-underline tagline-trigger" tabindex="0">Anytime</span>
-        <span class="tagline-reveal">
-          <a href="/contact.html">Book us</a>
-          <a href="/contact.html">Reach out</a>
-        </span>
-      </div>
-      <div class="header-tagline header-tagline--right header-tagline--mode-anywhere" data-tagline-brand="coffee-anywhere" aria-hidden="true">
-        <span class="tagline-underline tagline-trigger" tabindex="0">Anywhere</span>
-        <span class="tagline-reveal">
-          <a href="/contact.html">Book us</a>
-          <a href="/contact.html">Reach out</a>
-        </span>
-      </div>
-    </div>
-  </header>
 
   <div class="hero-brand-logo" aria-hidden="true">
     <img src="/images/logo-cream.png" alt="" class="hero-brand-logo__img" width="320" height="128">
@@ -56,7 +27,36 @@
 
   <main id="main">
     <section class="hero hero--minimal home-snap-page" data-snap-page="0" aria-label="Introduction">
+      <!-- Jude scrolls with this section -->
+      <a href="/" class="logo hero-scroll-logo" aria-label="Jude — Home" aria-current="page">
+        <img src="/images/Artboard%201.png?v=20250802mob106" alt="" class="logo-img logo-img--desktop" width="1081" height="1081">
+        <img src="/images/logo-mobile-sage.png" alt="" class="logo-img logo-img--mobile" width="979" height="433">
+      </a>
       <div class="hero-inner">
+        <!-- Viewport-fixed on desktop; sits above the image on mobile -->
+        <div class="home-fixed-taglines" aria-label="Site navigation">
+          <div class="header-tagline header-tagline--left" data-tagline-brand="coffee-anytime">
+            <span class="tagline-underline tagline-trigger" tabindex="0">Coffee</span>
+            <span class="tagline-reveal">
+              <a href="/services.html">Services</a>
+              <a href="/menu.html">Menu</a>
+            </span>
+          </div>
+          <div class="header-tagline header-tagline--right header-tagline--mode-anytime" data-tagline-brand="coffee-anytime">
+            <span class="tagline-underline tagline-trigger" tabindex="0">Anytime</span>
+            <span class="tagline-reveal">
+              <a href="/contact.html">Book us</a>
+              <a href="mailto:info@judecoffee.com">Reach out</a>
+            </span>
+          </div>
+          <div class="header-tagline header-tagline--right header-tagline--mode-anywhere" data-tagline-brand="coffee-anywhere" aria-hidden="true">
+            <span class="tagline-underline tagline-trigger" tabindex="0">Anywhere</span>
+            <span class="tagline-reveal">
+              <a href="/contact.html">Book us</a>
+              <a href="mailto:info@judecoffee.com">Reach out</a>
+            </span>
+          </div>
+        </div>
         <h1 class="hero-tagline hero-tagline--corners">
           <span class="visually-hidden">Coffee Anytime, Coffee Anywhere</span>
           <span class="hero-tagline__word hero-tagline__word--bl" data-tagline-brand="coffee-anywhere">
@@ -70,7 +70,7 @@
             <span class="tagline-underline tagline-trigger" tabindex="0">Anywhere</span>
             <span class="tagline-reveal">
               <a href="/contact.html">Book us</a>
-              <a href="/contact.html">Reach out</a>
+              <a href="mailto:info@judecoffee.com">Reach out</a>
             </span>
           </span>
         </h1>
@@ -96,38 +96,49 @@
             <img src="/images/beans.png" alt="" class="hero-collage__photo is-active">
             <img src="/images/popup.png" alt="" class="hero-collage__photo">
           </div>
-          <a href="#our-story" class="hero-collage__about story-title story-title--on-media tagline-underline">Our Story</a>
+          <a href="#our-story" class="hero-collage__about story-title story-title--on-media tagline-underline">About us</a>
+        </div>
+        <div class="home-mid">
+          <figure class="home-mobile-cart">
+            <img
+              src="/images/story-cart.png"
+              alt="Jude coffee cart"
+              class="home-mobile-cart__img"
+              width="900"
+              height="1200"
+              decoding="async"
+            >
+          </figure>
+          <nav class="home-mobile-nav" aria-label="Primary">
+            <a href="/menu.html" class="home-mobile-nav__link tagline-underline">Menu</a>
+            <a href="/services.html" class="home-mobile-nav__link tagline-underline">Services</a>
+            <a href="/reach-out.html" class="home-mobile-nav__link tagline-underline">Reach out</a>
+            <a href="/contact.html" class="home-mobile-nav__link tagline-underline">Book us</a>
+          </nav>
+        </div>
+        <div class="home-mobile-footer">
+          <a href="mailto:info@judecoffee.com" class="home-mobile-footer__email">info@judecoffee.com</a>
+          <p class="home-mobile-footer__tagline tagline-underline">Coffee Anytime Coffee Anywhere</p>
         </div>
       </div>
     </section>
 
-    <section id="our-story" class="section section--story home-snap-page fade-in" data-snap-page="1">
+    <section id="our-story" class="section section--story home-snap-page fade-in" data-snap-page="1" aria-label="About us">
       <div class="story-editorial">
-        <div class="story-column story-column--about">
-          <div class="story-accordion is-compressed" id="about-accordion" data-about-accordion>
-            <button type="button" class="story-accordion__trigger" id="about-accordion-trigger" data-about-accordion-trigger aria-expanded="false" aria-controls="about-accordion-panel" aria-label="Expand about us">
-              <span class="story-title tagline-underline story-section-heading">About us</span>
-              <span class="story-accordion__icon story-accordion__icon--right" aria-hidden="true">
-                <svg width="12" height="12" viewBox="0 0 12 12" focusable="false">
-                  <path d="M4.25 2 8.25 6 4.25 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                </svg>
-              </span>
-            </button>
-            <div id="about-accordion-panel" class="story-accordion__panel" role="region" aria-labelledby="about-accordion-trigger">
-              <div class="story-accordion__panel-inner story-accordion__panel-inner--columns3">
-                <div class="story-accordion__col">
-                  <p><span class="story-about-lead">In 2022, Jude was founded by Jordan and Kelsey Willcox in sunny Lakeland, Florida.</span> From its inception, Jude has been designed to be a mobile third place for people to gather.</p>
-                  <p>Since then, David &amp; Caleb have inherited this treasure of a coffee company. In the past years, we've<br>been serving coffee under a similar sensibility with Dumb Coffee, our<br>last venture in hospitality.</p>
-                </div>
-                <div class="story-accordion__col">
-                  <p>Whether you're a roaster with loads of experience or this is your first time trying to order a drink with a long Italian based name, we're here for you.</p>
-                  <p>We'll try our best to have a dialogue that leads to you experiencing the depth and kindness of others. We may not know all the correct answers, and that's okay, (everybody knows <span class="story-misspell">capppucccino</span> is incredibly difficult<br>to spell.)</p>
-                </div>
-                <div class="story-accordion__col">
-                  <p>We believe that both genuine care and others-centered hospitality are a large part of what makes us better humans.</p>
-                  <p>In an age where deep ties are fading and neighbors have grown farther estranged, our little pocket of Central Florida needs a reason to hang out and get to know each other. In fear of this sounding like a grand manifesto, we'd like to simply introduce Jude this way.<br><span class="story-tagline">Jude for all.</span></p>
-                </div>
-              </div>
+        <div class="story-about">
+          <h2 class="story-about__label story-title tagline-underline story-section-heading">About us</h2>
+          <div class="story-about__columns">
+            <div class="story-about__col">
+              <p><span class="story-about-lead">In 2022, Jude was founded by Jordan and Kelsey Willcox in sunny Lakeland, Florida.</span> From its inception, Jude has been designed to be a mobile third place for people to gather.</p>
+              <p class="story-about__mobile-hide">Since then, David &amp; Caleb have inherited this treasure of a coffee company. In the past years, we've been serving coffee under a similar sensibility with Dumb Coffee, our last venture in hospitality.</p>
+            </div>
+            <div class="story-about__col">
+              <p class="story-about__mobile-hide">Whether you're a roaster with loads of experience or this is your first time trying to order a drink with a long Italian based name, we're here for you.</p>
+              <p class="story-about__mobile-hide">We'll try our best to have a dialogue that leads to you experiencing the depth and kindness of others. We may not know all the correct answers, and that's okay, (everybody knows <span class="story-misspell">capppucccino</span> is incredibly difficult to spell.)</p>
+            </div>
+            <div class="story-about__col">
+              <p>We believe that both genuine care and others-centered hospitality are a large part of what makes us better humans.</p>
+              <p>In an age where deep ties are fading and neighbors have grown farther estranged, our little pocket of Central Florida needs a reason to hang out and get to know each other. In fear of this sounding like a grand manifesto, we'd like to simply introduce Jude this way. <span class="story-tagline">Jude for all.</span></p>
             </div>
           </div>
         </div>
@@ -137,42 +148,69 @@
       </div>
     </section>
 
-    <div class="home-snap-page home-snap-page--close" data-snap-page="2">
-    <section class="section section--home-close section--cta section--cta-blue fade-in">
-      <div class="container">
-        <h2 class="section-heading__title section--home-close__heading">
-          <a href="https://instagram.com/judeisforall" target="_blank" rel="noopener noreferrer" class="heading-link">@judeisforall</a>
-        </h2>
-        <div class="instagram-grid" aria-label="Recent photos from Jude">
-          <img src="/images/prep.png" alt="Espresso preparation" loading="lazy" width="400" height="400">
-          <img src="/images/beans.png" alt="Fresh coffee beans" loading="lazy" width="400" height="400">
-          <img src="/images/team.png" alt="Caleb and David at the Jude cart" loading="lazy" width="400" height="400">
-          <img src="/images/barista.png" alt="Behind the bar" loading="lazy" width="400" height="400">
+    <section class="section section--home-services" aria-label="What we do">
+      <div class="home-services-marquee-frame" aria-hidden="true">
+        <div class="services-marquee services-marquee--vertical services-marquee--left home-services-marquee">
+          <div class="services-marquee__track" data-services-marquee-track data-marquee-axis="y" data-marquee-direction="up"></div>
         </div>
+        <div class="services-marquee services-marquee--vertical services-marquee--right home-services-marquee">
+          <div class="services-marquee__track" data-services-marquee-track data-marquee-axis="y" data-marquee-direction="down"></div>
+        </div>
+      </div>
+      <div class="home-services">
+        <h2 class="home-services__title story-title tagline-underline story-section-heading">What we do</h2>
+        <div class="home-services__track" tabindex="0" aria-label="Services — swipe for more">
+          <article class="home-services__card">
+            <a href="/contact.html" class="home-services__link">
+              <div class="home-services__media">
+                <img src="/images/popup.png" alt="" width="800" height="800" loading="lazy">
+              </div>
+              <h3 class="home-services__name">Weddings</h3>
+              <p class="home-services__copy">From the first toast to the last dance — specialty coffee for your guests, all night long.</p>
+            </a>
+          </article>
+          <article class="home-services__card">
+            <a href="/contact.html" class="home-services__link">
+              <div class="home-services__media">
+                <img src="/images/barista.png" alt="" width="800" height="800" loading="lazy">
+              </div>
+              <h3 class="home-services__name">Corporate events</h3>
+              <p class="home-services__copy">Meetings, launches, and company gatherings — barista-crafted coffee on site.</p>
+            </a>
+          </article>
+          <article class="home-services__card">
+            <a href="/contact.html" class="home-services__link">
+              <div class="home-services__media">
+                <img src="/images/cart.png" alt="" width="800" height="800" loading="lazy">
+              </div>
+              <h3 class="home-services__name">Pop-ups</h3>
+              <p class="home-services__copy">Markets, festivals, private parties — wherever good coffee belongs.</p>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="home-snap-page home-snap-page--close" data-snap-page="2">
+    <section class="section section--home-close section--cta fade-in">
+      <div class="container">
         <div class="section--home-close__cta container--prose text-center">
           <h2 class="story-title tagline-underline story-section-heading">Ready when you are.</h2>
           <p>Tell us about your event. We'll handle the coffee.</p>
-          <a href="/contact.html" class="btn">Get in touch</a>
+          <a href="mailto:info@judecoffee.com" class="btn">Get in touch</a>
         </div>
       </div>
     </section>
 
     <footer class="site-footer">
-      <div class="footer-bar">
-        <div class="footer-bar__contact">
-          <p class="footer-bar__name">Jude Coffee</p>
-          <p class="footer-bar__location">Lakeland, FL 33801</p>
-          <a href="mailto:Caleb@judeforall.com" class="footer-bar__link">Caleb@judeforall.com</a>
-          <a href="tel:+12536919308" class="footer-bar__link">(253) 691-9308</a>
-        </div>
-        <a href="/" class="footer-bar__logo" aria-label="Jude — Home">
-          <img src="/images/logo-cream.png" alt="" class="footer-logo-mark" width="200" height="80">
-        </a>
-      </div>
-    </footer>
+    <div class="footer-bar footer-bar--simple">
+      <a href="mailto:info@judecoffee.com" class="footer-bar__email">info@judecoffee.com</a>
+      <p class="footer-bar__tagline tagline-underline">Coffee Anytime Coffee Anywhere</p>
+    </div>
+  </footer>
     </div>
   </main>
 
-  <script src="/js/main.js"></script>
+  <script src="/js/main.js?v=20250802mob106"></script>
 </body>
 </html>
