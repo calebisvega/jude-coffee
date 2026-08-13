@@ -10,15 +10,14 @@
   function syncMobilePageLocks() {
     var isMobile = mobileLockMq.matches;
     var isHome = document.body.classList.contains('page-home');
-    var isContactPage = document.body.classList.contains('page-contact');
     var canLockMobile =
       isHome ||
       document.body.classList.contains('page-menu') ||
       document.body.classList.contains('page-about') ||
       document.body.classList.contains('page-services') ||
-      isContactPage;
-    // Contact pages (Book us + Reach out) stay viewport-locked on all breakpoints.
-    var pageLocked = (isMobile && canLockMobile) || isContactPage;
+      document.body.classList.contains('page-contact');
+    // Viewport locks are mobile-only (desktop keeps normal scroll).
+    var pageLocked = isMobile && canLockMobile;
 
     document.documentElement.classList.toggle('is-home-locked', isMobile && isHome);
     document.documentElement.classList.toggle('is-page-locked', pageLocked);
