@@ -8,6 +8,11 @@
   :root {
     --page-gutter: clamp(1rem, 4.5vw, 1.35rem);
     --footer-simple-font-size: 0.6875rem;
+    --mobile-footer-pad-bottom: 0.2rem;
+  }
+
+  body.is-page-locked .footer-bar.footer-bar--simple {
+    padding-bottom: var(--mobile-footer-pad-bottom);
   }
 
   body:not(.page-home) {
@@ -36,7 +41,7 @@
     --home-hero-pad-top: 0;
     --home-logo-width-fill: 1.15; /* compensates transparent side padding in Artboard 1.png */
     --home-logo-shift-y: -3.5rem; /* pull logo up (PNG has top transparent padding) */
-    --home-mid-bottom: 10.75rem;
+    --home-mid-bottom: 7.5rem;
     --home-nav-size: clamp(1.65rem, 8vw, 2.1rem);
     --home-cart-fr: 1.15fr;
     --home-cart-aspect: 5 / 3.5;
@@ -82,7 +87,7 @@
     align-items: stretch;
     justify-content: flex-start;
     width: 100%;
-    padding: var(--home-hero-pad-top, 0.35rem) var(--page-gutter) 1rem;
+    padding: var(--home-hero-pad-top, 0.35rem) var(--page-gutter) var(--mobile-footer-pad-bottom);
     box-sizing: border-box;
     background: var(--off-white);
   }
@@ -614,12 +619,14 @@
     height: auto;
   }
 
-  .page-menu .section--menu-asset {
+  .page-menu .section--menu-asset,
+  .page-menu.is-page-locked .section--menu-asset {
     position: relative;
     display: block;
-    min-height: calc(100dvh - 5.5rem);
+    min-height: 0;
+    height: 100%;
     padding: 0;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .page-menu .menu-editorial {
@@ -655,10 +662,10 @@
   }
 
   .page-menu .menu-asset-drag {
-    position: absolute;
+    position: fixed;
     left: 50%;
     top: 45%;
-    z-index: 2;
+    z-index: 500;
     order: unset;
     align-self: auto;
     width: min(42vw, 9.5rem);
@@ -666,6 +673,7 @@
     transform: translate(-50%, -50%);
     cursor: grab;
     touch-action: none;
+    pointer-events: auto;
   }
 
   .page-menu .menu-asset-drag.is-dragging {
@@ -684,9 +692,24 @@
     animation: none;
   }
 
+  .page-menu .site-header,
+  .page-menu .logo {
+    position: relative;
+    z-index: 2;
+  }
+
+  .page-menu.is-page-locked #main {
+    overflow: visible;
+  }
+
   .page-menu .site-footer {
     position: relative;
     z-index: 3;
+    pointer-events: none;
+  }
+
+  .page-menu .site-footer a {
+    pointer-events: auto;
   }
 
   /* --------------------------------------------------------------------------

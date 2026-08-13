@@ -1021,16 +1021,39 @@
       var menuPointerId = null;
       var menuGrabOffsetX = 0;
       var menuGrabOffsetY = 0;
+      var menuMobileMq = window.matchMedia('(max-width: 768px)');
 
       function placeMenu(x, y) {
-        var maxX = Math.max(0, menuSection.clientWidth - menuDrag.offsetWidth);
-        var maxY = Math.max(0, menuSection.clientHeight - menuDrag.offsetHeight);
+        var maxX;
+        var maxY;
+
+        if (menuMobileMq.matches) {
+          // Free drag across the full viewport — including over the logo/footer
+          maxX = Math.max(0, window.innerWidth - menuDrag.offsetWidth);
+          maxY = Math.max(0, window.innerHeight - menuDrag.offsetHeight);
+          menuDrag.style.position = 'fixed';
+          menuDrag.style.zIndex = '500';
+        } else {
+          maxX = Math.max(0, menuSection.clientWidth - menuDrag.offsetWidth);
+          maxY = Math.max(0, menuSection.clientHeight - menuDrag.offsetHeight);
+          menuDrag.style.position = 'absolute';
+          menuDrag.style.zIndex = '';
+        }
+
         menuDrag.style.left = Math.min(Math.max(0, x), maxX) + 'px';
         menuDrag.style.top = Math.min(Math.max(0, y), maxY) + 'px';
         menuDrag.style.transform = 'none';
       }
 
       function defaultMenuPosition() {
+        if (menuMobileMq.matches) {
+          placeMenu(
+            (window.innerWidth - menuDrag.offsetWidth) / 2,
+            Math.max(0, window.innerHeight * 0.42 - menuDrag.offsetHeight / 2)
+          );
+          return;
+        }
+
         placeMenu(
           (menuSection.clientWidth - menuDrag.offsetWidth) / 2,
           Math.max(0, menuSection.clientHeight * 0.42 - menuDrag.offsetHeight / 2)
@@ -1058,20 +1081,32 @@
         menuDrag.setPointerCapture(e.pointerId);
 
         var dragRect = menuDrag.getBoundingClientRect();
-        var sectionRect = menuSection.getBoundingClientRect();
         menuGrabOffsetX = e.clientX - dragRect.left;
         menuGrabOffsetY = e.clientY - dragRect.top;
 
-        placeMenu(
-          dragRect.left - sectionRect.left,
-          dragRect.top - sectionRect.top
-        );
+        if (menuMobileMq.matches) {
+          placeMenu(dragRect.left, dragRect.top);
+        } else {
+          var sectionRect = menuSection.getBoundingClientRect();
+          placeMenu(
+            dragRect.left - sectionRect.left,
+            dragRect.top - sectionRect.top
+          );
+        }
 
         e.preventDefault();
       });
 
       menuDrag.addEventListener('pointermove', function (e) {
         if (!menuDragging || e.pointerId !== menuPointerId) return;
+
+        if (menuMobileMq.matches) {
+          placeMenu(
+            e.clientX - menuGrabOffsetX,
+            e.clientY - menuGrabOffsetY
+          );
+          return;
+        }
 
         var sectionRect = menuSection.getBoundingClientRect();
         placeMenu(
