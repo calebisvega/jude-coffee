@@ -2866,331 +2866,30 @@ body.is-page-locked .footer-bar.footer-bar--simple {
 }
 
 
-/* Contact — simplified (no video)
+/* Contact — simplified
    ========================================================================== */
 
 .page-contact--simple {
-  height: 100dvh;
   min-height: 100dvh;
-  max-height: 100dvh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-html:has(body.page-contact--simple) {
-  height: 100%;
-  overflow: hidden;
-}
-
-.page-contact--simple #main {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.page-contact--simple .section--contact-book {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow: hidden;
-  padding-bottom: 0.75rem;
-}
-
-.page-contact--simple .contact-simple,
-.page-contact--simple .contact-booking {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-height: 0;
-  width: 100%;
-  max-width: 40rem;
-}
-
-.page-contact--simple .booking-widget {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-height: 0;
-  margin-top: 0.35rem;
-}
-
-.page-contact--simple .booking-widget__viewport {
-  flex: 1 1 auto;
-  min-height: 0;
-  height: 100%;
-  overflow: hidden;
-}
-
-.page-contact--simple .site-footer {
-  flex: 0 0 auto;
-}
-
-/* Reach out — photo stage (services dialect) */
-.page-reach-out {
-  --reach-out-title-size: clamp(3.25rem, 13vw, 4.5rem);
-  --reach-out-title-to-lead: 0.55rem;
-  --reach-out-form-offset: 2.35rem;
-  --reach-out-stage-radius: 2.75rem;
-  --reach-out-stage-height: 86dvh;
-  --reach-out-overlay: rgba(0, 0, 0, 0.42);
-  --reach-out-photo-crossfade: 9s;
-  background: #000;
-  color: var(--cream);
-}
-
-.page-reach-out .section--reach-out {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  min-height: 0;
-  justify-content: flex-end;
-  padding: 0 var(--page-gutter) 0.45rem;
-  overflow: hidden;
-}
-
-@media (max-width: 768px) {
-  .page-reach-out .section--reach-out {
-    padding: 0 var(--page-gutter) 0.35rem;
-  }
-
-  .page-reach-out .reach-out-stage__content {
-    padding: 1.25rem 1rem 1.15rem;
-  }
-
-  .page-reach-out {
-    --reach-out-form-offset: 1.75rem;
-  }
-}
-
-.page-reach-out .reach-out-stage {
-  position: relative;
-  flex: 0 1 auto;
-  min-height: 0;
-  height: var(--reach-out-stage-height);
-  max-height: 100%;
-  width: 100%;
-  max-width: 42rem;
-  margin-inline: auto;
-  margin-top: auto;
-  border-radius: var(--reach-out-stage-radius);
-  overflow: hidden;
-  background: #000;
-  isolation: isolate;
-}
-
-.page-reach-out .reach-out-stage__media {
-  position: absolute;
-  inset: -1px;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.page-reach-out .reach-out-stage__photo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 40%;
-  opacity: 0;
-  transition: opacity 1.4s var(--ease);
-}
-
-.page-reach-out .reach-out-stage__photo.is-active {
-  opacity: 1;
-}
-
-.page-reach-out .reach-out-stage__shade {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, transparent 28%),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.55) 0%, transparent 42%),
-    var(--reach-out-overlay);
-  pointer-events: none;
-}
-
-.page-reach-out .reach-out-stage__content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  min-height: 0;
-  min-width: 0;
-  width: 100%;
-  padding: clamp(1.5rem, 5vw, 2.25rem) clamp(1.25rem, 4.5vw, 2rem) clamp(1.35rem, 4vw, 1.85rem);
-  box-sizing: border-box;
-}
-
-.page-reach-out .reach-out-stage__intro {
-  flex: 0 0 auto;
-}
-
-.page-reach-out .reach-out-stage__title {
-  font-family: var(--font-tagline);
-  font-size: var(--reach-out-title-size);
-  font-weight: 500;
-  line-height: 0.95;
-  letter-spacing: -0.01em;
-  text-transform: none;
-  color: var(--cream);
-  margin: 0 0 var(--reach-out-title-to-lead);
-  padding-bottom: 0.1em;
-  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.35);
-  opacity: 0;
-  transform: translate3d(0, 0.85rem, 0);
-  animation: reach-out-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.12s forwards;
-}
-
-.page-reach-out .reach-out-stage__title.tagline-underline::after {
-  background: var(--cream);
-  height: max(2px, 0.045em);
-  bottom: -0.02em;
-}
-
-.page-reach-out .reach-out-stage__lead {
-  margin: 0;
-  font-family: var(--font-tagline);
-  font-size: clamp(1.05rem, 3.8vw, 1.25rem);
-  font-weight: 500;
-  color: rgba(244, 247, 238, 0.9);
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
-  opacity: 0;
-  transform: translate3d(0, 0.7rem, 0);
-  animation: reach-out-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.28s forwards;
-}
-
-.page-reach-out .reach-out-form {
-  flex: 0 0 auto;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  margin-top: var(--reach-out-form-offset);
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 0.65rem 0.75rem;
-  align-content: end;
-  box-sizing: border-box;
-  opacity: 0;
-  transform: translate3d(0, 1rem, 0);
-  animation: reach-out-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.42s forwards;
-}
-
-.page-reach-out .reach-out-form .form-group {
-  gap: 0.3rem;
-  min-width: 0;
-}
-
-.page-reach-out .reach-out-form .form-group label {
-  font-size: 0.6875rem;
-  color: rgba(244, 247, 238, 0.92);
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
-}
-
-.page-reach-out .reach-out-form .form-group input,
-.page-reach-out .reach-out-form .form-group textarea {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  padding: 0.65rem 0.8rem;
-  font-size: 0.9rem;
-  background: rgba(244, 247, 238, 0.94);
-  border: 1px solid transparent;
-  border-radius: 0.35rem;
-}
-
-.page-reach-out .reach-out-form .form-group input:focus,
-.page-reach-out .reach-out-form .form-group textarea:focus {
-  border-color: var(--cream);
-  box-shadow: 0 0 0 1px rgba(244, 247, 238, 0.45);
-}
-
-.page-reach-out .reach-out-form .form-group textarea {
-  min-height: 4.75rem;
-  resize: none;
-}
-
-.page-reach-out .reach-out-form__btn {
-  grid-column: 1 / -1;
-  margin-top: 0.15rem;
-  padding-block: 0.8rem;
-  background: transparent;
-  color: var(--cream);
-  border: 1.5px solid rgba(244, 247, 238, 0.88);
-  border-radius: 0.85rem;
-}
-
-.page-reach-out .reach-out-form__btn:hover {
-  background: rgba(244, 247, 238, 0.12);
-  color: var(--cream);
-}
-
-.page-reach-out .site-footer {
-  background: #000;
-}
-
-.page-reach-out .footer-bar--simple {
-  color: var(--cream);
-}
-
-.page-reach-out .footer-bar__email,
-.page-reach-out .footer-bar__tagline {
-  color: var(--cream);
-}
-
-@keyframes reach-out-rise {
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .page-reach-out .reach-out-stage__photo,
-  .page-reach-out .reach-out-stage__photo.is-active,
-  .page-reach-out .reach-out-stage__title,
-  .page-reach-out .reach-out-stage__lead,
-  .page-reach-out .reach-out-form {
-    animation: none;
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  .page-reach-out .reach-out-stage__photo.is-active {
-    opacity: 1;
-  }
 }
 
 .contact-simple-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--page-logo-pad-top) var(--page-gutter) var(--page-logo-pad-bottom);
+  padding: clamp(1.25rem, 4vw, 2rem) var(--page-gutter) 0.5rem;
 }
 
 .contact-simple-header__logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--page-logo-width);
-  height: var(--page-logo-width);
-  max-width: 100%;
+  display: block;
   margin-inline: auto;
   line-height: 0;
 }
 
 .contact-simple-header__logo .logo-img {
   display: block;
-  width: 100%;
-  height: auto;
+  height: var(--home-logo-height);
+  width: auto;
 }
 
 .page-contact--simple .section--contact-book {
@@ -3208,6 +2907,408 @@ html:has(body.page-contact--simple) {
   display: block;
 }
 
+/* Reach out — desktop: video hero + form; mobile stage is scoped below */
+.page-reach-out .reach-out-desktop {
+  display: block;
+}
+
+.page-reach-out .reach-out-mobile-chrome {
+  display: none;
+}
+
+.page-reach-out .reach-out-desktop__hero {
+  position: relative;
+  min-height: clamp(28rem, 72vh, 42rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  color: var(--cream);
+}
+
+.page-reach-out .reach-out-desktop__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.page-reach-out .reach-out-desktop__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.page-reach-out .reach-out-desktop__shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, transparent 35%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.55) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+.page-reach-out .reach-out-desktop__hero-inner {
+  position: relative;
+  z-index: 2;
+  padding: clamp(1.5rem, 4vw, 2.5rem) var(--page-gutter) clamp(2rem, 5vw, 3rem);
+}
+
+.page-reach-out .reach-out-desktop__logo {
+  position: absolute;
+  top: clamp(1.25rem, 4vw, 2rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  line-height: 0;
+}
+
+.page-reach-out .reach-out-desktop__logo .logo-img {
+  height: var(--home-logo-height);
+  width: auto;
+}
+
+.page-reach-out .reach-out-desktop__title {
+  font-family: var(--font-tagline);
+  font-size: clamp(2.75rem, 6vw, 4rem);
+  font-weight: 500;
+  line-height: 0.95;
+  margin: 0 0 0.55rem;
+  color: var(--cream);
+}
+
+.page-reach-out .reach-out-desktop__title.tagline-underline::after {
+  background: var(--cream);
+}
+
+.page-reach-out .reach-out-desktop__lead {
+  margin: 0;
+  font-family: var(--font-tagline);
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  color: rgba(244, 247, 238, 0.9);
+}
+
+.page-reach-out .reach-out-desktop__body {
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+}
+
+.page-reach-out .reach-out-desktop__body .contact-form {
+  max-width: 36rem;
+}
+
+.page-reach-out .reach-out-desktop__body .form-group label {
+  color: rgba(244, 247, 238, 0.92);
+}
+
+@media (max-width: 768px) {
+  .page-contact--simple {
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  html:has(body.page-contact--simple) {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .page-contact--simple #main {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .page-contact--simple .section--contact-book {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    padding-bottom: 0.75rem;
+  }
+
+  .page-contact--simple .contact-simple,
+  .page-contact--simple .contact-booking {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    max-width: 40rem;
+  }
+
+  .page-contact--simple .booking-widget {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-top: 0.35rem;
+  }
+
+  .page-contact--simple .booking-widget__viewport {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .page-contact--simple .site-footer {
+    flex: 0 0 auto;
+  }
+
+  .contact-simple-header {
+    padding: var(--page-logo-pad-top) var(--page-gutter) var(--page-logo-pad-bottom);
+  }
+
+  .contact-simple-header__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--page-logo-width);
+    height: var(--page-logo-width);
+    max-width: 100%;
+  }
+
+  .contact-simple-header__logo .logo-img {
+    width: 100%;
+    height: auto;
+  }
+
+  .page-contact--simple .contact-simple-header__logo .logo-img--cream {
+    width: 100%;
+    height: auto;
+  }
+
+  .page-reach-out {
+    --reach-out-title-size: clamp(3.25rem, 13vw, 4.5rem);
+    --reach-out-title-to-lead: 0.55rem;
+    --reach-out-form-offset: 1.75rem;
+    --reach-out-stage-radius: 2.75rem;
+    --reach-out-stage-height: 86dvh;
+    --reach-out-overlay: rgba(0, 0, 0, 0.42);
+    background: #000;
+    color: var(--cream);
+  }
+
+  .page-reach-out .reach-out-desktop {
+    display: none;
+  }
+
+  .page-reach-out .reach-out-mobile-chrome {
+    display: contents;
+  }
+
+  .page-reach-out .section--reach-out {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    justify-content: flex-end;
+    padding: 0 var(--page-gutter) 0.35rem;
+    overflow: hidden;
+  }
+
+  .page-reach-out .reach-out-stage {
+    position: relative;
+    flex: 0 1 auto;
+    min-height: 0;
+    height: var(--reach-out-stage-height);
+    max-height: 100%;
+    width: 100%;
+    max-width: 42rem;
+    margin-inline: auto;
+    margin-top: auto;
+    border-radius: var(--reach-out-stage-radius);
+    overflow: hidden;
+    background: #000;
+    isolation: isolate;
+  }
+
+  .page-reach-out .reach-out-stage__media {
+    position: absolute;
+    inset: -1px;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .page-reach-out .reach-out-stage__photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 40%;
+    opacity: 0;
+    transition: opacity 1.4s var(--ease);
+  }
+
+  .page-reach-out .reach-out-stage__photo.is-active {
+    opacity: 1;
+  }
+
+  .page-reach-out .reach-out-stage__shade {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, transparent 28%),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.55) 0%, transparent 42%),
+      var(--reach-out-overlay);
+    pointer-events: none;
+  }
+
+  .page-reach-out .reach-out-stage__content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    min-height: 0;
+    min-width: 0;
+    width: 100%;
+    padding: 1.25rem 1rem 1.15rem;
+    box-sizing: border-box;
+  }
+
+  .page-reach-out .reach-out-stage__intro {
+    flex: 0 0 auto;
+  }
+
+  .page-reach-out .reach-out-stage__title {
+    font-family: var(--font-tagline);
+    font-size: var(--reach-out-title-size);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    color: var(--cream);
+    margin: 0 0 var(--reach-out-title-to-lead);
+    padding-bottom: 0.1em;
+    text-shadow: 0 1px 14px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    transform: translate3d(0, 0.85rem, 0);
+    animation: reach-out-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.12s forwards;
+  }
+
+  .page-reach-out .reach-out-stage__title.tagline-underline::after {
+    background: var(--cream);
+    height: max(2px, 0.045em);
+    bottom: -0.02em;
+  }
+
+  .page-reach-out .reach-out-stage__lead {
+    margin: 0;
+    font-family: var(--font-tagline);
+    font-size: clamp(1.05rem, 3.8vw, 1.25rem);
+    font-weight: 500;
+    color: rgba(244, 247, 238, 0.9);
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translate3d(0, 0.7rem, 0);
+    animation: reach-out-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.28s forwards;
+  }
+
+  .page-reach-out .reach-out-form {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-top: var(--reach-out-form-offset);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.65rem 0.75rem;
+    align-content: end;
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translate3d(0, 1rem, 0);
+    animation: reach-out-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.42s forwards;
+  }
+
+  .page-reach-out .reach-out-form .form-group {
+    gap: 0.3rem;
+    min-width: 0;
+  }
+
+  .page-reach-out .reach-out-form .form-group label {
+    font-size: 0.6875rem;
+    color: rgba(244, 247, 238, 0.92);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+  }
+
+  .page-reach-out .reach-out-form .form-group input,
+  .page-reach-out .reach-out-form .form-group textarea {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 0.65rem 0.8rem;
+    font-size: 0.9rem;
+    background: rgba(244, 247, 238, 0.94);
+    border: 1px solid transparent;
+    border-radius: 0.35rem;
+  }
+
+  .page-reach-out .reach-out-form .form-group input:focus,
+  .page-reach-out .reach-out-form .form-group textarea:focus {
+    border-color: var(--cream);
+    box-shadow: 0 0 0 1px rgba(244, 247, 238, 0.45);
+  }
+
+  .page-reach-out .reach-out-form .form-group textarea {
+    min-height: 4.75rem;
+    resize: none;
+  }
+
+  .page-reach-out .reach-out-form__btn {
+    grid-column: 1 / -1;
+    margin-top: 0.15rem;
+    padding-block: 0.8rem;
+    background: transparent;
+    color: var(--cream);
+    border: 1.5px solid rgba(244, 247, 238, 0.88);
+    border-radius: 0.85rem;
+  }
+
+  .page-reach-out .reach-out-form__btn:hover {
+    background: rgba(244, 247, 238, 0.12);
+    color: var(--cream);
+  }
+
+  .page-reach-out .site-footer {
+    background: #000;
+  }
+
+  .page-reach-out .footer-bar--simple,
+  .page-reach-out .footer-bar__email,
+  .page-reach-out .footer-bar__tagline {
+    color: var(--cream);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-reach-out .reach-out-stage__photo,
+    .page-reach-out .reach-out-stage__photo.is-active,
+    .page-reach-out .reach-out-stage__title,
+    .page-reach-out .reach-out-stage__lead,
+    .page-reach-out .reach-out-form {
+      animation: none;
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
+@keyframes reach-out-rise {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 
 /* Page themes
    ========================================================================== */
@@ -3218,13 +3319,20 @@ html:has(body.page-contact--simple) {
 }
 
 .page-contact.page-reach-out {
-  background: #000;
+  background: var(--sage);
   color: var(--cream);
 }
 
+@media (max-width: 768px) {
+  .page-contact.page-reach-out {
+    background: #000;
+    color: var(--cream);
+  }
+}
+
 .page-contact .logo-img--cream {
-  width: 100%;
-  height: auto;
+  height: var(--home-logo-height);
+  width: auto;
 }
 
 .page-hero--contact {
@@ -3340,7 +3448,13 @@ html:has(body.page-contact--simple) {
 }
 
 .page-contact.page-reach-out .site-footer {
-  background: #000;
+  background: var(--sage);
+}
+
+@media (max-width: 768px) {
+  .page-contact.page-reach-out .site-footer {
+    background: #000;
+  }
 }
 
 html:has(.page-services) {
@@ -3655,6 +3769,10 @@ html:has(.page-services) {
 /* Mobile services stage — desktop keeps classic layout */
 .services-mobile {
   display: none;
+}
+
+.page-services .services-desktop {
+  display: contents;
 }
 
 .page-services .services-scroll-arrow {

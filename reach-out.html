@@ -11,65 +11,104 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css?v=20250802mob192">
-  <link rel="stylesheet" href="/css/mobile.css?v=20250802mob192">
+  <link rel="stylesheet" href="/css/styles.css?v=20250802desk1">
+  <link rel="stylesheet" href="/css/mobile.css?v=20250802desk1">
 </head>
 <body class="page-contact page-contact--simple page-reach-out">
   <a href="#main" class="skip-link">Skip to content</a>
 
   <main id="main">
-    <header class="contact-simple-header">
-      <a href="/" class="contact-simple-header__logo logo" aria-label="Jude — Home">
-        <img src="/images/Artboard%201.png?v=20250802mob191" alt="" class="logo-img" width="1081" height="1081" decoding="async">
-      </a>
-    </header>
-
-    <section class="section section--reach-out" aria-label="Send a message">
-      <div class="reach-out-stage">
-        <div class="reach-out-stage__media" aria-hidden="true">
-          <img
-            class="reach-out-stage__photo reach-out-stage__photo--a is-active"
-            src="/images/lifestyle.png"
-            alt=""
-            width="1200"
-            height="1600"
-            decoding="async"
-          >
-          <img
-            class="reach-out-stage__photo reach-out-stage__photo--b"
-            src="/images/barista.png"
-            alt=""
-            width="1200"
-            height="1600"
-            decoding="async"
-          >
+    <section class="reach-out-desktop" aria-label="Reach out">
+      <div class="reach-out-desktop__hero">
+        <div class="reach-out-desktop__media" aria-hidden="true">
+          <video class="reach-out-desktop__video" autoplay muted loop playsinline disablepictureinpicture preload="metadata">
+            <source src="/videos/book-hero.mp4" type="video/mp4">
+            <source src="/videos/book-hero.mov" type="video/quicktime">
+          </video>
+          <div class="reach-out-desktop__shade"></div>
         </div>
-        <div class="reach-out-stage__shade" aria-hidden="true"></div>
-
-        <div class="reach-out-stage__content">
-          <div class="reach-out-stage__intro">
-            <h1 class="reach-out-stage__title tagline-underline">Reach out</h1>
-            <p class="reach-out-stage__lead">Send a message</p>
-          </div>
-
-          <form class="contact-form reach-out-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" id="name" name="name" required autocomplete="name">
-            </div>
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" required autocomplete="email">
-            </div>
-            <div class="form-group form-group--full">
-              <label for="message">Your message</label>
-              <textarea id="message" name="message" rows="3" required placeholder="Venue, timing, anything we should know..."></textarea>
-            </div>
-            <button type="submit" class="btn reach-out-form__btn">Send message</button>
-          </form>
+        <a href="/" class="reach-out-desktop__logo logo" aria-label="Jude — Home">
+          <img src="/images/logo-cream.png" alt="" class="logo-img logo-img--cream" width="120" height="48" decoding="async">
+        </a>
+        <div class="reach-out-desktop__hero-inner">
+          <h1 class="reach-out-desktop__title tagline-underline">Reach out</h1>
+          <p class="reach-out-desktop__lead">Send a message</p>
         </div>
       </div>
+
+      <div class="reach-out-desktop__body container container--narrow">
+        <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <div class="form-group">
+            <label for="desktop-name">Name</label>
+            <input type="text" id="desktop-name" name="name" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="desktop-email">Email</label>
+            <input type="email" id="desktop-email" name="email" required autocomplete="email">
+          </div>
+          <div class="form-group form-group--full">
+            <label for="desktop-message">Your message</label>
+            <textarea id="desktop-message" name="message" rows="5" required placeholder="Venue, timing, anything we should know..."></textarea>
+          </div>
+          <button type="submit" class="btn">Send message</button>
+        </form>
+      </div>
     </section>
+
+    <div class="reach-out-mobile-chrome">
+      <header class="contact-simple-header">
+        <a href="/" class="contact-simple-header__logo logo" aria-label="Jude — Home">
+          <img src="/images/Artboard%201.png?v=20250802desk1" alt="" class="logo-img" width="1081" height="1081" decoding="async">
+        </a>
+      </header>
+
+      <section class="section section--reach-out" aria-label="Send a message">
+        <div class="reach-out-stage">
+          <div class="reach-out-stage__media" aria-hidden="true">
+            <img
+              class="reach-out-stage__photo reach-out-stage__photo--a is-active"
+              src="/images/lifestyle.png"
+              alt=""
+              width="1200"
+              height="1600"
+              decoding="async"
+            >
+            <img
+              class="reach-out-stage__photo reach-out-stage__photo--b"
+              src="/images/barista.png"
+              alt=""
+              width="1200"
+              height="1600"
+              decoding="async"
+            >
+          </div>
+          <div class="reach-out-stage__shade" aria-hidden="true"></div>
+
+          <div class="reach-out-stage__content">
+            <div class="reach-out-stage__intro">
+              <h1 class="reach-out-stage__title tagline-underline">Reach out</h1>
+              <p class="reach-out-stage__lead">Send a message</p>
+            </div>
+
+            <form class="contact-form reach-out-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required autocomplete="email">
+              </div>
+              <div class="form-group form-group--full">
+                <label for="message">Your message</label>
+                <textarea id="message" name="message" rows="3" required placeholder="Venue, timing, anything we should know..."></textarea>
+              </div>
+              <button type="submit" class="btn reach-out-form__btn">Send message</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
 
   <footer class="site-footer">
@@ -79,6 +118,6 @@
     </div>
   </footer>
 
-  <script src="/js/main.js?v=20250802mob192"></script>
+  <script src="/js/main.js?v=20250802desk1"></script>
 </body>
 </html>
