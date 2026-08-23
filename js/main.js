@@ -1615,14 +1615,7 @@
       }
     })();
 
-    // Arrow PNG (612×936): tail ≈ (28,28), tip ≈ y=907 — used for precise layout
-    var ARROW_IMG_W = 612;
-    var ARROW_IMG_H = 936;
-    var ARROW_TAIL_Y_FRAC = 28 / ARROW_IMG_H;
-    var ARROW_TAIL_X_FRAC = 28 / ARROW_IMG_W;
-    var ARROW_TIP_Y_FRAC = 907 / ARROW_IMG_H;
-    var ARROW_ASPECT = ARROW_IMG_W / ARROW_IMG_H;
-
+    // Minimal SVG scroll hint — sits just right of the title
     function measureServicesCssLength(root, customProp, dimension) {
       var axis = dimension === 'width' ? 'left' : 'top';
       var probe = document.createElement('div');
@@ -1648,41 +1641,24 @@
 
       var root = document.querySelector('.page-services');
       var main = document.getElementById('main');
-      var forall = document.querySelector('.services-brand-banner__forall');
+      var forall = document.querySelector('.services-brand-banner__title');
       var arrow = document.querySelector('.services-scroll-arrow');
-      var weddingsImg = document.querySelector('.split-panel--weddings .split-panel__media img');
 
-      if (!root || !main || !forall || !arrow || !weddingsImg) return;
+      if (!root || !main || !forall || !arrow) return;
 
       var mainRect = main.getBoundingClientRect();
       var forallRect = forall.getBoundingClientRect();
-      var imgRect = weddingsImg.getBoundingClientRect();
       var gap = measureServicesCssLength(main, '--services-arrow-gap-after-all', 'width');
-      var shiftRight = measureServicesCssLength(main, '--services-arrow-shift-right', 'width');
-      var lift = measureServicesCssLength(main, '--services-arrow-lift', 'height');
-      var tipInset = measureServicesCssLength(main, '--services-arrow-tip-inset', 'height');
-      var scale =
-        parseFloat(getComputedStyle(root).getPropertyValue('--services-arrow-scale')) || 1;
+      var arrowHeight = measureServicesCssLength(root, '--services-arrow-height', 'height');
 
-      if (forallRect.width < 1 || imgRect.height < 1) return;
+      if (forallRect.width < 1) return;
 
-      var tailX = forallRect.right - mainRect.left + gap + shiftRight;
-      var tailY =
-        forallRect.top - mainRect.top + forallRect.height * 0.34 - lift;
-      var tipY = imgRect.top - mainRect.top + tipInset;
-      var span = ARROW_TIP_Y_FRAC - ARROW_TAIL_Y_FRAC;
-      var baseHeight = (tipY - tailY) / span;
-      var height = baseHeight * scale;
-      if (!isFinite(height) || height < 80) return;
-
-      var top = tailY - height * ARROW_TAIL_Y_FRAC;
-      var imgWidth = height * ARROW_ASPECT;
-      var left = tailX - imgWidth * ARROW_TAIL_X_FRAC;
+      var left = forallRect.right - mainRect.left + gap;
+      var top =
+        forallRect.top - mainRect.top + (forallRect.height - arrowHeight) / 2;
 
       root.style.setProperty('--services-arrow-top', top + 'px');
       root.style.setProperty('--services-arrow-left', left + 'px');
-      root.style.setProperty('--services-arrow-width', imgWidth + 'px');
-      root.style.setProperty('--services-arrow-height', height + 'px');
       arrow.dataset.positioned = 'true';
     }
 
@@ -1700,23 +1676,12 @@
       document.fonts.ready.then(scheduleServicesArrowLayout);
     }
 
-    var weddingsImgEl = document.querySelector('.split-panel--weddings .split-panel__media img');
-    if (weddingsImgEl) {
-      if (weddingsImgEl.complete) {
-        scheduleServicesArrowLayout();
-      } else {
-        weddingsImgEl.addEventListener('load', scheduleServicesArrowLayout);
-      }
-    }
-
     if (typeof ResizeObserver !== 'undefined') {
       var servicesArrowObserver = new ResizeObserver(scheduleServicesArrowLayout);
       var observeArrowTarget = document.querySelector('.services-opening');
       var observeBrandTarget = document.querySelector('.services-brand-banner');
-      var observeMediaTarget = document.querySelector('.split-panel--weddings .split-panel__media');
       if (observeArrowTarget) servicesArrowObserver.observe(observeArrowTarget);
       if (observeBrandTarget) servicesArrowObserver.observe(observeBrandTarget);
-      if (observeMediaTarget) servicesArrowObserver.observe(observeMediaTarget);
     }
 
     function scrollToServicesWeddings() {

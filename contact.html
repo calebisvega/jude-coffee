@@ -11,8 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css?v=20250812mob1">
-  <link rel="stylesheet" href="/css/mobile.css?v=20250812mob1">
+  <link rel="stylesheet" href="/css/styles.css?v=20250818desk57">
+  <link rel="stylesheet" href="/css/mobile.css?v=20250818desk57">
 </head>
 <body class="page-contact page-contact--simple">
   <a href="#main" class="skip-link">Skip to content</a>
@@ -24,14 +24,76 @@
       </a>
     </header>
 
+    <section class="contact-hero" aria-label="Book Jude Coffee">
+      <div class="contact-hero__media" aria-hidden="true">
+        <video class="contact-hero__video" autoplay muted loop playsinline disablepictureinpicture preload="metadata">
+          <source src="/videos/book-hero.mp4" type="video/mp4">
+          <source src="/videos/book-hero.mov" type="video/quicktime">
+        </video>
+        <div class="contact-hero__shade"></div>
+        <div class="contact-hero__grain"></div>
+      </div>
+      <a href="/" class="contact-hero__logo logo" aria-label="Jude — Home">
+        <img src="/images/logo-cream.png" alt="" class="logo-img logo-img--cream" width="120" height="48">
+      </a>
+      <div class="contact-hero__content container container--narrow">
+        <p class="contact-hero__eyebrow">Book</p>
+        <h1 class="contact-hero__title">Let's talk about<br>your event.</h1>
+      </div>
+    </section>
+
     <section class="section section--contact-book fade-in">
-      <div class="container container--narrow contact-simple">
-        <div class="contact-booking">
-          <h1 class="contact-booking__title">Request a quote</h1>
-          <p class="contact-booking__lead">Share your event details and get a custom quote from the Jude team.</p>
-          <div class="booking-widget">
-            <div class="booking-widget__viewport" id="flashquotes-widget" data-form-id="cmqftz2vj0001jv0424m1k88t"></div>
+      <div class="container contact-book-wrap">
+        <div class="contact-layout contact-layout--book">
+          <div class="contact-booking">
+            <h2 class="contact-booking__title">Request a quote</h2>
+            <p class="contact-booking__lead">Use our booking form to share your event details<br>and get a custom quote from the Jude team.</p>
+            <div class="booking-widget">
+              <div class="booking-widget__viewport" id="flashquotes-widget" data-form-id="cmqftz2vj0001jv0424m1k88t"></div>
+            </div>
           </div>
+
+          <aside class="contact-aside">
+            <h2 class="contact-booking__title">Or send a message</h2>
+            <p>Prefer email? Fill out the form below and we'll get back to you.</p>
+            <form class="contact-form contact-form--stacked" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required autocomplete="email">
+              </div>
+              <div class="form-group">
+                <label for="event-type">Event type</label>
+                <select id="event-type" name="event_type" required>
+                  <option value="" disabled selected>Select one</option>
+                  <option value="wedding">Wedding</option>
+                  <option value="corporate">Corporate event</option>
+                  <option value="popup">Pop-up / market</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="date">Event date</label>
+                <input type="date" id="date" name="event_date">
+              </div>
+              <div class="form-group">
+                <label for="guests">Estimated guests</label>
+                <input type="number" id="guests" name="guest_count" min="1" placeholder="e.g. 150">
+              </div>
+              <div class="form-group form-group--full">
+                <label for="message">Tell us about your event</label>
+                <textarea id="message" name="message" rows="5" required placeholder="Venue, timing, anything we should know..."></textarea>
+              </div>
+              <button type="submit" class="btn">Send message</button>
+            </form>
+            <div class="contact-info">
+              <p>Follow us on Instagram for updates and behind-the-scenes.</p>
+              <a href="https://instagram.com/judeisforall" target="_blank" rel="noopener noreferrer" class="text-link">@judeisforall</a>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
@@ -44,7 +106,19 @@
     </div>
   </footer>
 
-  <script src="/js/main.js?v=20250812mob1"></script>
-  <script src="/js/flashquotes-embed.js?v=20250812mob1"></script>
+  <script src="/js/main.js?v=20250818desk44"></script>
+  <script src="/js/flashquotes-embed.js?v=20250818desk44"></script>
+  <script>
+    (function () {
+      var video = document.querySelector('.contact-hero__video');
+      if (!video) return;
+      video.play().catch(function () {
+        document.addEventListener('click', function playOnce() {
+          video.play().catch(function () {});
+          document.removeEventListener('click', playOnce);
+        }, { once: true });
+      });
+    })();
+  </script>
 </body>
 </html>

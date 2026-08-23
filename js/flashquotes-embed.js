@@ -11,7 +11,7 @@
   var cardWidth = 400;
   var desktopScale = 1.28;
   var minHeight = 520;
-  var maxHeight = 920;
+  var maxHeight = 4000;
   var scale = desktopScale;
   var mobileQuery = window.matchMedia('(max-width: 768px)');
 
@@ -28,26 +28,32 @@
       return Math.min(desktopScale, maxScaledWidth / cardWidth);
     }
 
-    return desktopScale;
+    var desktopGutter = 8;
+    var desktopWidth = Math.max(cardWidth, available - desktopGutter);
+    return Math.min(1.45, desktopWidth / cardWidth);
+  }
+
+  function syncContactAsideHeight() {
+    var aside = document.querySelector('.contact-aside');
+    if (!aside) return;
+    aside.style.maxHeight = '';
   }
 
   function applyScaledDimensions(contentHeight) {
-    var height = Math.min(Math.max(contentHeight, minHeight), maxHeight);
-    var widget = host.closest('.booking-widget');
-    if (widget && widget.clientHeight > 40) {
-      scale = getScale();
-      var fit = Math.floor(widget.clientHeight / scale);
-      height = Math.min(height, Math.max(280, fit));
+    var height = Math.max(contentHeight || minHeight, minHeight);
+    if (maxHeight) {
+      height = Math.min(height, maxHeight);
     }
     scale = getScale();
 
     iframe.style.height = height + 'px';
-    iframe.style.minHeight = Math.min(minHeight, height) + 'px';
-    iframe.style.maxHeight = height + 'px';
+    iframe.style.minHeight = height + 'px';
+    iframe.style.maxHeight = 'none';
     iframe.style.transform = 'scale(' + scale + ')';
     host.style.width = Math.ceil(cardWidth * scale) + 'px';
     host.style.height = Math.ceil(height * scale) + 'px';
     host.style.maxWidth = '100%';
+    host.style.overflow = 'visible';
   }
 
   function setScaledHeight(contentHeight) {
@@ -196,4 +202,22 @@
   }, 0);
 
   host.appendChild(iframe);
+
+  syncContactAsideHeight();
+  window.addEventListener('resize', syncContactAsideHeight);
+
+  if (typeof ResizeObserver !== 'undefined') {
+    var bookingEl = document.querySelector('.contact-booking');
+    if (bookingEl) {
+      new ResizeObserver(syncContactAsideHeight).observe(bookingEl);
+    }
+
+    var widgetEl = host.closest('.booking-widget');
+    if (widgetEl) {
+      new ResizeObserver(function () {
+        var currentHeight = parseInt(iframe.style.height, 10) || minHeight;
+        applyScaledDimensions(currentHeight);
+      }).observe(widgetEl);
+    }
+  }
 })();

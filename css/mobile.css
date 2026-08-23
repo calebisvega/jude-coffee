@@ -144,6 +144,10 @@
     display: none !important;
   }
 
+  .page-home .hero-scroll-logo .logo-img--desktop-mark {
+    display: none !important;
+  }
+
   .page-home .home-mid {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
@@ -716,6 +720,39 @@
      Contact
      -------------------------------------------------------------------------- */
 
+  .page-contact:not(.page-reach-out) .contact-hero,
+  .page-contact:not(.page-reach-out) .contact-aside {
+    display: none !important;
+  }
+
+  .page-contact:not(.page-reach-out) .contact-simple-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--page-logo-pad-top) var(--page-gutter) var(--page-logo-pad-bottom);
+  }
+
+  .page-reach-out .contact-simple-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--page-logo-pad-top) var(--page-gutter) var(--page-logo-pad-bottom);
+  }
+
+  .page-reach-out .contact-simple-header__logo {
+    display: block;
+    width: var(--page-logo-width);
+    max-width: 100%;
+    margin-inline: auto;
+    line-height: 0;
+  }
+
+  .page-reach-out .contact-simple-header__logo .logo-img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
   .contact-hero {
     min-height: clamp(15rem, 38dvh, 20rem);
     padding: calc(var(--header-height) + 0.75rem) var(--page-gutter) 1.75rem;
@@ -814,8 +851,25 @@
     background: #000;
   }
 
-  .page-services .services-desktop,
+  .page-services .services-opening,
+  .page-services .split-panel,
+  .page-services .section--services-close,
   .page-services .services-scroll-arrow {
+    display: none !important;
+  }
+
+  .page-services .page-close-stack {
+    flex: 0 0 auto;
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+    isolation: auto;
+  }
+
+  .page-services .page-close-stack__backdrop,
+  .page-services .page-close-stack .media-backdrop__video,
+  .page-services .page-close-stack video {
     display: none !important;
   }
 
@@ -859,7 +913,7 @@
     z-index: 5;
     flex: 0 0 auto;
     width: 100%;
-    background: #000;
+    background: transparent;
     color: var(--cream);
   }
 
