@@ -3008,7 +3008,7 @@ body.is-page-locked .footer-bar.footer-bar--simple {
     --book-header-height: clamp(26rem, 50dvh, 38rem);
     --book-body-height: clamp(48rem, 92dvh, 64rem);
     --book-footer-height: calc(1rem + var(--footer-simple-font-size) * var(--footer-simple-line-height));
-    --book-title-size: clamp(3.5rem, 8vw, 6rem);
+    --book-title-size: clamp(3rem, 6.5vw, 5rem);
     --book-heading-size: clamp(1.125rem, 1.8vw, 1.375rem);
     --book-section-pad-top: clamp(1.75rem, 3.25vh, 2.5rem);
     --book-embed-gap: 2.25rem;
@@ -3137,6 +3137,23 @@ body.is-page-locked .footer-bar.footer-bar--simple {
 
   body.page-contact--simple:not(.page-reach-out) .contact-aside .contact-form {
     margin-top: var(--book-embed-gap);
+  }
+
+  /* Match Flash Quotes pure white (desktop only) */
+  body.page-contact--simple:not(.page-reach-out) .contact-booking__title,
+  body.page-contact--simple:not(.page-reach-out) .contact-aside .contact-booking__title {
+    color: #fff;
+  }
+
+  body.page-contact--simple:not(.page-reach-out) .contact-booking__lead,
+  body.page-contact--simple:not(.page-reach-out) .contact-aside > p {
+    color: #fff;
+  }
+
+  body.page-contact--simple:not(.page-reach-out) .form-group input,
+  body.page-contact--simple:not(.page-reach-out) .form-group select,
+  body.page-contact--simple:not(.page-reach-out) .form-group textarea {
+    background: #fff;
   }
 }
 
