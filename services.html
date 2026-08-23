@@ -11,8 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css?v=20250812mob1">
-  <link rel="stylesheet" href="/css/mobile.css?v=20250812mob1">
+  <link rel="stylesheet" href="/css/styles.css?v=20250820desk66">
+  <link rel="stylesheet" href="/css/mobile.css?v=20250820desk63">
 </head>
 <body class="page-services">
   <a href="#main" class="skip-link">Skip to content</a>
@@ -93,36 +93,48 @@
       </div>
     </section>
 
-    <div class="services-desktop">
     <div class="services-opening fade-in">
+      <div class="services-opening__media" aria-hidden="true">
+        <img
+          class="services-opening__photo"
+          src="/images/lifestyle.png"
+          alt=""
+          width="1600"
+          height="1067"
+          decoding="async"
+        >
+        <div class="services-opening__wash"></div>
+      </div>
       <div class="services-opening__content">
         <div class="services-brand-banner fade-in">
           <a href="/" class="services-brand-banner__home" aria-label="Jude — Home">
-            <img src="/images/logo-cream.png" alt="" class="services-brand-banner__jude" width="480" height="192">
-            <span class="services-brand-banner__forall tagline-underline">Is For All</span>
+            <img
+              src="/images/logo-cream.png"
+              alt=""
+              class="services-brand-banner__jude"
+              width="480"
+              height="192"
+              decoding="async"
+            >
           </a>
+          <h1 class="services-brand-banner__title tagline-underline">What we do</h1>
+          <p class="services-brand-banner__lead">Specialty coffee for weddings, work, and wherever people gather.</p>
+          <nav class="services-brand-banner__index" aria-label="Jump to a service">
+            <a class="services-brand-banner__link" href="#weddings">Weddings</a>
+            <a class="services-brand-banner__link" href="#corporate">Corporate</a>
+            <a class="services-brand-banner__link" href="#popups">Pop-ups</a>
+          </nav>
         </div>
-
-        <section class="section-heading section-heading--services fade-in">
-          <div class="container">
-            <h2 class="story-title tagline-underline story-section-heading">What we do</h2>
-          </div>
-        </section>
       </div>
     </div>
 
     <button type="button" class="services-scroll-arrow" aria-label="Scroll to services">
-      <img
-        src="/images/services-scroll-arrow.png?v=5"
-        alt=""
-        class="services-scroll-arrow__img"
-        width="612"
-        height="936"
-        decoding="async"
-      >
+      <svg class="services-scroll-arrow__icon" viewBox="0 0 24 56" fill="none" aria-hidden="true" focusable="false">
+        <path d="M12 2v44M5 39l7 7 7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </button>
 
-    <section class="split-panel split-panel--weddings fade-in">
+    <section id="weddings" class="split-panel split-panel--weddings fade-in">
       <div class="split-panel__content">
         <div class="split-panel__inner">
           <h3 class="story-title tagline-underline story-section-heading">
@@ -143,7 +155,7 @@
       </div>
     </section>
 
-    <section class="split-panel split-panel--reverse fade-in">
+    <section id="corporate" class="split-panel split-panel--reverse fade-in">
       <div class="split-panel__content">
         <div class="split-panel__inner">
           <h3 class="story-title tagline-underline story-section-heading">
@@ -164,7 +176,7 @@
       </div>
     </section>
 
-    <section class="split-panel split-panel--services-last fade-in">
+    <section id="popups" class="split-panel split-panel--services-last fade-in">
       <div class="split-panel__content">
         <div class="split-panel__inner">
           <h3 class="story-title tagline-underline story-section-heading">
@@ -185,8 +197,8 @@
       </div>
     </section>
 
-    <section class="section section--services-close section--cta section--video-cta fade-in">
-      <div class="media-backdrop" aria-hidden="true">
+    <div class="page-close-stack services-close-stack">
+      <div class="page-close-stack__backdrop media-backdrop" aria-hidden="true">
         <video class="media-backdrop__video" autoplay muted loop playsinline disablepictureinpicture preload="metadata">
           <source src="/videos/book-hero.mp4" type="video/mp4">
           <source src="/videos/book-hero.mov" type="video/quicktime">
@@ -194,22 +206,23 @@
         <div class="media-backdrop__shade"></div>
         <div class="media-backdrop__grain"></div>
       </div>
+    <section class="section section--services-close section--cta section--video-cta fade-in">
       <div class="container container--prose text-center">
         <h2 class="story-title tagline-underline story-section-heading">Ready when you are.</h2>
         <p>Tell us about your event. We'll handle the coffee.</p>
         <a href="/contact.html" class="btn">Get in touch</a>
       </div>
     </section>
+
+    <footer class="site-footer site-footer--on-video">
+      <div class="footer-bar footer-bar--simple">
+        <a href="https://instagram.com/judeforall" target="_blank" rel="noopener noreferrer" class="footer-bar__email">@judeforall</a>
+        <p class="footer-bar__tagline tagline-underline">Coffee Anytime Coffee Anywhere</p>
+      </div>
+    </footer>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="footer-bar footer-bar--simple">
-      <a href="mailto:info@judecoffee.com" class="footer-bar__email">info@judecoffee.com</a>
-      <p class="footer-bar__tagline tagline-underline">Coffee Anytime Coffee Anywhere</p>
-    </div>
-  </footer>
-
-  <script src="/js/main.js?v=20250812mob1"></script>
+  <script src="/js/main.js?v=20250820desk65"></script>
 </body>
 </html>
