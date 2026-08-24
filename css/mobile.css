@@ -260,10 +260,7 @@
     white-space: nowrap;
     pointer-events: auto;
     box-sizing: border-box;
-  }
-
-  .page-home .home-mobile-nav__link:first-child {
-    text-box: trim-start cap alphabetic;
+    text-box: trim-both cap alphabetic;
   }
 
   body.page-home.is-home-locked .home-mobile-nav {
@@ -278,11 +275,7 @@
   body.page-home.is-home-locked .home-mobile-nav__link {
     line-height: 1;
     padding: 0 0 max(2px, 0.05em);
-    text-box: normal;
-  }
-
-  body.page-home.is-home-locked .home-mobile-nav__link:first-child {
-    text-box: trim-start cap alphabetic;
+    text-box: trim-both cap alphabetic;
   }
 
   .page-home .home-mobile-nav__link.tagline-underline::after,
