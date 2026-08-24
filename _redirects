@@ -5,3 +5,5 @@
 # Keep only non-conflicting shortcuts below:
 /book /contact 301
 /book/ /contact 301
+/thanks /thank-you 301
+/thanks/ /thank-you 301
