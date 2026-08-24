@@ -59,8 +59,17 @@
     host.style.paddingBottom = mobileQuery.matches ? '1.5rem' : '';
   }
 
+  function resetMobileEmbedScroll() {
+    if (!mobileQuery.matches) return;
+    var widget = host.closest('.booking-widget');
+    if (widget) {
+      widget.scrollTop = 0;
+    }
+  }
+
   function setScaledHeight(contentHeight) {
     applyScaledDimensions(contentHeight);
+    resetMobileEmbedScroll();
   }
 
   function extractMarketingParams(urlString) {

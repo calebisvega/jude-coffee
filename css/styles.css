@@ -2749,7 +2749,7 @@ body.page-home.is-home-locked .hero--minimal {
   align-items: stretch;
   justify-content: flex-start;
   width: 100%;
-  padding: var(--home-hero-pad-top, 0.35rem) var(--page-gutter) 1rem;
+  padding: var(--home-hero-pad-top, 0.35rem) var(--page-gutter) 0;
   box-sizing: border-box;
   background: var(--off-white);
 }
@@ -2791,10 +2791,11 @@ body.page-home.is-home-locked {
   --home-logo-width-fill: 1.15;
   --home-logo-shift-y: -3.5rem;
   --home-mid-bottom: 10.75rem;
-  --home-mid-nudge-down: 46px;
+  --home-mid-nudge-down: 58px;
   --home-nav-size: clamp(1.65rem, 8vw, 2.1rem);
+  --home-nav-line-height: 1.12;
   --home-cart-fr: 1.15fr;
-  --home-cart-aspect: 5 / 3.5;
+  --home-cart-aspect: 5 / 3.15;
   --home-nav-underline-hang: 0.14em;
 }
 
@@ -2862,7 +2863,7 @@ body.page-home.is-home-locked .home-mobile-nav__link {
   font-family: var(--font-tagline);
   font-size: var(--home-nav-size, clamp(1.35rem, 6.8vw, 1.7rem));
   font-weight: 500;
-  line-height: 1;
+  line-height: var(--home-nav-line-height, 1.12);
   color: var(--sage);
   text-decoration: none;
   text-align: left;
@@ -3310,11 +3311,12 @@ body.is-page-locked .footer-bar.footer-bar--simple {
     align-items: center;
     flex: 1 1 auto;
     min-height: 0;
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+    scroll-padding-top: 0.4rem;
     padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.25rem);
   }
 
@@ -3327,7 +3329,7 @@ body.is-page-locked .footer-bar.footer-bar--simple {
     margin-inline: auto !important;
     overflow: visible !important;
     height: auto;
-    padding-top: 0.25rem;
+    padding-top: 0.4rem;
     padding-bottom: 0;
   }
 
@@ -3337,7 +3339,7 @@ body.is-page-locked .footer-bar.footer-bar--simple {
   }
 
   .page-contact--simple:not(.page-reach-out) .section--contact-book {
-    padding-top: 0.5rem;
+    padding-top: 0.75rem;
     padding-bottom: 0.5rem;
   }
 

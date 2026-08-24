@@ -11,8 +11,18 @@
     --mobile-footer-pad-bottom: 0.2rem;
   }
 
+  /* Match menu/book footer inset on all mobile pages */
   body.is-page-locked .footer-bar.footer-bar--simple {
-    padding-bottom: var(--mobile-footer-pad-bottom);
+    padding: 0 var(--page-gutter) var(--mobile-footer-pad-bottom);
+  }
+
+  .page-home .home-mobile-footer {
+    padding: 0 0 var(--mobile-footer-pad-bottom);
+  }
+
+  .page-home .hero--minimal,
+  body.page-home.is-home-locked .hero--minimal {
+    padding-bottom: 0;
   }
 
   body:not(.page-home) {
@@ -42,10 +52,11 @@
     --home-logo-width-fill: 1.15; /* compensates transparent side padding in Artboard 1.png */
     --home-logo-shift-y: -3.5rem; /* pull logo up (PNG has top transparent padding) */
     --home-mid-bottom: 7.5rem;
-    --home-mid-nudge-down: 46px;
+    --home-mid-nudge-down: 58px;
     --home-nav-size: clamp(1.65rem, 8vw, 2.1rem);
+    --home-nav-line-height: 1.12;
     --home-cart-fr: 1.15fr;
-    --home-cart-aspect: 5 / 3.5;
+    --home-cart-aspect: 5 / 3.15;
     --home-nav-underline-hang: 0.14em;
   }
 
@@ -88,7 +99,7 @@
     align-items: stretch;
     justify-content: flex-start;
     width: 100%;
-    padding: var(--home-hero-pad-top, 0.35rem) var(--page-gutter) var(--mobile-footer-pad-bottom);
+    padding: var(--home-hero-pad-top, 0.35rem) var(--page-gutter) 0;
     box-sizing: border-box;
     background: var(--off-white);
   }
@@ -216,7 +227,7 @@
     font-family: var(--font-tagline);
     font-size: var(--home-nav-size);
     font-weight: 500;
-    line-height: 1;
+    line-height: var(--home-nav-line-height, 1.12);
     letter-spacing: 0;
     color: var(--sage);
     text-decoration: none;
@@ -794,7 +805,7 @@
     width: 100%;
     max-width: 100%;
     margin-inline: 0;
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -813,13 +824,17 @@
     max-width: 100%;
     margin-inline: auto !important;
     overflow: visible !important;
-    padding-top: 0.25rem;
+    padding-top: 0.4rem;
     padding-bottom: 0;
     height: auto;
   }
 
+  .page-contact .booking-widget {
+    scroll-padding-top: 0.4rem;
+  }
+
   .page-contact--simple:not(.page-reach-out) {
-    --book-mobile-stack-nudge-up: 10px;
+    --book-mobile-stack-nudge-up: 0px;
   }
 
   .page-contact--simple:not(.page-reach-out) .contact-simple-header {
@@ -871,8 +886,8 @@
   }
 
   .page-contact--simple:not(.page-reach-out) .section--contact-book {
-    padding-top: 0.5rem;
-    padding-block: 0.5rem 0.5rem;
+    padding-top: 0.75rem;
+    padding-block: 0.75rem 0.5rem;
   }
 
   .contact-aside {
