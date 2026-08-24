@@ -4,7 +4,64 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Jude — specialty mobile coffee catering in Lakeland, Florida. Coffee anytime, coffee anywhere.">
+  <link rel="canonical" href="https://judecoffee.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jude Coffee">
+  <meta property="og:url" content="https://judecoffee.com/">
+  <meta property="og:title" content="Jude — Coffee Anytime, Coffee Anywhere">
+  <meta property="og:description" content="Specialty mobile coffee catering in Lakeland, Florida.">
+  <meta property="og:image" content="https://judecoffee.com/images/story-cart.png">
+  <meta property="og:image:secure_url" content="https://judecoffee.com/images/story-cart.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="900">
+  <meta property="og:image:height" content="1200">
+  <meta property="og:image:alt" content="Jude coffee cart at an event">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Jude — Coffee Anytime, Coffee Anywhere">
+  <meta name="twitter:description" content="Specialty mobile coffee catering in Lakeland, Florida.">
+  <meta name="twitter:image" content="https://judecoffee.com/images/story-cart.png">
+  <meta name="twitter:image:alt" content="Jude coffee cart at an event">
+  <meta name="theme-color" content="#FAFBF6">
   <title>Jude — Coffee Anytime, Coffee Anywhere</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://judecoffee.com/#organization",
+        "name": "Jude Coffee",
+        "url": "https://judecoffee.com/",
+        "logo": "https://judecoffee.com/images/logo.png",
+        "email": "info@judecoffee.com",
+        "description": "Specialty mobile coffee catering for weddings, corporate events, and pop-ups in Lakeland, Florida.",
+        "areaServed": {
+          "@type": "City",
+          "name": "Lakeland",
+          "containedInPlace": { "@type": "State", "name": "Florida" }
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://judecoffee.com/#website",
+        "url": "https://judecoffee.com/",
+        "name": "Jude Coffee",
+        "publisher": { "@id": "https://judecoffee.com/#organization" }
+      },
+      {
+        "@type": "FoodService",
+        "@id": "https://judecoffee.com/#business",
+        "name": "Jude Coffee",
+        "url": "https://judecoffee.com/",
+        "image": "https://judecoffee.com/images/story-cart.png",
+        "email": "info@judecoffee.com",
+        "servesCuisine": "Coffee",
+        "description": "Mobile specialty coffee catering — coffee anytime, coffee anywhere.",
+        "areaServed": "Lakeland, Florida"
+      }
+    ]
+  }
+  </script>
   <link rel="icon" href="/images/favicon.png" type="image/png" sizes="32x32">
   <link rel="icon" href="/images/icon-mug-48.png" type="image/png" sizes="48x48">
   <link rel="apple-touch-icon" href="/images/icon-mug-180.png">
@@ -108,6 +165,8 @@
               width="900"
               height="1200"
               decoding="async"
+              loading="eager"
+              fetchpriority="high"
             >
           </figure>
           <nav class="home-mobile-nav" aria-label="Primary">
