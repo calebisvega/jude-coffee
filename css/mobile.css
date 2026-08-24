@@ -42,7 +42,7 @@
     --home-logo-width-fill: 1.15; /* compensates transparent side padding in Artboard 1.png */
     --home-logo-shift-y: -3.5rem; /* pull logo up (PNG has top transparent padding) */
     --home-mid-bottom: 7.5rem;
-    --home-mid-nudge-down: 16px;
+    --home-mid-nudge-down: 46px;
     --home-nav-size: clamp(1.65rem, 8vw, 2.1rem);
     --home-cart-fr: 1.15fr;
     --home-cart-aspect: 5 / 3.5;
@@ -794,7 +794,7 @@
     width: 100%;
     max-width: 100%;
     margin-inline: 0;
-    margin-top: 0.75rem;
+    margin-top: 0.5rem;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -818,6 +818,10 @@
     height: auto;
   }
 
+  .page-contact--simple:not(.page-reach-out) {
+    --book-mobile-stack-nudge-up: 10px;
+  }
+
   .page-contact--simple:not(.page-reach-out) .contact-simple-header {
     padding-top: max(var(--page-logo-pad-top), 0.75rem);
     padding-bottom: var(--page-logo-pad-bottom);
@@ -827,6 +831,7 @@
     align-items: center;
     margin-inline: auto;
     width: 100%;
+    margin-top: calc(-1 * var(--book-mobile-stack-nudge-up, 10px));
   }
 
   .page-contact--simple:not(.page-reach-out) .contact-booking__title {
@@ -866,8 +871,8 @@
   }
 
   .page-contact--simple:not(.page-reach-out) .section--contact-book {
-    padding-top: 0.75rem;
-    padding-block: 0.75rem 0.5rem;
+    padding-top: 0.5rem;
+    padding-block: 0.5rem 0.5rem;
   }
 
   .contact-aside {
