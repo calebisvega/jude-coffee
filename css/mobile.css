@@ -794,33 +794,63 @@
     width: 100%;
     max-width: 100%;
     margin-inline: 0;
-    overflow: visible;
-  }
-
-  .page-contact .booking-widget__viewport {
-    width: 100% !important;
-    max-width: 100%;
-    margin-inline: auto;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
+    margin-top: 0.75rem;
+    overflow-x: hidden;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.25rem);
   }
 
-  .page-contact--simple:not(.page-reach-out) .contact-simple-header {
-    padding-top: 0.35rem;
-    padding-bottom: 0.2rem;
-  }
-
-  .page-contact--simple:not(.page-reach-out) .contact-simple-header__logo {
-    width: min(22vw, 4.75rem);
+  .page-contact #flashquotes-widget.booking-widget__viewport,
+  .page-contact #flashquotes-widget {
+    display: block;
+    flex: 0 0 auto;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto !important;
+    overflow: visible !important;
+    padding-top: 0.25rem;
+    padding-bottom: 0;
     height: auto;
   }
 
+  .page-contact--simple:not(.page-reach-out) .contact-simple-header {
+    padding-top: max(var(--page-logo-pad-top), 0.75rem);
+    padding-bottom: var(--page-logo-pad-bottom);
+  }
+
+  .page-contact--simple:not(.page-reach-out) .contact-booking {
+    align-items: center;
+    margin-inline: auto;
+    width: 100%;
+  }
+
   .page-contact--simple:not(.page-reach-out) .contact-booking__title {
-    font-size: clamp(1.25rem, 5.4vw, 1.625rem);
-    margin-bottom: 0.15rem;
+    align-self: stretch;
+    width: 100%;
+    text-align: left;
+    padding-inline: 0.25rem;
+  }
+
+  .page-contact--simple:not(.page-reach-out) .contact-simple-header__logo {
+    width: var(--page-logo-width);
+    height: auto;
+    overflow: visible;
+  }
+
+  .page-contact--simple:not(.page-reach-out) .contact-simple-header__logo .logo-img--cream {
+    width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
+  .page-contact--simple:not(.page-reach-out) .contact-booking__title {
+    font-size: clamp(1.375rem, 6vw, 1.75rem);
+    margin-bottom: 0.45rem;
   }
 
   .contact-booking__title {
@@ -836,8 +866,8 @@
   }
 
   .page-contact--simple:not(.page-reach-out) .section--contact-book {
-    padding-top: 0.5rem;
-    padding-block: 0.5rem 0.35rem;
+    padding-top: 0.75rem;
+    padding-block: 0.75rem 0.5rem;
   }
 
   .contact-aside {

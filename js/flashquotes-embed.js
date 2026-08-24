@@ -10,7 +10,7 @@
   var allowedOrigin = baseUrl;
   var cardWidth = 400;
   var desktopScale = 1.28;
-  var mobileScaleShrink = 0.92;
+  var mobileScaleShrink = 0.96;
   var minHeight = 520;
   var maxHeight = 4000;
   var scale = desktopScale;
@@ -54,25 +54,13 @@
     host.style.width = Math.ceil(cardWidth * scale) + 'px';
     host.style.height = Math.ceil(height * scale) + 'px';
     host.style.maxWidth = '100%';
+    host.style.marginInline = 'auto';
     host.style.overflow = 'visible';
-    host.style.paddingBottom = mobileQuery.matches ? '2rem' : '';
-  }
-
-  function ensureMobileSubmitVisible() {
-    if (!mobileQuery.matches) return;
-    var viewport = host.closest('.booking-widget__viewport');
-    if (!viewport) return;
-    requestAnimationFrame(function () {
-      var overflow = viewport.scrollHeight - viewport.clientHeight;
-      if (overflow > 0) {
-        viewport.scrollTop = overflow;
-      }
-    });
+    host.style.paddingBottom = mobileQuery.matches ? '1.5rem' : '';
   }
 
   function setScaledHeight(contentHeight) {
     applyScaledDimensions(contentHeight);
-    ensureMobileSubmitVisible();
   }
 
   function extractMarketingParams(urlString) {

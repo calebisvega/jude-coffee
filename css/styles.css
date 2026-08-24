@@ -3307,16 +3307,10 @@ body.is-page-locked .footer-bar.footer-bar--simple {
   .page-contact--simple .booking-widget {
     display: flex;
     flex-direction: column;
+    align-items: center;
     flex: 1 1 auto;
     min-height: 0;
-    margin-top: 0.15rem;
-    overflow: visible;
-  }
-
-  .page-contact--simple .booking-widget__viewport {
-    flex: 1 1 auto;
-    min-height: 0;
-    height: 100%;
+    margin-top: 0.75rem;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -3324,18 +3318,27 @@ body.is-page-locked .footer-bar.footer-bar--simple {
     padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.25rem);
   }
 
+  .page-contact--simple #flashquotes-widget.booking-widget__viewport,
+  .page-contact--simple #flashquotes-widget {
+    display: block;
+    flex: 0 0 auto;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto !important;
+    overflow: visible !important;
+    height: auto;
+    padding-top: 0.25rem;
+    padding-bottom: 0;
+  }
+
   .page-contact--simple:not(.page-reach-out) .contact-booking__title {
-    font-size: clamp(1.35rem, 5.8vw, 1.75rem);
-    margin-bottom: 0.2rem;
+    font-size: clamp(1.375rem, 6vw, 1.75rem);
+    margin-bottom: 0.45rem;
   }
 
   .page-contact--simple:not(.page-reach-out) .section--contact-book {
-    padding-top: 0.5rem;
-    padding-bottom: 0.35rem;
-  }
-
-  .page-contact--simple .contact-simple-header {
-    padding-bottom: 0.35rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.5rem;
   }
 
   .page-contact--simple .site-footer {
@@ -3715,6 +3718,11 @@ body.is-page-locked .footer-bar.footer-bar--simple {
   margin: 0;
   max-width: 100%;
   -webkit-overflow-scrolling: touch;
+}
+
+.page-contact #flashquotes-widget.booking-widget__viewport {
+  overflow: visible;
+  margin-inline: auto;
 }
 
 .page-contact .booking-widget__viewport iframe {
