@@ -1637,6 +1637,11 @@ body:not(.page-home) .section--story:first-of-type .story-editorial__copy {
   background: var(--sage-dark);
 }
 
+.btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
 .section--maroon-tint {
   position: relative;
   overflow: hidden;
@@ -2362,6 +2367,7 @@ body:not(.page-home) .section--story:first-of-type .story-editorial__copy {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.1rem;
+  position: relative;
 }
 
 .contact-form--stacked {
@@ -2409,6 +2415,22 @@ body:not(.page-home) .section--story:first-of-type .story-editorial__copy {
 .form-group textarea {
   resize: vertical;
   min-height: 7.5rem;
+}
+
+.form-honeypot {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form-status {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
 }
 
 .contact-aside h2,

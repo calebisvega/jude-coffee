@@ -1714,6 +1714,61 @@
     }
   };
 
+  /* Formspree — send in the background, then show the branded thank-you page */
+  var contactForms = document.querySelectorAll('form.contact-form[action*="formspree.io"]');
+  Array.prototype.forEach.call(contactForms, function (form) {
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      var submitBtn = form.querySelector('[type="submit"]');
+      var statusEl = form.querySelector('.form-status');
+      if (!statusEl) {
+        statusEl = document.createElement('p');
+        statusEl.className = 'form-status';
+        statusEl.setAttribute('role', 'alert');
+        form.appendChild(statusEl);
+      }
+      statusEl.textContent = '';
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.setAttribute('aria-busy', 'true');
+      }
+
+      fetch(form.getAttribute('action'), {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      })
+        .then(function (response) {
+          if (response.ok) {
+            window.location.assign('/thank-you');
+            return;
+          }
+          return response.json().then(function (payload) {
+            var message = "Couldn't send right now. Please try again or email info@judecoffee.com.";
+            if (payload && payload.errors && payload.errors.length) {
+              message = payload.errors.map(function (err) { return err.message; }).join(' ');
+            } else if (payload && payload.error) {
+              message = payload.error;
+            }
+            throw new Error(message);
+          }, function () {
+            throw new Error("Couldn't send right now. Please try again or email info@judecoffee.com.");
+          });
+        })
+        .catch(function (err) {
+          statusEl.textContent = (err && err.message)
+            ? err.message
+            : "Couldn't send right now. Please try again or email info@judecoffee.com.";
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.removeAttribute('aria-busy');
+          }
+        });
+    });
+  });
+
   /* Reach out — slow photo crossfade behind the form */
   if (document.body.classList.contains('page-reach-out')) {
     var reachPhotos = document.querySelectorAll('.reach-out-stage__photo');
