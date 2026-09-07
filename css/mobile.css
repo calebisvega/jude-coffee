@@ -1041,7 +1041,7 @@
     right: 0;
     bottom: 0;
     flex: none;
-    width: 100%;
+    width: auto;
     background: transparent;
     color: var(--cream);
     pointer-events: none;

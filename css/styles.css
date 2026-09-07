@@ -3979,8 +3979,8 @@ html:has(.page-services) {
 
 .page-services {
   overscroll-behavior: none;
-  --services-marquee-size: clamp(2rem, 4.5vw, 3rem);
-  --services-marquee-radius: clamp(0.875rem, 2.25vw, 1.5rem);
+  --services-marquee-size: 1.75rem;
+  --services-marquee-radius: 0.75rem;
   --services-marquee-line: rgba(105, 150, 107, 0.18);
   --cursor-mug: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='7' fill='%23F4F7EE'/%3E%3C/svg%3E") 10 10, auto;
   --services-offer-height: 34vh;
@@ -4378,11 +4378,12 @@ html:has(.page-services) {
 
 .page-services #main > .site-footer {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: var(--services-marquee-size);
+  right: var(--services-marquee-size);
   bottom: 0;
   z-index: 5;
   flex: none;
+  width: auto;
   background: transparent;
   color: var(--cream);
   pointer-events: none;
