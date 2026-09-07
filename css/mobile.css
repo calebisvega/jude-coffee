@@ -955,19 +955,30 @@
   }
 
   /* --------------------------------------------------------------------------
-     Services — locked mobile stage (desktop unchanged)
+     Services — header + 2×2 grid (marquee stays desktop-only)
      -------------------------------------------------------------------------- */
 
   .page-services {
     --services-marquee-size: 0;
-    --services-marquee-path-inset: 0.75rem;
-    --services-marquee-radius: 2.75rem;
-    --services-mobile-inner-radius: var(--services-marquee-radius);
-    --services-marquee-type-opacity: 0.62;
-    background: #000;
+    --services-marquee-radius: 0;
+    --services-offer-height: 22vh;
+    --services-offer-pad-x: 1.15rem;
+    --services-offer-pad-y: 1.35rem;
+    --services-offer-logo-width: 76px;
+    --services-offer-logo-top: 0.7rem;
+    --services-offer-logo-left: 0.85rem;
+    --services-offer-title-size: clamp(1.85rem, 8vw, 2.4rem);
+    --services-offer-lead-size: clamp(0.8125rem, 3.4vw, 0.9375rem);
+    --services-offer-copy-gap: 0.4rem;
+    --services-grid-min: 0;
+    --services-tile-label-size: clamp(0.625rem, 2.6vw, 0.75rem);
+    --services-tile-label-pad: 0.75rem 0.85rem;
+    --services-footer-pad-y: 0.55rem;
+    background: var(--sage);
   }
 
   .page-services .services-opening,
+  .page-services .services-mobile,
   .page-services .split-panel,
   .page-services .section--services-close,
   .page-services .services-scroll-arrow {
@@ -1010,7 +1021,7 @@
     min-height: 0;
     height: auto;
     overflow: hidden;
-    padding: 0 var(--page-gutter) 0.55rem;
+    padding: 0;
   }
 
   /* Body provides sage; fixed panel would cover the footer */
@@ -1036,6 +1047,19 @@
   .page-services .footer-bar.footer-bar--simple {
     background: transparent;
     color: var(--cream);
+    padding: var(--services-footer-pad-y) var(--page-gutter);
+  }
+
+  .page-services .services-offer {
+    border-radius: 0;
+  }
+
+  .page-services .services-grid {
+    min-height: 0;
+  }
+
+  .page-services .services-offer__copy {
+    padding-top: 0.85rem;
   }
 
   .page-services .footer-bar__tagline.tagline-underline::after {
@@ -1084,7 +1108,7 @@
   .page-services .services-mobile__copy {
     display: flex;
     flex-direction: column;
-    gap: 1.35rem;
+    gap: 0.85rem;
   }
 
   .page-services .services-mobile__title {
@@ -1153,9 +1177,9 @@
   .page-services .services-mobile__name {
     display: inline-block;
     font-family: var(--font-tagline);
-    font-size: clamp(1.4rem, 6.5vw, 1.9rem);
+    font-size: clamp(1.2rem, 5.6vw, 1.65rem);
     font-weight: 500;
-    line-height: 1.05;
+    line-height: 1.08;
     letter-spacing: 0;
     color: inherit;
   }
