@@ -13,7 +13,6 @@
     var canLockMobile =
       isHome ||
       document.body.classList.contains('page-menu') ||
-      document.body.classList.contains('page-about') ||
       document.body.classList.contains('page-services') ||
       document.body.classList.contains('page-contact');
     // Viewport locks are mobile-only (desktop keeps normal scroll).

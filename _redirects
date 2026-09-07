@@ -11,3 +11,6 @@
 /book/ /contact 301
 /thanks /thank-you 301
 /thanks/ /thank-you 301
+/about / 301
+/about/ / 301
+/about.html / 301

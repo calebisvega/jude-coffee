@@ -961,19 +961,18 @@
   .page-services {
     --services-marquee-size: 0;
     --services-marquee-radius: 0;
-    --services-offer-height: 22vh;
+    --services-offer-height: 24vh;
     --services-offer-pad-x: 1.15rem;
-    --services-offer-pad-y: 1.35rem;
+    --services-offer-pad-y: 1.15rem;
     --services-offer-logo-width: 76px;
-    --services-offer-logo-top: 0.7rem;
-    --services-offer-logo-left: 0.85rem;
-    --services-offer-title-size: clamp(1.85rem, 8vw, 2.4rem);
+    --services-offer-logo-gap: 0.4rem;
+    --services-offer-title-size: clamp(2.15rem, 9vw, 2.85rem);
     --services-offer-lead-size: clamp(0.8125rem, 3.4vw, 0.9375rem);
     --services-offer-copy-gap: 0.4rem;
     --services-grid-min: 0;
     --services-tile-label-size: clamp(0.625rem, 2.6vw, 0.75rem);
     --services-tile-label-pad: 0.75rem 0.85rem;
-    --services-footer-pad-y: 0.55rem;
+    --services-footer-pad-y: 0.65rem;
     background: var(--sage);
   }
 
@@ -1034,14 +1033,18 @@
     display: none;
   }
 
-  .page-services .site-footer {
+  .page-services #main > .site-footer {
     display: block !important;
-    position: relative;
+    position: absolute;
     z-index: 5;
-    flex: 0 0 auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex: none;
     width: 100%;
     background: transparent;
     color: var(--cream);
+    pointer-events: none;
   }
 
   .page-services .footer-bar.footer-bar--simple {
@@ -1056,10 +1059,6 @@
 
   .page-services .services-grid {
     min-height: 0;
-  }
-
-  .page-services .services-offer__copy {
-    padding-top: 0.85rem;
   }
 
   .page-services .footer-bar__tagline.tagline-underline::after {

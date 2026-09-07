@@ -3983,13 +3983,12 @@ html:has(.page-services) {
   --services-marquee-radius: clamp(0.875rem, 2.25vw, 1.5rem);
   --services-marquee-line: rgba(105, 150, 107, 0.18);
   --cursor-mug: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='7' fill='%23F4F7EE'/%3E%3C/svg%3E") 10 10, auto;
-  --services-offer-height: 32vh;
+  --services-offer-height: 34vh;
   --services-offer-pad-x: clamp(1.75rem, 4vw, 3rem);
   --services-offer-pad-y: clamp(1.5rem, 4vh, 2.5rem);
   --services-offer-logo-width: 120px;
-  --services-offer-logo-top: 1.35rem;
-  --services-offer-logo-left: 1.65rem;
-  --services-offer-title-size: clamp(2.75rem, 6.2vw, 4.5rem);
+  --services-offer-logo-gap: 0.55rem;
+  --services-offer-title-size: clamp(3.25rem, 7.4vw, 5.75rem);
   --services-offer-lead-size: clamp(0.95rem, 1.4vw, 1.125rem);
   --services-offer-copy-gap: 0.7rem;
   --services-offer-lead-max: 36rem;
@@ -3997,7 +3996,7 @@ html:has(.page-services) {
   --services-tile-label-size: clamp(0.8125rem, 1.35vw, 1.0625rem);
   --services-tile-label-pad: 1.15rem 1.3rem;
   --services-tile-hover-scale: 1.05;
-  --services-footer-pad-y: 0.75rem;
+  --services-footer-pad-y: 0.9rem;
   --services-split-panel-height: 700px;
   --services-cursor-mug-size: 28px;
   --services-cursor-hotspot-x: 7px;
@@ -4209,8 +4208,10 @@ html:has(.page-services) {
   position: relative;
   flex: 0 0 auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: var(--services-offer-logo-gap);
   min-height: var(--services-offer-height);
   padding: var(--services-offer-pad-y) var(--services-offer-pad-x);
   box-sizing: border-box;
@@ -4220,9 +4221,7 @@ html:has(.page-services) {
 }
 
 .services-offer__logo {
-  position: absolute;
-  top: var(--services-offer-logo-top);
-  left: var(--services-offer-logo-left);
+  position: relative;
   display: block;
   width: var(--services-offer-logo-width);
   max-width: min(42vw, var(--services-offer-logo-width));
@@ -4247,7 +4246,7 @@ html:has(.page-services) {
   width: 100%;
   height: auto;
   object-fit: contain;
-  object-position: left center;
+  object-position: center;
 }
 
 .services-offer__copy {
@@ -4257,7 +4256,6 @@ html:has(.page-services) {
   gap: var(--services-offer-copy-gap);
   width: min(100%, 46rem);
   margin: 0 auto;
-  padding-inline: calc(var(--services-offer-logo-width) * 0.15);
 }
 
 .services-offer__title {
@@ -4326,9 +4324,11 @@ html:has(.page-services) {
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(20, 32, 22, 0.62) 0%,
-    rgba(20, 32, 22, 0.12) 42%,
-    transparent 62%
+    rgba(20, 32, 22, 0.58) 0%,
+    rgba(20, 32, 22, 0.22) 32%,
+    rgba(20, 32, 22, 0.28) 52%,
+    rgba(20, 32, 22, 0.08) 78%,
+    transparent 100%
   );
   pointer-events: none;
   z-index: 1;
@@ -4336,12 +4336,15 @@ html:has(.page-services) {
 
 .services-tile__label {
   position: absolute;
-  left: 0;
-  bottom: 0;
+  left: 50%;
+  top: 50%;
   z-index: 2;
   margin: 0;
   padding: var(--services-tile-label-pad);
-  max-width: calc(100% - 0.75rem);
+  max-width: calc(100% - 1.5rem);
+  width: max-content;
+  transform: translate(-50%, -50%);
+  text-align: center;
   font-family: var(--font-display);
   font-size: var(--services-tile-label-size);
   font-weight: 700;
@@ -4373,10 +4376,16 @@ html:has(.page-services) {
   object-position: center 52%;
 }
 
-.page-services .site-footer {
-  flex: 0 0 auto;
+.page-services #main > .site-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  flex: none;
   background: transparent;
   color: var(--cream);
+  pointer-events: none;
 }
 
 .page-services .footer-bar.footer-bar--simple {
@@ -4386,6 +4395,7 @@ html:has(.page-services) {
 
 .page-services .footer-bar__email,
 .page-services .footer-bar__tagline {
+  pointer-events: auto;
   color: var(--cream);
 }
 
