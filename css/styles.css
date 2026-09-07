@@ -1172,11 +1172,10 @@ h1.hero-tagline--corners {
   }
 
   .page-home .story-quote {
-    --story-quote-max: 42rem;
-    --story-quote-line-height: 1.2;
+    --story-quote-line-height: 1.5;
     display: block;
     width: 100%;
-    max-width: var(--story-quote-max);
+    max-width: none;
     margin: 0;
     border: 0;
     padding: 0;
@@ -1194,7 +1193,7 @@ h1.hero-tagline--corners {
     margin: 0;
     font: inherit;
     color: inherit;
-    text-wrap: pretty;
+    text-wrap: wrap;
   }
 }
 
