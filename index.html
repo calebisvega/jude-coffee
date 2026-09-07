@@ -3,26 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Jude — specialty mobile coffee catering in Lakeland, Florida. Coffee anytime, coffee anywhere.">
+  <meta name="description" content="Specialty mobile coffee catering in Lakeland, Florida — espresso and pour-over for weddings, corporate events, and pop-ups. Coffee anytime, anywhere.">
   <link rel="canonical" href="https://judecoffee.com/">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
   <meta property="og:site_name" content="Jude Coffee">
   <meta property="og:url" content="https://judecoffee.com/">
-  <meta property="og:title" content="Jude — Coffee Anytime, Coffee Anywhere">
-  <meta property="og:description" content="Specialty mobile coffee catering in Lakeland, Florida.">
+  <meta property="og:title" content="Jude Coffee | Mobile Coffee Catering in Lakeland, FL">
+  <meta property="og:description" content="Specialty mobile coffee catering in Lakeland, Florida — espresso and pour-over for weddings, corporate events, and pop-ups.">
   <meta property="og:image" content="https://judecoffee.com/images/story-cart.png">
   <meta property="og:image:secure_url" content="https://judecoffee.com/images/story-cart.png">
   <meta property="og:image:type" content="image/png">
-  <meta property="og:image:width" content="900">
-  <meta property="og:image:height" content="1200">
+  <meta property="og:image:width" content="680">
+  <meta property="og:image:height" content="1024">
   <meta property="og:image:alt" content="Jude coffee cart at an event">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Jude — Coffee Anytime, Coffee Anywhere">
-  <meta name="twitter:description" content="Specialty mobile coffee catering in Lakeland, Florida.">
+  <meta name="twitter:title" content="Jude Coffee | Mobile Coffee Catering in Lakeland, FL">
+  <meta name="twitter:description" content="Specialty mobile coffee catering in Lakeland, Florida — espresso and pour-over for weddings, corporate events, and pop-ups.">
   <meta name="twitter:image" content="https://judecoffee.com/images/story-cart.png">
   <meta name="twitter:image:alt" content="Jude coffee cart at an event">
   <meta name="theme-color" content="#FAFBF6">
-  <title>Jude — Coffee Anytime, Coffee Anywhere</title>
+  <title>Jude Coffee | Mobile Coffee Catering in Lakeland, FL</title>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -31,10 +32,16 @@
         "@type": "Organization",
         "@id": "https://judecoffee.com/#organization",
         "name": "Jude Coffee",
+        "alternateName": "Jude",
         "url": "https://judecoffee.com/",
         "logo": "https://judecoffee.com/images/logo.png",
         "email": "info@judecoffee.com",
+        "telephone": "+1-334-332-9764",
         "description": "Specialty mobile coffee catering for weddings, corporate events, and pop-ups in Lakeland, Florida.",
+        "sameAs": [
+          "https://www.instagram.com/judeforall/",
+          "https://www.google.com/maps?cid=16430164943661015661"
+        ],
         "areaServed": {
           "@type": "City",
           "name": "Lakeland",
@@ -49,15 +56,72 @@
         "publisher": { "@id": "https://judecoffee.com/#organization" }
       },
       {
-        "@type": "FoodService",
+        "@type": ["LocalBusiness", "FoodService"],
         "@id": "https://judecoffee.com/#business",
         "name": "Jude Coffee",
+        "alternateName": "Jude",
         "url": "https://judecoffee.com/",
         "image": "https://judecoffee.com/images/story-cart.png",
+        "logo": "https://judecoffee.com/images/logo.png",
         "email": "info@judecoffee.com",
+        "telephone": "+1-334-332-9764",
+        "parentOrganization": { "@id": "https://judecoffee.com/#organization" },
         "servesCuisine": "Coffee",
-        "description": "Mobile specialty coffee catering — coffee anytime, coffee anywhere.",
-        "areaServed": "Lakeland, Florida"
+        "priceRange": "$$",
+        "currenciesAccepted": "USD",
+        "description": "Mobile specialty coffee catering for weddings, corporate events, and pop-ups in Lakeland and Central Florida.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Lakeland",
+          "addressRegion": "FL",
+          "addressCountry": "US"
+        },
+        "areaServed": [
+          {
+            "@type": "City",
+            "name": "Lakeland",
+            "containedInPlace": { "@type": "State", "name": "Florida" }
+          },
+          { "@type": "City", "name": "Winter Haven" },
+          { "@type": "AdministrativeArea", "name": "Polk County" },
+          { "@type": "AdministrativeArea", "name": "Central Florida" }
+        ],
+        "sameAs": [
+          "https://www.instagram.com/judeforall/",
+          "https://www.google.com/maps?cid=16430164943661015661"
+        ],
+        "hasMap": "https://www.google.com/maps?cid=16430164943661015661",
+        "hasMenu": "https://judecoffee.com/menu",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Coffee catering",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Wedding coffee catering",
+                "areaServed": "Lakeland, Florida"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Corporate event coffee catering",
+                "areaServed": "Lakeland, Florida"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Pop-up coffee cart",
+                "areaServed": "Lakeland, Florida"
+              }
+            }
+          ]
+        }
       }
     ]
   }
@@ -68,7 +132,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500;9..40,600&family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css?v=20250823homecart2">
+  <link rel="stylesheet" href="/css/styles.css?v=20260907seo1">
   <link rel="stylesheet" href="/css/mobile.css?v=20250823homecart18">
 </head>
 <body class="page-home">
@@ -96,39 +160,41 @@
           <div class="header-tagline header-tagline--left" data-tagline-brand="coffee-anytime">
             <span class="tagline-underline tagline-trigger" tabindex="0">Coffee</span>
             <span class="tagline-reveal">
-              <a href="/services.html">Services</a>
-              <a href="/menu.html">Menu</a>
+              <a href="/services">Services</a>
+              <a href="/menu">Menu</a>
+              <a href="/about">About</a>
             </span>
           </div>
           <div class="header-tagline header-tagline--right header-tagline--mode-anytime" data-tagline-brand="coffee-anytime">
             <span class="tagline-underline tagline-trigger" tabindex="0">Anytime</span>
             <span class="tagline-reveal">
-              <a href="/contact.html">Book us</a>
-              <a href="mailto:info@judecoffee.com">Reach out</a>
+              <a href="/contact">Book us</a>
+              <a href="/reach-out">Reach out</a>
             </span>
           </div>
           <div class="header-tagline header-tagline--right header-tagline--mode-anywhere" data-tagline-brand="coffee-anywhere" aria-hidden="true">
             <span class="tagline-underline tagline-trigger" tabindex="0">Anywhere</span>
             <span class="tagline-reveal">
-              <a href="/contact.html">Book us</a>
-              <a href="mailto:info@judecoffee.com">Reach out</a>
+              <a href="/contact">Book us</a>
+              <a href="/reach-out">Reach out</a>
             </span>
           </div>
         </div>
         <h1 class="hero-tagline hero-tagline--corners">
-          <span class="visually-hidden">Coffee Anytime, Coffee Anywhere</span>
+          <span class="visually-hidden">Jude Coffee — mobile coffee catering in Lakeland, Florida</span>
           <span class="hero-tagline__word hero-tagline__word--bl" data-tagline-brand="coffee-anywhere">
             <span class="tagline-underline tagline-trigger" tabindex="0">Coffee</span>
             <span class="tagline-reveal">
-              <a href="/services.html">Services</a>
-              <a href="/menu.html">Menu</a>
+              <a href="/services">Services</a>
+              <a href="/menu">Menu</a>
+              <a href="/about">About</a>
             </span>
           </span>
           <span class="hero-tagline__word hero-tagline__word--br" data-tagline-brand="coffee-anywhere">
             <span class="tagline-underline tagline-trigger" tabindex="0">Anywhere</span>
             <span class="tagline-reveal">
-              <a href="/contact.html">Book us</a>
-              <a href="mailto:info@judecoffee.com">Reach out</a>
+              <a href="/contact">Book us</a>
+              <a href="/reach-out">Reach out</a>
             </span>
           </span>
         </h1>
@@ -139,28 +205,28 @@
             </video>
           </div>
           <div class="hero-collage__piece hero-collage__piece--photo hero-collage__piece--b">
-            <img src="/images/prep.png" alt="" class="hero-collage__photo is-active">
-            <img src="/images/lifestyle.png" alt="" class="hero-collage__photo">
+            <img src="/images/prep.png" alt="Barista preparing espresso at a Jude event" class="hero-collage__photo is-active">
+            <img src="/images/lifestyle.png" alt="Guests gathering around specialty coffee" class="hero-collage__photo">
           </div>
           <div class="hero-collage__piece hero-collage__piece--photo hero-collage__piece--c">
-            <img src="/images/barista.png" alt="" class="hero-collage__photo is-active">
-            <img src="/images/cart.png" alt="" class="hero-collage__photo">
+            <img src="/images/barista.png" alt="Jude barista pulling espresso" class="hero-collage__photo is-active">
+            <img src="/images/cart.png" alt="Jude mobile coffee cart" class="hero-collage__photo">
           </div>
           <div class="hero-collage__piece hero-collage__piece--photo hero-collage__piece--d">
-            <img src="/images/team.png" alt="" class="hero-collage__photo is-active">
-            <img src="/images/popup.png" alt="" class="hero-collage__photo">
+            <img src="/images/team.png" alt="The Jude Coffee team" class="hero-collage__photo is-active">
+            <img src="/images/popup.png" alt="Jude coffee cart at a pop-up" class="hero-collage__photo">
           </div>
           <div class="hero-collage__piece hero-collage__piece--photo hero-collage__piece--e">
-            <img src="/images/beans.png" alt="" class="hero-collage__photo is-active">
-            <img src="/images/popup.png" alt="" class="hero-collage__photo">
+            <img src="/images/beans.png" alt="Fresh coffee beans" class="hero-collage__photo is-active">
+            <img src="/images/popup.png" alt="Jude coffee service at an outdoor gathering" class="hero-collage__photo">
           </div>
-          <a href="#our-story" class="hero-collage__about story-title story-title--on-media tagline-underline">About us</a>
+          <a href="/about" class="hero-collage__about story-title story-title--on-media tagline-underline">About us</a>
         </div>
         <div class="home-mid">
           <figure class="home-mobile-cart">
             <img
               src="/images/story-cart.png"
-              alt="Jude coffee cart"
+              alt="Jude mobile coffee cart"
               class="home-mobile-cart__img"
               width="900"
               height="1200"
@@ -170,10 +236,11 @@
             >
           </figure>
           <nav class="home-mobile-nav" aria-label="Primary">
-            <a href="/menu.html" class="home-mobile-nav__link tagline-underline">Menu</a>
-            <a href="/services.html" class="home-mobile-nav__link tagline-underline">Services</a>
-            <a href="/reach-out.html" class="home-mobile-nav__link tagline-underline">Reach out</a>
-            <a href="/contact.html" class="home-mobile-nav__link tagline-underline">Book us</a>
+            <a href="/menu" class="home-mobile-nav__link tagline-underline">Menu</a>
+            <a href="/services" class="home-mobile-nav__link tagline-underline">Services</a>
+            <a href="/about" class="home-mobile-nav__link tagline-underline">About</a>
+            <a href="/reach-out" class="home-mobile-nav__link tagline-underline">Reach out</a>
+            <a href="/contact" class="home-mobile-nav__link tagline-underline">Book us</a>
           </nav>
         </div>
         <div class="home-mobile-footer">
@@ -186,7 +253,7 @@
     <section id="our-story" class="section section--story home-snap-page fade-in" data-snap-page="1" aria-label="About us">
       <div class="story-editorial">
         <div class="story-about">
-          <h2 class="story-about__label story-title tagline-underline story-section-heading">About us</h2>
+          <h2 class="story-about__label story-title tagline-underline story-section-heading"><a href="/about">About us</a></h2>
           <div class="story-about__columns">
             <div class="story-about__col">
               <p><span class="story-about-lead">In 2022, Jude was founded by Jordan and Kelsey Willcox in sunny Lakeland, Florida.</span> From its inception, Jude has been designed to be a mobile third place for people to gather.</p>
@@ -209,7 +276,7 @@
 
       <footer class="site-footer home-about-footer">
         <div class="footer-bar footer-bar--simple">
-          <a href="https://instagram.com/judeforall" target="_blank" rel="noopener noreferrer" class="footer-bar__email">@judeforall</a>
+          <a href="https://www.instagram.com/judeforall/" target="_blank" rel="noopener noreferrer" class="footer-bar__email">@judeforall</a>
           <p class="footer-bar__tagline tagline-underline">Coffee Anytime Coffee Anywhere</p>
         </div>
       </footer>
@@ -228,27 +295,27 @@
         <h2 class="home-services__title story-title tagline-underline story-section-heading">What we do</h2>
         <div class="home-services__track" tabindex="0" aria-label="Services — swipe for more">
           <article class="home-services__card">
-            <a href="/contact.html" class="home-services__link">
+            <a href="/contact" class="home-services__link">
               <div class="home-services__media">
-                <img src="/images/popup.png" alt="" width="800" height="800" loading="lazy">
+                <img src="/images/popup.png" alt="Wedding coffee service from Jude" width="800" height="800" loading="lazy">
               </div>
               <h3 class="home-services__name">Weddings</h3>
               <p class="home-services__copy">From the first toast to the last dance — specialty coffee for your guests, all night long.</p>
             </a>
           </article>
           <article class="home-services__card">
-            <a href="/contact.html" class="home-services__link">
+            <a href="/contact" class="home-services__link">
               <div class="home-services__media">
-                <img src="/images/barista.png" alt="" width="800" height="800" loading="lazy">
+                <img src="/images/barista.png" alt="Barista-crafted coffee at a corporate event" width="800" height="800" loading="lazy">
               </div>
               <h3 class="home-services__name">Corporate events</h3>
               <p class="home-services__copy">Meetings, launches, and company gatherings — barista-crafted coffee on site.</p>
             </a>
           </article>
           <article class="home-services__card">
-            <a href="/contact.html" class="home-services__link">
+            <a href="/contact" class="home-services__link">
               <div class="home-services__media">
-                <img src="/images/cart.png" alt="" width="800" height="800" loading="lazy">
+                <img src="/images/cart.png" alt="Jude mobile coffee cart at a pop-up" width="800" height="800" loading="lazy">
               </div>
               <h3 class="home-services__name">Pop-ups</h3>
               <p class="home-services__copy">Markets, festivals, private parties — wherever good coffee belongs.</p>

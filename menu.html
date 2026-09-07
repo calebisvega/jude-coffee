@@ -3,36 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Jude Coffee menu — espresso, pour-over, and specialty drinks for events in Lakeland, Florida.">
+  <meta name="description" content="Jude Coffee's event menu in Lakeland, Florida — espresso, pour-over, and specialty drinks with house-made syrups for weddings and gatherings.">
   <link rel="canonical" href="https://judecoffee.com/menu">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
   <meta property="og:site_name" content="Jude Coffee">
   <meta property="og:url" content="https://judecoffee.com/menu">
-  <meta property="og:title" content="Menu — Jude Coffee">
-  <meta property="og:description" content="Espresso, pour-over, and specialty drinks for events in Lakeland, Florida.">
+  <meta property="og:title" content="Jude Coffee Menu | Espresso & Pour-Over in Lakeland">
+  <meta property="og:description" content="Espresso, pour-over, and specialty drinks with house-made syrups for events in Lakeland, Florida.">
   <meta property="og:image" content="https://judecoffee.com/images/story-cart.png">
+  <meta property="og:image:width" content="680">
+  <meta property="og:image:height" content="1024">
   <meta property="og:image:alt" content="Jude coffee cart at an event">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Menu — Jude Coffee">
-  <meta name="twitter:description" content="Espresso, pour-over, and specialty drinks for events in Lakeland, Florida.">
+  <meta name="twitter:title" content="Jude Coffee Menu | Espresso & Pour-Over in Lakeland">
+  <meta name="twitter:description" content="Espresso, pour-over, and specialty drinks with house-made syrups for events in Lakeland, Florida.">
   <meta name="twitter:image" content="https://judecoffee.com/images/story-cart.png">
   <meta name="theme-color" content="#000000">
-  <title>Menu — Jude Coffee</title>
+  <title>Jude Coffee Menu | Espresso & Pour-Over in Lakeland</title>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Menu — Jude Coffee",
-    "url": "https://judecoffee.com/menu",
-    "description": "Jude Coffee menu — espresso, pour-over, and specialty drinks for events in Lakeland, Florida.",
-    "isPartOf": { "@id": "https://judecoffee.com/#website" },
-    "breadcrumb": {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://judecoffee.com/" },
-        { "@type": "ListItem", "position": 2, "name": "Menu", "item": "https://judecoffee.com/menu" }
-      ]
-    }
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "name": "Jude Coffee Menu | Espresso & Pour-Over in Lakeland",
+        "url": "https://judecoffee.com/menu",
+        "description": "Jude Coffee's event menu in Lakeland, Florida — espresso, pour-over, and specialty drinks with house-made syrups.",
+        "isPartOf": { "@id": "https://judecoffee.com/#website" },
+        "about": { "@id": "https://judecoffee.com/#business" },
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://judecoffee.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Menu", "item": "https://judecoffee.com/menu" }
+          ]
+        }
+      },
+      {
+        "@type": "Menu",
+        "@id": "https://judecoffee.com/menu#menu",
+        "name": "Jude Coffee event menu",
+        "description": "Primary offering for weddings, corporate events, and pop-ups. Seasonal menu drops separately; syrups are formulated in-house.",
+        "hasMenuSection": {
+          "@type": "MenuSection",
+          "name": "Primary offering",
+          "hasMenuItem": [
+            { "@type": "MenuItem", "name": "Espresso" },
+            { "@type": "MenuItem", "name": "Pour-over" },
+            { "@type": "MenuItem", "name": "Specialty drinks" }
+          ]
+        }
+      }
+    ]
   }
   </script>
   <link rel="icon" href="/images/favicon.png" type="image/png" sizes="32x32">
@@ -56,14 +79,19 @@
   </header>
 
   <main id="main">
-    <h1 class="visually-hidden">Menu</h1>
+    <h1 class="visually-hidden">Jude Coffee event menu — espresso, pour-over, and specialty drinks</h1>
+    <ul class="visually-hidden">
+      <li>Espresso</li>
+      <li>Pour-over</li>
+      <li>Specialty drinks with house-made syrups</li>
+    </ul>
     <section class="section section--menu-asset fade-in">
       <div class="menu-editorial">
         <p class="menu-editorial__body" lang="en">We've tried our best to direct our attention to the most commonly beloved drinks. This doesn't mean that we're all prim &amp; proper and unwilling to crank out a specialty drink menu. This is just our primary offering, with a seasonal menu hopefully dropping soon. Syrups are all formulated in-house and coffee will come from a variety of roasters, please feel free to ask us before or during the event what we have on bar and we'd love to let you know what we're ripping.</p>
       </div>
       <div class="menu-asset-drag" id="menu-asset-drag">
         <div class="menu-asset-drift">
-          <img src="/images/menu.gif" alt="Jude Coffee menu" class="menu-asset" width="518" height="1500" loading="eager" draggable="false">
+          <img src="/images/menu.gif" alt="Jude Coffee event menu with espresso, pour-over, and specialty drinks" class="menu-asset" width="518" height="1500" loading="eager" draggable="false">
         </div>
       </div>
     </section>

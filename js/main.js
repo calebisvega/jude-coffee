@@ -1780,5 +1780,43 @@
         reachPhotos[reachIndex].classList.add('is-active');
       }, 9000);
     }
+
+    /* Fit the photo/form stage to the visible viewport so Chrome iOS
+       keyboards (and autofill bars) shrink the box instead of covering it. */
+    var syncReachViewport = function () {
+      var vv = window.visualViewport;
+      var height = vv ? vv.height : window.innerHeight;
+      document.documentElement.style.setProperty('--reach-vvh', height + 'px');
+      var layoutH = window.innerHeight || height;
+      document.body.classList.toggle(
+        'is-reach-keyboard',
+        height < layoutH * 0.82 || height < 560
+      );
+    };
+
+    syncReachViewport();
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', syncReachViewport);
+      window.visualViewport.addEventListener('scroll', syncReachViewport);
+    }
+    window.addEventListener('resize', syncReachViewport);
+    window.addEventListener('orientationchange', syncReachViewport);
+
+    var reachForm = document.querySelector('.reach-out-form');
+    if (reachForm) {
+      reachForm.addEventListener('focusin', function (e) {
+        var field = e.target;
+        if (!field || (field.tagName !== 'INPUT' && field.tagName !== 'TEXTAREA')) return;
+        window.setTimeout(function () {
+          syncReachViewport();
+          if (typeof field.scrollIntoView === 'function') {
+            field.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+          }
+        }, 350);
+      });
+      reachForm.addEventListener('focusout', function () {
+        window.setTimeout(syncReachViewport, 150);
+      });
+    }
   }
 })();

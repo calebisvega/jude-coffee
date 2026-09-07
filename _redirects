@@ -2,7 +2,11 @@
 # Cloudflare Pages already maps /menu → menu.html and redirects
 # /menu.html → /menu. A 200 rewrite to *.html creates a redirect loop.
 #
-# Keep only non-conflicting shortcuts below:
+# Host-level 301 for judeforall.com is in functions/_middleware.js.
+# Until DNS for that domain points at this project, set a 301 forward
+# in Squarespace (Domains → Website → Domain Forwarding) to
+# https://judecoffee.com with Permanent Redirect and Maintain paths.
+
 /book /contact 301
 /book/ /contact 301
 /thanks /thank-you 301
