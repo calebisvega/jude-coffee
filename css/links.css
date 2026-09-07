@@ -1,0 +1,108 @@
+/* Jude Coffee — Instagram / bio link tree (mobile landing) */
+
+:root {
+  --links-bg: #000000;
+  --links-cream: #f4f7ee;
+  /* Side inset from the mockup (~43px at 625px artboard). */
+  --links-inset-x: 1.7rem;
+  /* Top/bottom inset from the mockup (~48px at 1024px artboard). */
+  --links-inset-y: 2.5rem;
+  /* Space between the three cards (~30px on the mockup). */
+  --links-gap: 1.375rem;
+  /* Desktop column — phone-width stack for QA. */
+  --links-max: 27rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  min-height: 100%;
+  background: var(--links-bg);
+  color: var(--links-cream);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  font-family: system-ui, sans-serif;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 1000;
+  padding: 0.75rem 1.25rem;
+  background: #2c2c2c;
+  color: var(--links-cream);
+  border-radius: 0 0 4px 4px;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--links-gap);
+  min-height: 100dvh;
+  max-width: var(--links-max);
+  margin: 0 auto;
+  padding:
+    calc(var(--links-inset-y) + env(safe-area-inset-top, 0px))
+    calc(var(--links-inset-x) + env(safe-area-inset-right, 0px))
+    calc(var(--links-inset-y) + env(safe-area-inset-bottom, 0px))
+    calc(var(--links-inset-x) + env(safe-area-inset-left, 0px));
+}
+
+.links__btn {
+  display: block;
+  flex: 0 0 auto;
+  line-height: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.links__btn img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.links__btn:focus-visible {
+  outline: 2px solid var(--links-cream);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) {
+  .links__btn {
+    transition: opacity 0.2s ease;
+  }
+
+  .links__btn:hover {
+    opacity: 0.88;
+  }
+}
