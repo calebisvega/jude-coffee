@@ -24,7 +24,9 @@
   --booking-welcome-type-bottom: 5.5rem;
   --booking-welcome-frame: #000;
   --booking-welcome-stage-max: 30rem;
-  --booking-welcome-overlay: 0.42;
+  --booking-welcome-overlay: 0.58;
+  --booking-welcome-border: 1.5px;
+  --booking-welcome-zoom: 0.9;
   --booking-path-top: 13.35rem;
   --booking-path-bottom: 4.85rem;
   --booking-path-gap: 0.38rem;
@@ -1296,12 +1298,12 @@
 }
 
 .booking-welcome {
-  justify-content: flex-end;
+  justify-content: center;
   align-items: stretch;
   padding: var(--booking-welcome-gutter);
   padding-top: calc(var(--booking-status-height) + 0.45rem);
-  padding-bottom: var(--booking-welcome-gutter);
-  gap: 0.7rem;
+  padding-bottom: 2.85rem;
+  gap: 0;
   background: var(--booking-welcome-frame);
 }
 
@@ -1311,14 +1313,14 @@
   width: 100%;
   height: min(var(--booking-welcome-stage-max), 60dvh);
   max-height: min(var(--booking-welcome-stage-max), 60dvh);
-  margin-top: auto;
+  margin-top: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
   isolation: isolate;
   border-radius: var(--booking-welcome-radius);
-  border: 3px solid var(--cream);
+  border: var(--booking-welcome-border) solid var(--cream);
   background: #111411;
 }
 
@@ -1338,7 +1340,9 @@
   height: 100%;
   max-width: none;
   object-fit: cover;
-  object-position: 50% 42%;
+  object-position: 50% 45%;
+  transform: scale(var(--booking-welcome-zoom));
+  transform-origin: 50% 45%;
 }
 
 .booking-welcome__shade {
@@ -1428,6 +1432,10 @@
 }
 
 .booking-welcome__footer {
+  position: absolute;
+  left: var(--booking-welcome-gutter);
+  right: var(--booking-welcome-gutter);
+  bottom: 0.55rem;
   flex: 0 0 auto;
   display: flex;
   flex-direction: row;
@@ -1818,7 +1826,11 @@
 
   .booking-welcome {
     padding-top: calc(env(safe-area-inset-top, 0px) + var(--booking-welcome-gutter));
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.35rem);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 2.85rem);
+  }
+
+  .booking-welcome__footer {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 0.45rem);
   }
 
   .booking-nav {
