@@ -14,7 +14,7 @@
   ];
 
   var COLLAB_MAILTO = 'mailto:info@judecoffee.com?subject=' +
-    encodeURIComponent('Custom quote') +
+    encodeURIComponent('Event budget') +
     '&body=' +
     encodeURIComponent('Hi Jude team,\n\nBudget doesn\'t quite line up with the packages — I\'d still love to tell you about the event.\n\n');
 
@@ -190,6 +190,10 @@
       case 'welcome':
         node = el(
           '<section class="booking-step booking-welcome" data-step="welcome">' +
+            '<span class="booking-welcome__media" aria-hidden="true">' +
+              '<img src="/images/lifestyle.png" alt="" width="800" height="1000">' +
+              '<span class="booking-welcome__shade"></span>' +
+            '</span>' +
             '<div class="booking-step__inner booking-step__inner--welcome">' +
               '<h1 class="booking-question">' +
                 '<span class="booking-welcome__lockup">' +
