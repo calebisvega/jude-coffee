@@ -190,23 +190,25 @@
       case 'welcome':
         node = el(
           '<section class="booking-step booking-welcome" data-step="welcome">' +
-            '<span class="booking-welcome__media" aria-hidden="true">' +
-              '<img src="/images/book-welcome.jpg" alt="" width="1200" height="1800">' +
-              '<span class="booking-welcome__shade"></span>' +
-            '</span>' +
-            '<div class="booking-step__inner booking-step__inner--welcome">' +
-              '<h1 class="booking-question">' +
-                '<span class="booking-welcome__lockup">' +
-                  '<span class="booking-welcome__lead">Let\'s talk about</span>' +
-                  '<span class="booking-welcome__line">' +
-                    'your event.' +
-                    '<button type="button" class="booking-ok booking-ok--arrow booking-ok--bare" data-ok aria-label="Start">' +
-                      '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>' +
-                    '</button>' +
+            '<div class="booking-welcome__stage">' +
+              '<span class="booking-welcome__media" aria-hidden="true">' +
+                '<img src="/images/book-welcome.jpg" alt="" width="1200" height="1800">' +
+                '<span class="booking-welcome__shade"></span>' +
+              '</span>' +
+              '<div class="booking-step__inner booking-step__inner--welcome">' +
+                '<h1 class="booking-question">' +
+                  '<span class="booking-welcome__lockup">' +
+                    '<span class="booking-welcome__lead">Let\'s talk about</span>' +
+                    '<span class="booking-welcome__line">' +
+                      'your event.' +
+                      '<button type="button" class="booking-ok booking-ok--arrow booking-ok--bare" data-ok aria-label="Start">' +
+                        '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>' +
+                      '</button>' +
+                    '</span>' +
                   '</span>' +
-                '</span>' +
-              '</h1>' +
-              '<p class="booking-lead">Let us in on some of the important information to help give you an accurate estimated quote.</p>' +
+                '</h1>' +
+                '<p class="booking-lead">Let us in on some of the important information to help give you an accurate estimated quote.</p>' +
+              '</div>' +
             '</div>' +
           '</section>'
         );

@@ -19,6 +19,8 @@
   --booking-ok-size: 2.75rem;
   --booking-welcome-ok-size: 2.95rem;
   --booking-welcome-shift: -0.75rem;
+  --booking-welcome-radius: 2.75rem;
+  --booking-welcome-gutter: 0.7rem;
   --booking-path-top: 13.35rem;
   --booking-path-bottom: 4.85rem;
   --booking-path-gap: 0.38rem;
@@ -175,8 +177,12 @@
   margin-inline: auto;
 }
 
+.booking-app.is-welcome {
+  background: #000;
+}
+
 .booking-app.is-welcome .booking-top {
-  top: calc(var(--booking-status-height) + var(--booking-welcome-logo-top));
+  top: calc(var(--booking-status-height) + var(--booking-welcome-gutter) + var(--booking-welcome-logo-top));
 }
 
 .booking-app.is-welcome .booking-nav {
@@ -1285,9 +1291,27 @@
 }
 
 .booking-welcome {
+  justify-content: stretch;
+  align-items: stretch;
+  padding: var(--booking-welcome-gutter);
+  padding-top: calc(var(--booking-status-height) + 0.4rem);
+  padding-bottom: 0.7rem;
+  background: #000;
+}
+
+.booking-welcome__stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  padding-top: 6.5rem;
-  padding-bottom: 7.35rem;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: var(--booking-welcome-radius);
+  border: 1.5px solid color-mix(in srgb, var(--cream) 34%, transparent);
+  background: #111411;
 }
 
 .booking-welcome__media {
@@ -1699,13 +1723,13 @@
     height: 100%;
     min-height: 100dvh;
     min-height: 100svh;
-    background: #1a2018;
+    background: #000;
     overflow: hidden;
   }
 
   .page-booking-preview {
     padding: 0;
-    background: #1a2018;
+    background: #000;
     gap: 0;
     justify-content: stretch;
   }
@@ -1722,16 +1746,16 @@
     border-radius: 0;
     padding: 0;
     box-shadow: none;
-    background: #1a2018;
+    background: #000;
   }
 
   .booking-app {
     border-radius: 0;
-    background: #1a2018;
+    background: var(--sage);
   }
 
   .booking-app.is-welcome {
-    background: #1a2018;
+    background: #000;
   }
 
   .booking-status,
@@ -1744,7 +1768,12 @@
   }
 
   .booking-app.is-welcome .booking-top {
-    top: calc(env(safe-area-inset-top, 0px) + var(--booking-welcome-logo-top));
+    top: calc(env(safe-area-inset-top, 0px) + var(--booking-welcome-gutter) + var(--booking-welcome-logo-top));
+  }
+
+  .booking-welcome {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 0.55rem);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.55rem);
   }
 
   .booking-nav {
