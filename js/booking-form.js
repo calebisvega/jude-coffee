@@ -209,6 +209,10 @@
                 '</h1>' +
               '</div>' +
             '</div>' +
+            '<footer class="booking-welcome__footer">' +
+              '<a href="mailto:info@judecoffee.com" class="booking-welcome__footer-email">info@judecoffee.com</a>' +
+              '<p class="booking-welcome__footer-tagline">Coffee Anytime Coffee Anywhere</p>' +
+            '</footer>' +
           '</section>'
         );
         break;
