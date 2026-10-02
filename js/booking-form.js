@@ -364,7 +364,7 @@
             '<span class="booking-tier-row__title">' + escapeHtml(opts.title) + '</span>' +
             (opts.sub ? '<span class="booking-tier-row__sub">' + escapeHtml(opts.sub) + '</span>' : '') +
           '</span>' +
-          meta +
+          (meta ? '<span class="booking-tier-row__detail">' + meta + '</span>' : '') +
         '</span>' +
       '</' + tag + '>'
     );
@@ -372,7 +372,7 @@
 
   function tierRow(item) {
     return overlayCard({
-      extraClass: item.extraClass || '',
+      extraClass: (item.extraClass || '') + (item.id === 'lean' ? ' is-open' : ''),
       data: 'data-tier="' + item.id + '"',
       role: 'option',
       selected: state.tier === item.id,
@@ -623,6 +623,57 @@
     });
     syncChrome();
     focusActive();
+    Array.prototype.forEach.call(stage.querySelectorAll('[data-step="path"]'), bindPathReveal);
+  }
+
+  function bindPathReveal(root) {
+    if (root.getAttribute('data-path-bound') === '1') return;
+    var inner = root.querySelector('.booking-step__inner--fill');
+    var cards = Array.prototype.slice.call(root.querySelectorAll('[data-tier]'));
+    if (!inner || cards.length < 2) return;
+    root.setAttribute('data-path-bound', '1');
+    var last = -1;
+    var lock = false;
+    function setOpen(i) {
+      if (i === last) return;
+      lock = true;
+      var card = cards[i];
+      var topBefore = card.getBoundingClientRect().top;
+      cards.forEach(function (el, n) {
+        el.classList.toggle('is-open', n === i);
+      });
+      last = i;
+      var topAfter = card.getBoundingClientRect().top;
+      inner.scrollTop += topAfter - topBefore;
+      lock = false;
+    }
+    function onScroll() {
+      if (lock) return;
+      var max = Math.max(1, inner.scrollHeight - inner.clientHeight);
+      var t = inner.scrollTop / max;
+      setOpen(t < 0.3 ? 0 : t < 0.65 ? 1 : 2);
+    }
+    function measure() {
+      if (inner.clientHeight > 0) inner.style.setProperty('--path-view', inner.clientHeight + 'px');
+    }
+    var last = -1;
+    function setOpen(i) {
+      if (i === last) return;
+      measure();
+      cards.forEach(function (el, n) {
+        el.classList.toggle('is-open', n === i);
+      });
+      last = i;
+    }
+    function onScroll() {
+      measure();
+      var max = Math.max(1, inner.scrollHeight - inner.clientHeight);
+      var t = inner.scrollTop / max;
+      setOpen(t < 0.3 ? 0 : t < 0.65 ? 1 : 2);
+    }
+    inner.addEventListener('scroll', onScroll, { passive: true });
+    measure();
+    setOpen(0);
   }
 
   function activeNode() {
@@ -904,6 +955,12 @@
       btn.classList.toggle('is-active', btn.getAttribute('data-tier') === state.tier);
     });
     refreshEstimate();
+    if (step && step.id === 'path') {
+      var pathInner = stage.querySelector('[data-step="path"] .booking-step__inner--fill');
+      if (pathInner && pathInner.clientHeight > 0) {
+        pathInner.style.setProperty('--path-view', pathInner.clientHeight + 'px');
+      }
+    }
   }
 
   function scheduleGeocode() {
