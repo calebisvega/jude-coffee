@@ -13,14 +13,16 @@
   --booking-logo-width: 6.85rem;
   --booking-welcome-logo-top: 1.55rem;
   --booking-question-size: 1.5rem;
-  --booking-welcome-size: 3.32rem;
+  --booking-welcome-size: 2.85rem;
   --booking-welcome-sub: 0.5625rem;
   --booking-ok-radius: 999px;
   --booking-ok-size: 2.75rem;
-  --booking-welcome-ok-size: 2.95rem;
-  --booking-welcome-shift: -0.75rem;
-  --booking-welcome-radius: 2.75rem;
-  --booking-welcome-gutter: 0.7rem;
+  --booking-welcome-ok-size: 2.55rem;
+  --booking-welcome-shift: 0;
+  --booking-welcome-radius: 2.5rem;
+  --booking-welcome-gutter: 0.95rem;
+  --booking-welcome-type-bottom: 10.75rem;
+  --booking-welcome-frame: #5f5f5f;
   --booking-path-top: 13.35rem;
   --booking-path-bottom: 4.85rem;
   --booking-path-gap: 0.38rem;
@@ -178,11 +180,11 @@
 }
 
 .booking-app.is-welcome {
-  background: #000;
+  background: var(--booking-welcome-frame);
 }
 
 .booking-app.is-welcome .booking-top {
-  top: calc(var(--booking-status-height) + var(--booking-welcome-gutter) + var(--booking-welcome-logo-top));
+  display: none;
 }
 
 .booking-app.is-welcome .booking-nav {
@@ -1294,9 +1296,9 @@
   justify-content: stretch;
   align-items: stretch;
   padding: var(--booking-welcome-gutter);
-  padding-top: calc(var(--booking-status-height) + 0.4rem);
-  padding-bottom: 0.7rem;
-  background: #000;
+  padding-top: calc(var(--booking-status-height) + 0.45rem);
+  padding-bottom: var(--booking-welcome-gutter);
+  background: var(--booking-welcome-frame);
 }
 
 .booking-welcome__stage {
@@ -1306,11 +1308,11 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   overflow: hidden;
   isolation: isolate;
   border-radius: var(--booking-welcome-radius);
-  border: 1.5px solid color-mix(in srgb, var(--cream) 34%, transparent);
+  border: 3px solid var(--cream);
   background: #111411;
 }
 
@@ -1336,9 +1338,7 @@
 .booking-welcome__shade {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.46) 0%, rgba(0, 0, 0, 0.2) 38%, rgba(0, 0, 0, 0.62) 100%),
-    rgba(0, 0, 0, 0.28);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.04) 42%, rgba(0, 0, 0, 0.28) 100%);
   pointer-events: none;
 }
 
@@ -1346,13 +1346,13 @@
   position: relative;
   z-index: 1;
   font-size: var(--booking-welcome-size);
-  line-height: 0.86;
-  letter-spacing: -0.018em;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
   text-align: left;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.4);
+  align-items: flex-start;
+  text-shadow: 0 1px 16px rgba(0, 0, 0, 0.35);
 }
 
 .booking-welcome__lockup {
@@ -1409,12 +1409,12 @@
 .booking-step__inner--welcome {
   position: relative;
   z-index: 1;
-  width: fit-content;
-  max-width: calc(100% - 0.4rem);
-  margin-inline: auto;
-  padding-inline: 0;
+  width: auto;
+  max-width: 100%;
+  margin-inline: 0;
+  padding: 0 1.15rem var(--booking-welcome-type-bottom);
   text-align: left;
-  transform: translateY(var(--booking-welcome-shift));
+  transform: none;
   overflow: visible;
 }
 
@@ -1723,13 +1723,13 @@
     height: 100%;
     min-height: 100dvh;
     min-height: 100svh;
-    background: #000;
+    background: var(--booking-welcome-frame);
     overflow: hidden;
   }
 
   .page-booking-preview {
     padding: 0;
-    background: #000;
+    background: var(--booking-welcome-frame);
     gap: 0;
     justify-content: stretch;
   }
@@ -1746,7 +1746,7 @@
     border-radius: 0;
     padding: 0;
     box-shadow: none;
-    background: #000;
+    background: var(--booking-welcome-frame);
   }
 
   .booking-app {
@@ -1755,7 +1755,7 @@
   }
 
   .booking-app.is-welcome {
-    background: #000;
+    background: var(--booking-welcome-frame);
   }
 
   .booking-status,
@@ -1768,12 +1768,12 @@
   }
 
   .booking-app.is-welcome .booking-top {
-    top: calc(env(safe-area-inset-top, 0px) + var(--booking-welcome-gutter) + var(--booking-welcome-logo-top));
+    display: none;
   }
 
   .booking-welcome {
-    padding-top: calc(env(safe-area-inset-top, 0px) + 0.55rem);
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.55rem);
+    padding-top: calc(env(safe-area-inset-top, 0px) + var(--booking-welcome-gutter));
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--booking-welcome-gutter));
   }
 
   .booking-nav {

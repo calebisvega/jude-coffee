@@ -207,7 +207,6 @@
                     '</span>' +
                   '</span>' +
                 '</h1>' +
-                '<p class="booking-lead">Let us in on some of the important information to help give you an accurate estimated quote.</p>' +
               '</div>' +
             '</div>' +
           '</section>'
