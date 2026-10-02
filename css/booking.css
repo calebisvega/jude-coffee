@@ -1299,13 +1299,14 @@
 }
 
 .booking-welcome__media img {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
+  max-width: none;
   object-fit: cover;
-  object-position: 50% 36%;
-  transform: scale(1.7);
-  transform-origin: 50% 38%;
+  object-position: 50% 50%;
 }
 
 .booking-welcome__shade {
@@ -1693,9 +1694,18 @@
 }
 
 @media (max-width: 440px) {
+  html:has(.page-booking-preview),
+  body.page-booking-preview {
+    height: 100%;
+    min-height: 100dvh;
+    min-height: 100svh;
+    background: #1a2018;
+    overflow: hidden;
+  }
+
   .page-booking-preview {
     padding: 0;
-    background: var(--sage);
+    background: #1a2018;
     gap: 0;
     justify-content: stretch;
   }
@@ -1707,14 +1717,21 @@
   .booking-phone {
     width: 100%;
     height: 100dvh;
+    height: 100svh;
+    min-height: -webkit-fill-available;
     border-radius: 0;
     padding: 0;
     box-shadow: none;
-    background: var(--sage);
+    background: #1a2018;
   }
 
   .booking-app {
     border-radius: 0;
+    background: #1a2018;
+  }
+
+  .booking-app.is-welcome {
+    background: #1a2018;
   }
 
   .booking-status,
