@@ -24,6 +24,7 @@
       title: 'Base',
       image: '/images/book-base.jpg',
       extraClass: 'booking-tier-row--base',
+      blurb: 'Cold brew, iced coffee, and hot drip for the crowd.',
       includes: ['Cold brew', 'Iced coffee', 'Hot drip']
     },
     {
@@ -31,6 +32,7 @@
       title: 'Signature',
       image: '/images/book-signature.jpg',
       extraClass: 'booking-tier-row--signature',
+      blurb: 'Lattes, cappuccinos, cold brew, and drip.',
       includes: ['Lattes & cappuccinos', 'Cold brew', 'Drip']
     },
     {
@@ -38,6 +40,7 @@
       title: 'Curated',
       image: '/images/book-curated.jpg',
       extraClass: 'booking-tier-row--curated',
+      blurb: 'Full espresso bar with a custom drink, menu, and stamp.',
       includes: ['Full espresso bar', 'Custom drink', 'Menu & stamp']
     }
   ];
@@ -340,19 +343,6 @@
       : ' type="button"';
     if (opts.data) attrs += ' ' + opts.data;
     if (opts.role) attrs += ' role="' + opts.role + '" aria-selected="' + (opts.selected ? 'true' : 'false') + '"';
-    var meta = '';
-    if (opts.price || opts.includes) {
-      meta =
-        '<span class="booking-tier-row__meta">' +
-          (opts.price
-            ? '<span class="booking-tier-row__price">' +
-                '<span class="booking-tier-row__price-label">rate starts at</span>' +
-                '<span class="booking-tier-row__price-value">' + opts.price + '</span>' +
-              '</span>'
-            : '') +
-          (opts.includes ? includeList(opts.includes) : '') +
-        '</span>';
-    }
     return (
       '<' + tag + ' class="booking-tier-row' + extraClass + selected + '"' + attrs + '>' +
         '<span class="booking-tier-row__media" aria-hidden="true">' +
@@ -364,24 +354,34 @@
             '<span class="booking-tier-row__title">' + escapeHtml(opts.title) + '</span>' +
             (opts.sub ? '<span class="booking-tier-row__sub">' + escapeHtml(opts.sub) + '</span>' : '') +
           '</span>' +
-          (meta ? '<span class="booking-tier-row__detail">' + meta + '</span>' : '') +
         '</span>' +
       '</' + tag + '>'
     );
   }
 
   function tierRow(item) {
-    return overlayCard({
-      extraClass: (item.extraClass || '') + (item.id === 'lean' ? ' is-open' : ''),
-      data: 'data-tier="' + item.id + '"',
-      role: 'option',
-      selected: state.tier === item.id,
-      image: item.image,
-      title: item.title,
-      sub: item.sub,
-      includes: item.includes,
-      price: calc.formatMoney(calc.startingAmount(item.id))
-    });
+    var open = item.id === 'lean' ? ' is-expanded' : '';
+    return (
+      '<button type="button" class="booking-tier-row ' + (item.extraClass || '') + open + '" data-tier="' + item.id + '" role="option" aria-selected="' + (state.tier === item.id ? 'true' : 'false') + '">' +
+        '<span class="booking-tier-row__media" aria-hidden="true">' +
+          '<img src="' + item.image + '" alt="" width="800" height="520">' +
+        '</span>' +
+        '<span class="booking-tier-row__sheet">' +
+          '<span class="booking-tier-row__title">' + escapeHtml(item.title) + '</span>' +
+          '<span class="booking-tier-row__more">' +
+            '<span class="booking-tier-row__more-inner">' +
+              (item.blurb ? '<span class="booking-tier-row__blurb">' + escapeHtml(item.blurb) + '</span>' : '') +
+              '<span class="booking-tier-row__price">' +
+                '<span class="booking-tier-row__price-value">' + calc.formatMoney(calc.startingAmount(item.id)) + '</span>' +
+                '<span class="booking-tier-row__price-label">rate starts at</span>' +
+              '</span>' +
+              '<span class="booking-tier-row__rule"></span>' +
+              includeList(item.includes) +
+            '</span>' +
+          '</span>' +
+        '</span>' +
+      '</button>'
+    );
   }
 
   function addonRow(item) {
@@ -627,53 +627,38 @@
   }
 
   function bindPathReveal(root) {
-    if (root.getAttribute('data-path-bound') === '1') return;
     var inner = root.querySelector('.booking-step__inner--fill');
     var cards = Array.prototype.slice.call(root.querySelectorAll('[data-tier]'));
-    if (!inner || cards.length < 2) return;
-    root.setAttribute('data-path-bound', '1');
-    var last = -1;
-    var lock = false;
-    function setOpen(i) {
-      if (i === last) return;
-      lock = true;
-      var card = cards[i];
-      var topBefore = card.getBoundingClientRect().top;
-      cards.forEach(function (el, n) {
-        el.classList.toggle('is-open', n === i);
+    if (!inner || !cards.length) return;
+
+    function reveal() {
+      var rootRect = inner.getBoundingClientRect();
+      var viewH = inner.clientHeight || rootRect.height;
+      if (!viewH) return;
+      cards.forEach(function (card) {
+        if (card.classList.contains('is-expanded')) return;
+        var r = card.getBoundingClientRect();
+        var top = r.top - rootRect.top;
+        if (top < viewH * 0.46 && r.bottom > rootRect.top + 16) {
+          card.classList.add('is-expanded');
+        }
       });
-      last = i;
-      var topAfter = card.getBoundingClientRect().top;
-      inner.scrollTop += topAfter - topBefore;
-      lock = false;
     }
-    function onScroll() {
-      if (lock) return;
-      var max = Math.max(1, inner.scrollHeight - inner.clientHeight);
-      var t = inner.scrollTop / max;
-      setOpen(t < 0.3 ? 0 : t < 0.65 ? 1 : 2);
+
+    if (root.getAttribute('data-path-bound') !== '1') {
+      root.setAttribute('data-path-bound', '1');
+      var frame = 0;
+      inner.addEventListener('scroll', function () {
+        if (frame) return;
+        frame = window.requestAnimationFrame(function () {
+          frame = 0;
+          reveal();
+        });
+      }, { passive: true });
     }
-    function measure() {
-      if (inner.clientHeight > 0) inner.style.setProperty('--path-view', inner.clientHeight + 'px');
-    }
-    var last = -1;
-    function setOpen(i) {
-      if (i === last) return;
-      measure();
-      cards.forEach(function (el, n) {
-        el.classList.toggle('is-open', n === i);
-      });
-      last = i;
-    }
-    function onScroll() {
-      measure();
-      var max = Math.max(1, inner.scrollHeight - inner.clientHeight);
-      var t = inner.scrollTop / max;
-      setOpen(t < 0.3 ? 0 : t < 0.65 ? 1 : 2);
-    }
-    inner.addEventListener('scroll', onScroll, { passive: true });
-    measure();
-    setOpen(0);
+    window.requestAnimationFrame(function () {
+      window.requestAnimationFrame(reveal);
+    });
   }
 
   function activeNode() {
@@ -947,6 +932,11 @@
     nextBtn.disabled = !step || step.id === 'done';
     var app = document.getElementById('booking-app');
     app.classList.toggle('is-welcome', Boolean(step && step.id === 'welcome'));
+    app.classList.toggle('is-path', Boolean(step && step.id === 'path'));
+    if (step && step.id === 'path') {
+      var pathNode = stage.querySelector('[data-step="path"].is-active') || stage.querySelector('[data-step="path"]');
+      if (pathNode) bindPathReveal(pathNode);
+    }
     var showTiers = state.tier && step && step.id !== 'welcome' && step.id !== 'path' && step.id !== 'done';
     tiersEl.hidden = !showTiers;
     tiersEl.classList.toggle('is-visible', showTiers);
@@ -955,12 +945,6 @@
       btn.classList.toggle('is-active', btn.getAttribute('data-tier') === state.tier);
     });
     refreshEstimate();
-    if (step && step.id === 'path') {
-      var pathInner = stage.querySelector('[data-step="path"] .booking-step__inner--fill');
-      if (pathInner && pathInner.clientHeight > 0) {
-        pathInner.style.setProperty('--path-view', pathInner.clientHeight + 'px');
-      }
-    }
   }
 
   function scheduleGeocode() {
