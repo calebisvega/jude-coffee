@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /book-preview
+Disallow: /book-preview.html
 
 Sitemap: https://judecoffee.com/sitemap.xml
