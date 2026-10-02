@@ -21,9 +21,10 @@
   --booking-welcome-shift: 0;
   --booking-welcome-radius: 2.5rem;
   --booking-welcome-gutter: 0.95rem;
-  --booking-welcome-type-bottom: 6.5rem;
+  --booking-welcome-type-bottom: 5.5rem;
   --booking-welcome-frame: #000;
-  --booking-welcome-stage-max: 33.5rem;
+  --booking-welcome-stage-max: 30rem;
+  --booking-welcome-overlay: 0.42;
   --booking-path-top: 13.35rem;
   --booking-path-bottom: 4.85rem;
   --booking-path-gap: 0.38rem;
@@ -1308,8 +1309,8 @@
   position: relative;
   flex: 0 0 auto;
   width: 100%;
-  height: min(var(--booking-welcome-stage-max), 68dvh);
-  max-height: min(var(--booking-welcome-stage-max), 68dvh);
+  height: min(var(--booking-welcome-stage-max), 60dvh);
+  max-height: min(var(--booking-welcome-stage-max), 60dvh);
   margin-top: auto;
   display: flex;
   flex-direction: column;
@@ -1337,13 +1338,16 @@
   height: 100%;
   max-width: none;
   object-fit: cover;
-  object-position: 50% 50%;
+  object-position: 50% 42%;
 }
 
 .booking-welcome__shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.04) 42%, rgba(0, 0, 0, 0.28) 100%);
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.32) 0%, transparent 28%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, transparent 42%),
+    rgba(0, 0, 0, var(--booking-welcome-overlay));
   pointer-events: none;
 }
 
