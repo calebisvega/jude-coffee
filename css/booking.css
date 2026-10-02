@@ -367,12 +367,21 @@
   object-position: 78% 32%;
 }
 
+.booking-tier-row__media img[src*="book-espresso"] {
+  object-position: 36% 52%;
+}
+
 .booking-tier-row__media img[src*="book-table"] {
   object-position: 32% 48%;
 }
 
 .booking-tier-row__media img[src*="book-hand"] {
-  object-position: 72% 48%;
+  object-position: 78% 46%;
+}
+
+.booking-tier-row--curated .booking-tier-row__media img {
+  transform: scale(1.85);
+  transform-origin: 80% 48%;
 }
 
 .booking-tier-row__shade {

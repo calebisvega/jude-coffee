@@ -28,7 +28,7 @@
     {
       id: 'standard',
       title: 'Signature',
-      image: '/images/book-table.jpg',
+      image: '/images/book-espresso.jpg',
       includes: ['Lattes & cappuccinos', 'Cold brew', 'Drip']
     },
     {
@@ -357,7 +357,7 @@
 
   function tierRow(item) {
     return overlayCard({
-      extraClass: '',
+      extraClass: item.id === 'premium' ? 'booking-tier-row--curated' : '',
       data: 'data-tier="' + item.id + '"',
       role: 'option',
       selected: state.tier === item.id,
