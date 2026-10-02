@@ -7,10 +7,10 @@
   var CAPACITY_NOTE = 'For this many guests in this window, we\'d usually recommend more time or an extra staff member — we\'ll follow up with the right setup before confirming.';
 
   var ADD_ONS = [
-    { id: 'stamp', title: 'Custom stamp', image: '/images/beans.png' },
-    { id: 'menu_design', title: 'Custom menu design', image: '/images/prep.png' },
-    { id: 'stamp_design', title: 'Custom stamp design', image: '/images/popup.png' },
-    { id: 'specialty_drink', title: 'Custom drink', image: '/images/barista.png' }
+    { id: 'stamp', title: 'Custom stamp', image: '/images/book-table.jpg' },
+    { id: 'menu_design', title: 'Custom menu design', image: '/images/book-table.jpg' },
+    { id: 'stamp_design', title: 'Custom stamp design', image: '/images/book-latte.jpg' },
+    { id: 'specialty_drink', title: 'Custom drink', image: '/images/book-hand.jpg' }
   ];
 
   var COLLAB_MAILTO = 'mailto:info@judecoffee.com?subject=' +
@@ -22,19 +22,19 @@
     {
       id: 'lean',
       title: 'Base',
-      image: '/images/cart.png',
+      image: '/images/book-latte.jpg',
       includes: ['Cold brew', 'Iced coffee', 'Hot drip']
     },
     {
       id: 'standard',
       title: 'Signature',
-      image: '/images/story-cart.png',
+      image: '/images/book-table.jpg',
       includes: ['Lattes & cappuccinos', 'Cold brew', 'Drip']
     },
     {
       id: 'premium',
       title: 'Curated',
-      image: '/images/lifestyle.png',
+      image: '/images/book-hand.jpg',
       includes: ['Full espresso bar', 'Custom drink', 'Menu & stamp']
     }
   ];
@@ -191,7 +191,7 @@
         node = el(
           '<section class="booking-step booking-welcome" data-step="welcome">' +
             '<span class="booking-welcome__media" aria-hidden="true">' +
-              '<img src="/images/lifestyle.png" alt="" width="800" height="1000">' +
+              '<img src="/images/book-latte.jpg" alt="" width="1200" height="800">' +
               '<span class="booking-welcome__shade"></span>' +
             '</span>' +
             '<div class="booking-step__inner booking-step__inner--welcome">' +

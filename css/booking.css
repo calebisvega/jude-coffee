@@ -363,6 +363,18 @@
   object-position: 50% 42%;
 }
 
+.booking-tier-row__media img[src*="book-latte"] {
+  object-position: 78% 32%;
+}
+
+.booking-tier-row__media img[src*="book-table"] {
+  object-position: 32% 48%;
+}
+
+.booking-tier-row__media img[src*="book-hand"] {
+  object-position: 72% 48%;
+}
+
 .booking-tier-row__shade {
   position: absolute;
   inset: 0;
@@ -1282,7 +1294,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 40%;
+  object-position: 78% 28%;
 }
 
 .booking-welcome__shade {
