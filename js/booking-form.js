@@ -191,7 +191,7 @@
         node = el(
           '<section class="booking-step booking-welcome" data-step="welcome">' +
             '<span class="booking-welcome__media" aria-hidden="true">' +
-              '<img src="/images/book-latte.jpg" alt="" width="1200" height="800">' +
+              '<img src="/images/book-welcome.jpg" alt="" width="1200" height="1800">' +
               '<span class="booking-welcome__shade"></span>' +
             '</span>' +
             '<div class="booking-step__inner booking-step__inner--welcome">' +
@@ -538,7 +538,11 @@
     var rows = [];
     var hours = state.durationHours || '—';
     if (q.breakdown.staffing) {
-      rows.push(['Staffing (' + hours + ' hr × ' + calc.formatMoney(q.breakdown.staffingRate) + ')', calc.formatMoney(q.breakdown.staffing)]);
+      var staffN = q.breakdown.staffCount || 1;
+      rows.push([
+        'Staffing (' + staffN + ' × ' + calc.formatMoney(q.breakdown.staffingRate) + ' × ' + hours + ' hr)',
+        calc.formatMoney(q.breakdown.staffing)
+      ]);
     }
     if (q.breakdown.resourceFee) rows.push(['Resource', calc.formatMoney(q.breakdown.resourceFee)]);
     if (q.breakdown.perGuest) {
