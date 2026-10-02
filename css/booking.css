@@ -1303,7 +1303,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 30%;
+  object-position: 50% 36%;
+  transform: scale(1.7);
+  transform-origin: 50% 38%;
 }
 
 .booking-welcome__shade {
