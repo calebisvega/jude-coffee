@@ -22,19 +22,22 @@
     {
       id: 'lean',
       title: 'Base',
-      image: '/images/book-latte.jpg',
+      image: '/images/book-base.jpg',
+      extraClass: 'booking-tier-row--base',
       includes: ['Cold brew', 'Iced coffee', 'Hot drip']
     },
     {
       id: 'standard',
       title: 'Signature',
-      image: '/images/book-espresso.jpg',
+      image: '/images/book-signature.jpg',
+      extraClass: 'booking-tier-row--signature',
       includes: ['Lattes & cappuccinos', 'Cold brew', 'Drip']
     },
     {
       id: 'premium',
       title: 'Curated',
-      image: '/images/book-hand.jpg',
+      image: '/images/book-curated.jpg',
+      extraClass: 'booking-tier-row--curated',
       includes: ['Full espresso bar', 'Custom drink', 'Menu & stamp']
     }
   ];
@@ -337,6 +340,19 @@
       : ' type="button"';
     if (opts.data) attrs += ' ' + opts.data;
     if (opts.role) attrs += ' role="' + opts.role + '" aria-selected="' + (opts.selected ? 'true' : 'false') + '"';
+    var meta = '';
+    if (opts.price || opts.includes) {
+      meta =
+        '<span class="booking-tier-row__meta">' +
+          (opts.price
+            ? '<span class="booking-tier-row__price">' +
+                '<span class="booking-tier-row__price-label">rate starts at</span>' +
+                '<span class="booking-tier-row__price-value">' + opts.price + '</span>' +
+              '</span>'
+            : '') +
+          (opts.includes ? includeList(opts.includes) : '') +
+        '</span>';
+    }
     return (
       '<' + tag + ' class="booking-tier-row' + extraClass + selected + '"' + attrs + '>' +
         '<span class="booking-tier-row__media" aria-hidden="true">' +
@@ -348,21 +364,15 @@
             '<span class="booking-tier-row__title">' + escapeHtml(opts.title) + '</span>' +
             (opts.sub ? '<span class="booking-tier-row__sub">' + escapeHtml(opts.sub) + '</span>' : '') +
           '</span>' +
-          (opts.includes ? includeList(opts.includes) : '') +
+          meta +
         '</span>' +
-        (opts.price
-          ? '<span class="booking-tier-row__price">' +
-              '<span class="booking-tier-row__price-label">rate starts at</span>' +
-              '<span class="booking-tier-row__price-value">' + opts.price + '</span>' +
-            '</span>'
-          : '') +
       '</' + tag + '>'
     );
   }
 
   function tierRow(item) {
     return overlayCard({
-      extraClass: item.id === 'premium' ? 'booking-tier-row--curated' : '',
+      extraClass: item.extraClass || '',
       data: 'data-tier="' + item.id + '"',
       role: 'option',
       selected: state.tier === item.id,
@@ -880,7 +890,7 @@
     if (pageEl) {
       var showPage = Boolean(step && step.id !== 'welcome' && step.id !== 'done' && pos >= 0);
       pageEl.hidden = !showPage;
-      pageEl.textContent = showPage ? ('Page ' + (pos + 1) + ' of ' + countable.length) : '';
+      pageEl.textContent = showPage ? ((pos + 1) + '/' + countable.length) : '';
     }
     prevBtn.disabled = index <= 0 || (step && step.id === 'done');
     nextBtn.disabled = !step || step.id === 'done';

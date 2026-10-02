@@ -378,7 +378,13 @@
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
-  min-height: 6.85rem;
+  min-height: 6.35rem;
+  border-color: color-mix(in srgb, var(--cream) 28%, transparent);
+  transition: none;
+}
+
+.booking-step[data-step="path"] .booking-tier-row--signature {
+  flex: 1.42 1 0;
 }
 
 .booking-tier-row__media {
@@ -392,37 +398,44 @@
   display: block;
   width: 100%;
   height: 100%;
+  max-width: none;
   object-fit: cover;
-  object-position: 50% 42%;
+  object-position: 50% 50%;
 }
 
-.booking-tier-row__media img[src*="book-latte"] {
-  object-position: 78% 32%;
+.booking-tier-row--base .booking-tier-row__media img {
+  object-fit: cover;
+  object-position: 50% 48%;
+  transform: none;
 }
 
-.booking-tier-row__media img[src*="book-espresso"] {
-  object-position: 36% 52%;
+.booking-tier-row--signature .booking-tier-row__media img {
+  object-position: 46% 42%;
+}
+
+.booking-tier-row--curated .booking-tier-row__media img {
+  object-position: 42% 38%;
+  transform: none;
 }
 
 .booking-tier-row__media img[src*="book-table"] {
   object-position: 32% 48%;
 }
 
-.booking-tier-row__media img[src*="book-hand"] {
-  object-position: 78% 46%;
+.booking-tier-row__media img[src*="book-latte"] {
+  object-position: 78% 32%;
 }
 
-.booking-tier-row--curated .booking-tier-row__media img {
-  transform: scale(1.85);
-  transform-origin: 80% 48%;
+.booking-tier-row__media img[src*="book-hand"] {
+  object-position: 78% 46%;
 }
 
 .booking-tier-row__shade {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.58) 0%, rgba(0, 0, 0, 0.42) 42%, rgba(0, 0, 0, 0.78) 100%),
-    rgba(0, 0, 0, 0.22);
+    linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.56) 42%, rgba(0, 0, 0, 0.88) 100%),
+    rgba(0, 0, 0, 0.4);
   pointer-events: none;
 }
 
@@ -435,7 +448,15 @@
   min-width: 0;
   flex: 1 1 auto;
   min-height: 100%;
-  padding: 0.55rem 7.1rem 0.7rem 0.8rem;
+  padding: 0.55rem 0.85rem 0.7rem 0.8rem;
+}
+
+.booking-step[data-step="path"] .booking-tier-row__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: start;
+  column-gap: 0.7rem;
+  padding: 0.62rem 0.9rem 0.7rem 0.9rem;
 }
 
 .booking-tier-row__heading {
@@ -443,6 +464,18 @@
   align-items: baseline;
   gap: 0.42rem;
   min-width: 0;
+}
+
+.booking-step[data-step="path"] .booking-tier-row__heading {
+  padding-top: 0.08rem;
+}
+
+.booking-tier-row__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 9.9rem;
+  min-width: 9.9rem;
 }
 
 .booking-tier-row__title {
@@ -485,10 +518,14 @@
 
 .booking-include {
   list-style: none;
-  margin: 0.58rem 0 0;
+  margin: 0.4rem 0 0;
   padding: 0;
   display: grid;
   gap: 0.08rem;
+}
+
+.booking-step[data-step="path"] .booking-include {
+  margin-top: 0.38rem;
 }
 
 .booking-include li {
@@ -512,13 +549,12 @@
 }
 
 .booking-tier-row__price {
-  position: absolute;
-  top: 0.55rem;
-  right: 0.55rem;
+  position: static;
   z-index: 2;
   display: grid;
   justify-items: start;
-  width: 6.5rem;
+  width: auto;
+  min-width: 6.5rem;
   padding: 0;
   border: 0;
   background: none;
@@ -553,16 +589,16 @@
   color: var(--cream);
 }
 
-.booking-tier-row:hover,
-.booking-tier-row.is-selected {
+.booking-addon-row:hover,
+.booking-addon-row.is-selected {
   border-color: var(--cream);
 }
 
-.booking-tier-row.is-selected {
+.booking-addon-row.is-selected {
   box-shadow: inset 0 0 0 2px var(--cream);
 }
 
-.booking-tier-row.is-selected .booking-tier-row__shade {
+.booking-addon-row.is-selected .booking-tier-row__shade {
   background:
     linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.34) 42%, rgba(0, 0, 0, 0.72) 100%),
     rgba(0, 0, 0, 0.16);
@@ -1627,17 +1663,18 @@
 
 .booking-nav__page {
   margin: 0;
+  min-width: 2.1rem;
   text-align: center;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: var(--cream);
 }
 
 .booking-nav button {
   width: auto;
   height: auto;
-  padding: 0.12rem;
+  padding: 0.22rem;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -1659,11 +1696,11 @@
 }
 
 .booking-nav svg {
-  width: 0.62rem;
-  height: 0.62rem;
+  width: 0.95rem;
+  height: 0.95rem;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2.2;
+  stroke-width: 2.1;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
