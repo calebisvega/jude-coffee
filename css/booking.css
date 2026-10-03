@@ -13,7 +13,7 @@
   --booking-logo-width: 6.85rem;
   --booking-welcome-logo-top: 1.55rem;
   --booking-question-size: 1.5rem;
-  --booking-welcome-size: 2.85rem;
+  --booking-welcome-size: 65px;
   --booking-welcome-sub: 0.5625rem;
   --booking-ok-radius: 999px;
   --booking-ok-size: 2.75rem;
@@ -1569,7 +1569,7 @@
   z-index: 1;
   font-size: var(--booking-welcome-size);
   line-height: 0.98;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.07em;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -1636,7 +1636,7 @@
   width: auto;
   max-width: 100%;
   margin-inline: 0;
-  padding: 0 1.15rem var(--booking-welcome-type-bottom);
+  padding: 0 0.65rem var(--booking-welcome-type-bottom);
   text-align: left;
   transform: none;
   overflow: visible;
