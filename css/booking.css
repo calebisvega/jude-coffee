@@ -13,20 +13,22 @@
   --booking-logo-width: 6.85rem;
   --booking-welcome-logo-top: 1.55rem;
   --booking-question-size: 1.5rem;
-  --booking-welcome-size: 65px;
+  --booking-welcome-size: 18px;
+  --booking-welcome-tracking: 20px;
   --booking-welcome-sub: 0.5625rem;
   --booking-ok-radius: 999px;
   --booking-ok-size: 2.75rem;
-  --booking-welcome-ok-size: 2.15rem;
+  --booking-welcome-ok-size: 1rem;
   --booking-welcome-shift: 0;
   --booking-welcome-radius: 2.5rem;
   --booking-welcome-gutter: 0.95rem;
   --booking-welcome-type-bottom: 10.25rem;
   --booking-welcome-frame: #000;
   --booking-welcome-stage-max: 30rem;
-  --booking-welcome-overlay: 0.18;
+  --booking-welcome-overlay: 0.42;
   --booking-welcome-border: 1px;
-  --booking-welcome-zoom: 1;
+  --booking-welcome-zoom: 1.12;
+  --booking-welcome-edge-blur: 18px;
   --booking-path-top: 0.55rem;
   --booking-path-bottom: 5.85rem;
   --booking-path-gap: 0.7rem;
@@ -188,6 +190,7 @@
   display: none;
 }
 
+.booking-app.is-welcome .booking-status,
 .booking-app.is-welcome .booking-nav,
 .booking-app.is-welcome .booking-home-bar {
   display: none;
@@ -1515,12 +1518,11 @@
 }
 
 .booking-welcome__stage {
-  position: relative;
-  flex: 1 1 auto;
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
-  max-height: none;
-  margin-top: 0;
+  height: 100%;
+  margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -1541,25 +1543,59 @@
   pointer-events: none;
 }
 
-.booking-welcome__media img {
+.booking-welcome__bleed {
   position: absolute;
-  inset: 0;
+  inset: -10%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.booking-welcome__bleed img {
   display: block;
   width: 100%;
   height: 100%;
   max-width: none;
   object-fit: cover;
   object-position: 50% 48%;
+  transform: scale(1.2);
+  filter: blur(var(--booking-welcome-edge-blur)) saturate(1.08);
+}
+
+.booking-welcome__photo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 46%;
   transform: scale(var(--booking-welcome-zoom));
-  transform-origin: 50% 48%;
+  transform-origin: 50% 46%;
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 9%,
+    #000 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 9%,
+    #000 88%,
+    transparent 100%
+  );
 }
 
 .booking-welcome__shade {
   position: absolute;
   inset: 0;
+  z-index: 2;
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, transparent 24%),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.62) 0%, transparent 46%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.38) 0%, transparent 28%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.78) 0%, transparent 52%),
     rgba(0, 0, 0, var(--booking-welcome-overlay));
   pointer-events: none;
 }
@@ -1569,7 +1605,7 @@
   z-index: 1;
   font-size: var(--booking-welcome-size);
   line-height: 0.98;
-  letter-spacing: -0.07em;
+  letter-spacing: var(--booking-welcome-tracking);
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -1626,8 +1662,8 @@
 }
 
 .booking-welcome__line .booking-ok svg {
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 0.72rem;
+  height: 0.72rem;
 }
 
 .booking-step__inner--welcome {
@@ -1636,7 +1672,7 @@
   width: auto;
   max-width: 100%;
   margin-inline: 0;
-  padding: 0 0.65rem var(--booking-welcome-type-bottom);
+  padding: 0 1.15rem var(--booking-welcome-type-bottom);
   text-align: left;
   transform: none;
   overflow: visible;

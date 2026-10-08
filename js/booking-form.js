@@ -198,13 +198,16 @@
           '<section class="booking-step booking-welcome" data-step="welcome">' +
             '<div class="booking-welcome__stage">' +
               '<span class="booking-welcome__media" aria-hidden="true">' +
-                '<img src="/images/book-welcome.jpg" alt="" width="1200" height="1800">' +
+                '<span class="booking-welcome__bleed">' +
+                  '<img src="/images/book-welcome.jpg" alt="" width="1200" height="1800">' +
+                '</span>' +
+                '<img class="booking-welcome__photo" src="/images/book-welcome.jpg" alt="" width="1200" height="1800">' +
                 '<span class="booking-welcome__shade"></span>' +
               '</span>' +
               '<div class="booking-step__inner booking-step__inner--welcome">' +
                 '<h1 class="booking-question">' +
                   '<span class="booking-welcome__lockup">' +
-                    '<span class="booking-welcome__lead">Let\'s talk about</span>' +
+                    '<span class="booking-welcome__lead">Let\'s talk<br>about</span>' +
                     '<span class="booking-welcome__line">' +
                       'your event.' +
                       '<button type="button" class="booking-ok booking-ok--arrow booking-ok--bare" data-ok aria-label="Start">' +
