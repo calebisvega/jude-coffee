@@ -3,25 +3,14 @@
 :root {
   --links-bg: #000000;
   --links-cream: #f4f7ee;
-  --links-inset-x: 1.35rem;
-  --links-inset-y: 0.85rem;
-  --links-gap: 0.55rem;
-  --links-ig-space: 1.85rem;
-  --links-max: 22rem;
-  /* Card art aspect (~908×488). Width is derived from available height so
-     four buttons + Instagram handle fit in one mobile viewport. */
-  --links-btn-aspect: 1.86;
-  --links-btn-h: calc(
-    (
-      100dvh
-      - (2 * var(--links-inset-y))
-      - env(safe-area-inset-top, 0px)
-      - env(safe-area-inset-bottom, 0px)
-      - (3 * var(--links-gap))
-      - var(--links-ig-space)
-    ) / 4
-  );
-  --links-btn-w: calc(var(--links-btn-h) * var(--links-btn-aspect));
+  /* Side inset from the mockup (~43px at 625px artboard). */
+  --links-inset-x: 1.7rem;
+  /* Top/bottom inset — a bit tighter with four cards stacked. */
+  --links-inset-y: 1.75rem;
+  /* Space between the link cards (~30px on the mockup). */
+  --links-gap: 1.15rem;
+  /* Desktop column — phone-width stack for QA. */
+  --links-max: 27rem;
 }
 
 *,
@@ -34,7 +23,7 @@
 
 html,
 body {
-  height: 100%;
+  min-height: 100%;
   background: var(--links-bg);
   color: var(--links-cream);
 }
@@ -45,7 +34,6 @@ html {
 
 body {
   min-height: 100dvh;
-  overflow: hidden;
   font-family: system-ui, sans-serif;
 }
 
@@ -80,25 +68,20 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: stretch;
   gap: var(--links-gap);
-  height: 100dvh;
-  max-height: 100dvh;
-  width: 100%;
-  max-width: min(100%, var(--links-max), var(--links-btn-w));
+  min-height: 100dvh;
+  max-width: var(--links-max);
   margin: 0 auto;
   padding:
     calc(var(--links-inset-y) + env(safe-area-inset-top, 0px))
     calc(var(--links-inset-x) + env(safe-area-inset-right, 0px))
     calc(var(--links-inset-y) + env(safe-area-inset-bottom, 0px))
     calc(var(--links-inset-x) + env(safe-area-inset-left, 0px));
-  overflow: hidden;
 }
 
 .links__btn {
   display: block;
   flex: 0 0 auto;
-  width: 100%;
   line-height: 0;
   -webkit-tap-highlight-color: transparent;
 }
@@ -111,61 +94,42 @@ body {
 
 .links__btn:focus-visible {
   outline: 2px solid var(--links-cream);
-  outline-offset: 3px;
+  outline-offset: 4px;
 }
 
+/* Skinny Instagram strip — full width, short height. */
 .links__ig {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 0 0 auto;
-  display: block;
-  margin-top: 0.2rem;
-  padding: 0.35rem 0.5rem;
-  text-align: center;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.03em;
+  width: 100%;
+  min-height: 2.65rem;
+  padding: 0.65rem 1rem;
+  border: 1.5px solid color-mix(in srgb, var(--links-cream) 88%, transparent);
+  border-radius: 0.85rem;
   color: var(--links-cream);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   text-decoration: none;
-  opacity: 0.78;
+  text-align: center;
   -webkit-tap-highlight-color: transparent;
 }
 
 .links__ig:focus-visible {
   outline: 2px solid var(--links-cream);
-  outline-offset: 3px;
-  border-radius: 2px;
-  opacity: 1;
+  outline-offset: 4px;
 }
 
 @media (hover: hover) {
-  .links__btn {
-    transition: opacity 0.2s ease;
-  }
-
-  .links__btn:hover {
-    opacity: 0.88;
-  }
-
+  .links__btn,
   .links__ig {
     transition: opacity 0.2s ease;
   }
 
+  .links__btn:hover,
   .links__ig:hover {
-    opacity: 1;
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
-  }
-}
-
-/* Short phones: keep chrome minimal so four cards still fit. */
-@media (max-height: 700px) {
-  :root {
-    --links-inset-y: 0.55rem;
-    --links-gap: 0.4rem;
-    --links-ig-space: 1.55rem;
-  }
-
-  .links__ig {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.5rem;
+    opacity: 0.88;
   }
 }
