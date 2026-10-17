@@ -5,10 +5,10 @@
   --links-cream: #f4f7ee;
   /* Side inset from the mockup (~43px at 625px artboard). */
   --links-inset-x: 1.7rem;
-  /* Top/bottom inset from the mockup (~48px at 1024px artboard). */
-  --links-inset-y: 2.5rem;
-  /* Space between the three cards (~30px on the mockup). */
-  --links-gap: 1.375rem;
+  /* Top/bottom inset — a bit tighter with four cards stacked. */
+  --links-inset-y: 1.75rem;
+  /* Space between the link cards (~30px on the mockup). */
+  --links-gap: 1.15rem;
   /* Desktop column — phone-width stack for QA. */
   --links-max: 27rem;
 }
