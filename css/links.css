@@ -7,8 +7,8 @@
   --links-inset-x: 1.7rem;
   /* Top/bottom inset — a bit tighter with four cards stacked. */
   --links-inset-y: 1.75rem;
-  /* Space between the link cards (~30px on the mockup). */
-  --links-gap: 1.15rem;
+  /* Space between the link cards. */
+  --links-gap: 0.55rem;
   /* Desktop column — phone-width stack for QA. */
   --links-max: 27rem;
 }
