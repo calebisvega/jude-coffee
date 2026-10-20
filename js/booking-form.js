@@ -116,8 +116,9 @@
         (opts.value ? ' value="' + escapeHtml(opts.value) + '"' : '') +
       '>'
     );
+    var showSuffix = opts.suffix && String(opts.value || '').trim();
     var control = opts.suffix
-      ? '<span class="booking-welcome__control">' + input + '<span class="booking-welcome__suffix">' + escapeHtml(opts.suffix) + '</span></span>'
+      ? '<span class="booking-welcome__control">' + input + '<span class="booking-welcome__suffix"' + (showSuffix ? '' : ' hidden') + '>' + escapeHtml(opts.suffix) + '</span></span>'
       : input;
     return (
       '<label class="booking-welcome__field" for="' + opts.id + '">' +
@@ -264,7 +265,7 @@
                       min: '1',
                       step: '0.5',
                       value: state.durationHours,
-                      suffix: 'HRS'
+                      suffix: 'hrs'
                     }) +
                     '<div class="booking-welcome__card-foot">' +
                       '<p class="booking-welcome__notice">If you\'re not sure, a ballpark figure helps us give you our best estimate.</p>' +
@@ -767,6 +768,7 @@
       if (welcomeGuests && document.activeElement !== welcomeGuests) welcomeGuests.value = state.guestCount;
       var welcomeHours = stage.querySelector('#booking-welcome-hours');
       if (welcomeHours && document.activeElement !== welcomeHours) welcomeHours.value = state.durationHours;
+      syncWelcomeHours();
     }
     if (id === 'contact') {
       state.contactName = fieldValue(node, 'booking-name');
@@ -797,6 +799,15 @@
     if (hours) hours.value = state.durationHours;
     var dateValue = stage.querySelector('[data-step="details"] .booking-cal__value');
     if (dateValue) dateValue.textContent = state.eventDate ? formatEventDate(state.eventDate) : 'Add a date';
+  }
+
+  function syncWelcomeHours(node) {
+    node = node || stage.querySelector('[data-step="welcome"]');
+    if (!node) return;
+    var input = node.querySelector('#booking-welcome-hours');
+    var suffix = node.querySelector('.booking-welcome__suffix');
+    if (!input || !suffix) return;
+    suffix.hidden = !String(input.value || '').trim();
   }
 
   function syncWelcomeArrow(node) {
@@ -1170,7 +1181,10 @@
     refreshEstimate();
     clearError();
     var step = currentStep();
-    if (step && step.id === 'welcome') syncWelcomeArrow();
+    if (step && step.id === 'welcome') {
+      syncWelcomeArrow();
+      syncWelcomeHours();
+    }
     if (step && step.id === 'details' && event.target && event.target.id === 'booking-location') scheduleGeocode();
     if (step && step.id === 'contact' && event.target && event.target.id === 'booking-phone' && !contactValid()) {
       capturePartial();

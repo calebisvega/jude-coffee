@@ -1743,6 +1743,10 @@
   color: var(--charcoal);
 }
 
+.booking-welcome__suffix[hidden] {
+  display: none;
+}
+
 .booking-welcome__card-foot {
   display: flex;
   align-items: flex-end;
