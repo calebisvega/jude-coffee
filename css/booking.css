@@ -1747,16 +1747,61 @@
   display: none;
 }
 
-.booking-welcome__card-foot {
+.booking-welcome__field-label--follow {
+  margin-top: 0.75rem;
+}
+
+.booking-welcome__chips {
   display: flex;
-  align-items: flex-end;
-  gap: 0.75rem;
-  margin-top: 0.9rem;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+}
+
+.booking-welcome__chip {
+  appearance: none;
+  margin: 0;
+  border: 1px solid rgba(44, 44, 44, 0.2);
+  background: #fff;
+  color: var(--charcoal);
+  border-radius: 999px;
+  padding: 0.32rem 0.62rem;
+  font-family: var(--font-tagline);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.booking-welcome__chip.is-selected {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: #fff;
+}
+
+.booking-welcome__hours {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.booking-welcome__hours .booking-welcome__chips {
+  margin-top: 0.4rem;
+}
+
+.booking-welcome__hours-unit {
+  margin-top: 0.4rem;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--charcoal);
 }
 
 .booking-welcome__notice {
-  flex: 1;
-  margin: 0;
+  margin: 0.75rem 0 0;
   font-family: var(--font-tagline);
   font-size: 0.68rem;
   font-weight: 500;
@@ -1765,38 +1810,30 @@
   color: var(--charcoal);
 }
 
-.booking-welcome__card .booking-ok {
-  width: 2.25rem;
-  height: 2.25rem;
-  min-height: 0;
-  padding: 0;
-  border-radius: 999px;
+.booking-welcome__estimate {
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.95rem;
   background: var(--sage);
   color: #fff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
   visibility: hidden;
   pointer-events: none;
 }
 
-.booking-welcome__card .booking-ok.is-ready {
+.booking-welcome__estimate.is-ready {
   visibility: visible;
   pointer-events: auto;
 }
 
-.booking-welcome__card .booking-ok:hover,
-.booking-welcome__card .booking-ok:disabled {
+.booking-welcome__estimate:hover,
+.booking-welcome__estimate:disabled {
   background: var(--sage);
   color: #fff;
   opacity: 1;
 }
 
-.booking-welcome__card .booking-ok.is-ready:hover {
-  opacity: 0.88;
-}
-
-.booking-welcome__card .booking-ok svg {
-  width: 0.95rem;
-  height: 0.95rem;
+.booking-welcome__estimate.is-ready:hover {
+  opacity: 0.9;
 }
 
 .booking-step__inner--welcome {
@@ -1805,7 +1842,8 @@
   width: 100%;
   max-width: 100%;
   margin-inline: 0;
-  padding: 4.75rem 1.15rem 5.25rem;
+  padding: 3.4rem 1.05rem 4.4rem;
+  overflow: auto;
   text-align: left;
   transform: none;
   overflow: visible;
