@@ -14,6 +14,7 @@
   --booking-welcome-logo-top: 1.55rem;
   --booking-question-size: 1.5rem;
   --booking-welcome-size: 40px;
+  --booking-welcome-leading: 0.95;
   --booking-welcome-tracking: -0.04em;
   --booking-welcome-sub: 0.5625rem;
   --booking-ok-radius: 999px;
@@ -1604,7 +1605,7 @@
   position: relative;
   z-index: 1;
   font-size: var(--booking-welcome-size);
-  line-height: 1.08;
+  line-height: var(--booking-welcome-leading);
   letter-spacing: var(--booking-welcome-tracking);
   text-align: left;
   color: #fff;
