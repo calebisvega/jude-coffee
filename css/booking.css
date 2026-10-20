@@ -27,6 +27,7 @@
   --booking-welcome-offset: 9.5rem;
   --booking-welcome-card-pad: 0.95rem;
   --booking-welcome-field-gap: 0.65rem;
+  --booking-welcome-control-width: 86%;
   --booking-welcome-chip-height: 40px;
   --booking-welcome-chip-size: 14px;
   --booking-welcome-hint-size: 0.62rem;
@@ -1636,6 +1637,7 @@
   --welcome-scale: 1.18;
   --welcome-space: 0.9rem;
   --welcome-label-gap: 0.28rem;
+  width: var(--booking-welcome-control-width);
   margin-top: 1.15rem;
   padding: 0;
   background: transparent;
@@ -1696,7 +1698,7 @@
 .booking-welcome__field-input {
   box-sizing: border-box;
   width: 100%;
-  height: max(2.5rem, calc(2.85rem * var(--welcome-scale)));
+  height: max(2.35rem, calc(2.45rem * var(--welcome-scale)));
   margin: 0;
   padding: 0 0.7rem;
   font-family: var(--font-tagline);
@@ -1752,7 +1754,7 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  height: max(2.5rem, calc(2.85rem * var(--welcome-scale)));
+  height: max(2.35rem, calc(2.45rem * var(--welcome-scale)));
   margin: 0;
   padding: 0 0.7rem;
   border: 1px solid rgba(44, 44, 44, 0.18);
