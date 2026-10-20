@@ -272,9 +272,9 @@
             '<div class="booking-welcome__stage">' +
               '<span class="booking-welcome__media" aria-hidden="true">' +
                 '<span class="booking-welcome__bleed">' +
-                  '<img src="/images/book-welcome.jpg" alt="" width="1200" height="1800">' +
+                  '<img src="/images/IMG_2992.jpg" alt="" width="1037" height="684">' +
                 '</span>' +
-                '<img class="booking-welcome__photo" src="/images/book-welcome.jpg" alt="" width="1200" height="1800">' +
+                '<img class="booking-welcome__photo" src="/images/IMG_2992.jpg" alt="" width="1037" height="684">' +
                 '<span class="booking-welcome__shade"></span>' +
               '</span>' +
               '<div class="booking-step__inner booking-step__inner--welcome">' +
@@ -299,7 +299,7 @@
                   '</div>' +
                   '<div class="booking-welcome__section">' +
                     '<div class="booking-welcome__field">' +
-                      '<span class="booking-welcome__field-label">Guest Count and Service Length.</span>' +
+                      '<span class="booking-welcome__field-label">Guest Count &amp; Service Length.</span>' +
                       '<div class="booking-welcome__pair">' +
                         welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range') +
                         welcomeBar(LENGTH_CHOICES, state.hoursChoice, 'data-length') +
@@ -315,8 +315,8 @@
                     }) +
                   '</div>' +
                   '<button type="button" class="booking-ok booking-welcome__estimate' + (welcomeReady() ? ' is-ready' : '') + '" data-ok' + (welcomeReady() ? '' : ' disabled') + '>See my estimate.</button>' +
-                  '<p class="booking-welcome__notice">If you\'re not sure, a ballpark figure helps us give you our best estimate.</p>' +
                 '</div>' +
+                '<p class="booking-welcome__notice">If you\'re not sure, a ballpark figure helps!</p>' +
               '</div>' +
             '</div>' +
             '<footer class="booking-welcome__footer">' +
