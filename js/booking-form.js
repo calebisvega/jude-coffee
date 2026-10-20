@@ -260,7 +260,7 @@
                       value: state.durationHours
                     }) +
                     '<div class="booking-welcome__card-foot">' +
-                      '<p class="booking-welcome__notice">If you\'re not sure, a ballpark figure helps us give you an accurate quote.</p>' +
+                      '<p class="booking-welcome__notice">If you\'re not sure, a ballpark figure helps us give you our best estimate.</p>' +
                       '<button type="button" class="booking-ok booking-ok--arrow' + (welcomeReady() ? ' is-ready' : '') + '" data-ok aria-label="Continue"' + (welcomeReady() ? '' : ' disabled') + '>' +
                         '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>' +
                       '</button>' +
