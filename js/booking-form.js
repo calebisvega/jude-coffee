@@ -62,10 +62,11 @@
 
   var state = {
     tier: null,
-    guestCount: '24',
-    durationHours: '1',
+    guestCount: '',
+    durationHours: '',
     addOns: [],
     eventDate: '',
+    eventZip: '',
     locationAddress: '',
     locationMiles: null,
     locationStatus: 'idle',
@@ -73,8 +74,8 @@
     contactName: '',
     contactEmail: '',
     contactPhone: '',
-    guestRange: 'under-25',
-    hoursChoice: '1',
+    guestRange: '',
+    hoursChoice: '',
     partialCaptured: false,
     submitted: false
   };
@@ -131,6 +132,9 @@
         ' type="' + opts.type + '"' +
         (opts.inputmode ? ' inputmode="' + opts.inputmode + '"' : '') +
         (opts.autocomplete ? ' autocomplete="' + opts.autocomplete + '"' : '') +
+        (opts.placeholder ? ' placeholder="' + escapeHtml(opts.placeholder) + '"' : '') +
+        (opts.maxlength ? ' maxlength="' + opts.maxlength + '"' : '') +
+        (opts.pattern ? ' pattern="' + opts.pattern + '"' : '') +
         (opts.suggest ? ' role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="' + opts.id + '-list"' : '') +
         (opts.min ? ' min="' + opts.min + '"' : '') +
         (opts.step ? ' step="' + opts.step + '"' : '') +
@@ -152,17 +156,18 @@
     );
   }
 
-  function welcomeBar(items, selectedId, attr) {
-    var index = 0;
+  function welcomeBar(items, selectedId, attr, extraClass) {
+    var index = -1;
     var i;
     for (i = 0; i < items.length; i++) {
-      if (items[i].id === selectedId) index = i;
+      if (selectedId && items[i].id === selectedId) index = i;
     }
+    var selected = index >= 0 ? items[index] : null;
     return (
-      '<div class="booking-welcome__bar" role="slider" tabindex="0" style="--i:' + index + ';--n:' + items.length + '" aria-valuemin="0" aria-valuemax="' + (items.length - 1) + '" aria-valuenow="' + index + '" aria-valuetext="' + escapeHtml(items[index].label) + '">' +
-        '<span class="booking-welcome__bar-thumb" aria-hidden="true"></span>' +
+      '<div class="booking-welcome__bar' + (extraClass ? ' ' + extraClass : '') + '" role="slider" tabindex="0" style="--n:' + items.length + '" aria-valuemin="0" aria-valuemax="' + (items.length - 1) + '" aria-valuenow="' + (selected ? index : '') + '" aria-valuetext="' + (selected ? escapeHtml(selected.label) : 'Not chosen') + '">' +
+        '<span class="booking-welcome__bar-thumb" aria-hidden="true"' + (selected ? '' : ' hidden') + '></span>' +
         items.map(function (item) {
-          var on = item.id === items[index].id;
+          var on = selected && item.id === selected.id;
           return '<button type="button" class="booking-welcome__bar-stop' + (on ? ' is-selected' : '') + '" ' + attr + '="' + item.id + '" tabindex="-1">' + escapeHtml(item.label) + '</button>';
         }).join('') +
       '</div>'
@@ -294,36 +299,42 @@
                       type: 'email',
                       inputmode: 'email',
                       autocomplete: 'email',
+                      placeholder: 'you@email.com',
                       value: state.contactEmail
                     }) +
                     welcomeField({
                       id: 'booking-welcome-date',
-                      label: 'Your date',
+                      label: 'Event date',
                       type: 'date',
                       value: state.eventDate,
                       min: toISODate(new Date())
                     }) +
+                    welcomeField({
+                      id: 'booking-welcome-zip',
+                      label: 'Event ZIP code',
+                      type: 'text',
+                      inputmode: 'numeric',
+                      autocomplete: 'postal-code',
+                      placeholder: '33801',
+                      maxlength: '5',
+                      pattern: '[0-9]*',
+                      value: state.eventZip
+                    }) +
                   '</div>' +
                   '<div class="booking-welcome__section">' +
                     '<div class="booking-welcome__field">' +
-                      '<span class="booking-welcome__field-label">Guest Count &amp; Service Length.</span>' +
-                      '<div class="booking-welcome__pair">' +
-                        welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range') +
-                        welcomeBar(LENGTH_CHOICES, state.hoursChoice, 'data-length') +
-                      '</div>' +
+                      '<span class="booking-welcome__field-label">Guests</span>' +
+                      welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range', 'booking-welcome__bar--guests') +
                     '</div>' +
-                    welcomeField({
-                      id: 'booking-welcome-place',
-                      label: 'Location',
-                      type: 'text',
-                      autocomplete: 'off',
-                      suggest: true,
-                      value: state.locationAddress
-                    }) +
+                    '<div class="booking-welcome__field">' +
+                      '<span class="booking-welcome__field-label">How long should we serve?</span>' +
+                      welcomeBar(LENGTH_CHOICES, state.hoursChoice, 'data-length') +
+                    '</div>' +
+                    '<p class="booking-welcome__notice">A rough guess is fine. You can adjust it next.</p>' +
                   '</div>' +
                   '<button type="button" class="booking-ok booking-welcome__estimate' + (welcomeReady() ? ' is-ready' : '') + '" data-ok' + (welcomeReady() ? '' : ' disabled') + '>See my estimate.</button>' +
+                  '<p class="booking-welcome__reassure">Free estimate, no commitment.</p>' +
                 '</div>' +
-                '<p class="booking-welcome__notice">Not sure yet? A rough guess is perfect. You can adjust it on the next screen.</p>' +
               '</div>' +
             '</div>' +
             '<footer class="booking-welcome__footer">' +
@@ -699,6 +710,7 @@
     else if (state.durationHours) facts.push(state.durationHours + ' hours');
     if (state.eventDate) facts.push(formatEventDate(state.eventDate));
     if (state.locationAddress) facts.push(escapeHtml(state.locationAddress));
+    else if (state.eventZip) facts.push('ZIP ' + escapeHtml(state.eventZip));
     if (state.contactName) facts.push(escapeHtml(state.contactName));
     if (state.addOns.length) {
       facts.push(state.addOns.map(function (id) {
@@ -739,6 +751,7 @@
     syncChrome();
     focusActive();
     bindWelcomeBars(stage);
+    Array.prototype.forEach.call(stage.querySelectorAll('.booking-welcome__bar'), placeWelcomeThumb);
     Array.prototype.forEach.call(stage.querySelectorAll('[data-step="path"]'), bindPathReveal);
   }
 
@@ -809,7 +822,7 @@
     if (id === 'welcome') {
       state.contactEmail = fieldValue(node, 'booking-welcome-email');
       state.eventDate = fieldValue(node, 'booking-welcome-date');
-      state.locationAddress = fieldValue(node, 'booking-welcome-place');
+      state.eventZip = fieldValue(node, 'booking-welcome-zip');
       syncWelcomeIntoLaterSteps();
     }
     if (id === 'budget') state.budget = fieldValue(node, 'booking-budget');
@@ -821,8 +834,6 @@
       if (guestRange && String(guestRange.guests) !== String(state.guestCount)) state.guestRange = '';
       var lengthChoice = lengthChoiceById(state.hoursChoice);
       if (lengthChoice && String(lengthChoice.hours) !== String(state.durationHours)) state.hoursChoice = '';
-      var welcomePlace = stage.querySelector('#booking-welcome-place');
-      if (welcomePlace && document.activeElement !== welcomePlace) welcomePlace.value = state.locationAddress;
     }
     if (id === 'contact') {
       state.contactName = fieldValue(node, 'booking-name');
@@ -837,16 +848,16 @@
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim());
   }
 
-  function placeLooksUsable(value) {
-    return String(value || '').trim().length >= 3;
+  function zipLooksValid(value) {
+    return /^\d{5}$/.test(String(value || '').trim());
   }
 
   function welcomeReady() {
     return emailLooksValid(state.contactEmail) &&
       /^\d{4}-\d{2}-\d{2}$/.test(state.eventDate) &&
-      parseInt(state.guestCount, 10) > 0 &&
-      parseFloat(state.durationHours) > 0 &&
-      placeLooksUsable(state.locationAddress);
+      Boolean(state.guestRange) &&
+      Boolean(state.hoursChoice) &&
+      zipLooksValid(state.eventZip);
   }
 
   function syncWelcomeIntoLaterSteps() {
@@ -856,25 +867,38 @@
     if (guests) guests.value = state.guestCount;
     var hours = stage.querySelector('#booking-hours');
     if (hours) hours.value = state.durationHours;
-    var place = stage.querySelector('#booking-location');
-    if (place && document.activeElement !== place) place.value = state.locationAddress;
     var dateValue = stage.querySelector('[data-step="details"] .booking-cal__value');
     if (dateValue) dateValue.textContent = state.eventDate ? formatEventDate(state.eventDate) : 'Add a date';
+  }
+
+  function placeWelcomeThumb(group) {
+    var thumb = group.querySelector('.booking-welcome__bar-thumb');
+    var selected = group.querySelector('.booking-welcome__bar-stop.is-selected');
+    if (!thumb) return;
+    if (!selected) {
+      thumb.hidden = true;
+      return;
+    }
+    thumb.hidden = false;
+    thumb.style.left = selected.offsetLeft + 'px';
+    thumb.style.top = selected.offsetTop + 'px';
+    thumb.style.width = selected.offsetWidth + 'px';
+    thumb.style.height = selected.offsetHeight + 'px';
   }
 
   function paintWelcomeChips(group, selectedId) {
     if (!group) return;
     var stops = group.querySelectorAll('.booking-welcome__bar-stop');
-    var index = 0;
+    var index = -1;
     Array.prototype.forEach.call(stops, function (chip, i) {
       var id = chip.getAttribute('data-guest-range') || chip.getAttribute('data-length');
-      var on = id === selectedId;
+      var on = Boolean(selectedId) && id === selectedId;
       chip.classList.toggle('is-selected', on);
       if (on) index = i;
     });
-    group.style.setProperty('--i', String(index));
-    group.setAttribute('aria-valuenow', String(index));
-    if (stops[index]) group.setAttribute('aria-valuetext', stops[index].textContent);
+    group.setAttribute('aria-valuenow', index >= 0 ? String(index) : '');
+    group.setAttribute('aria-valuetext', index >= 0 && stops[index] ? stops[index].textContent : 'Not chosen');
+    placeWelcomeThumb(group);
   }
 
   function bindWelcomeBars(root) {
@@ -882,10 +906,20 @@
       var dragging = false;
       function indexFromEvent(event) {
         var stops = bar.querySelectorAll('.booking-welcome__bar-stop');
-        var rect = bar.getBoundingClientRect();
-        if (!stops.length || !rect.width) return 0;
-        var x = Math.min(Math.max(event.clientX - rect.left, 0), rect.width - 0.01);
-        return Math.min(stops.length - 1, Math.floor(x / rect.width * stops.length));
+        var i;
+        var best = 0;
+        var bestDist = Infinity;
+        for (i = 0; i < stops.length; i++) {
+          var rect = stops[i].getBoundingClientRect();
+          var dx = event.clientX - (rect.left + rect.width / 2);
+          var dy = event.clientY - (rect.top + rect.height / 2);
+          var dist = dx * dx + dy * dy;
+          if (dist < bestDist) {
+            bestDist = dist;
+            best = i;
+          }
+        }
+        return best;
       }
       function apply(event) {
         var stops = bar.querySelectorAll('.booking-welcome__bar-stop');
@@ -908,7 +942,8 @@
         event.preventDefault();
         event.stopPropagation();
         var stops = bar.querySelectorAll('.booking-welcome__bar-stop');
-        var current = Number(bar.getAttribute('aria-valuenow')) || 0;
+        var raw = bar.getAttribute('aria-valuenow');
+        var current = raw === '' || raw == null ? -1 : Number(raw);
         var next = event.key === 'ArrowRight' ? Math.min(stops.length - 1, current + 1) : Math.max(0, current - 1);
         if (stops[next] && next !== current) stops[next].click();
       });
@@ -923,7 +958,6 @@
     var ready = welcomeReady();
     arrow.classList.toggle('is-ready', ready);
     arrow.disabled = !ready;
-    arrow.setAttribute('aria-hidden', ready ? 'false' : 'true');
   }
 
   function contactValid() {
@@ -1270,10 +1304,18 @@
       });
   }
 
+  function geocodeQuery() {
+    var address = String(state.locationAddress || '').trim();
+    if (address.length >= 4) return address;
+    var zip = String(state.eventZip || '').trim();
+    if (/^\d{5}$/.test(zip)) return zip;
+    return '';
+  }
+
   function scheduleGeocode() {
     window.clearTimeout(geocodeTimer);
-    var address = state.locationAddress;
-    if (!address || address.length < 4) {
+    var address = geocodeQuery();
+    if (!address) {
       state.locationMiles = null;
       state.locationStatus = 'idle';
       refreshEstimate();
@@ -1414,16 +1456,17 @@
   }
 
   function onStageInput(event) {
+    if (event.target && event.target.id === 'booking-welcome-zip') {
+      var digits = event.target.value.replace(/\D/g, '').slice(0, 5);
+      if (digits !== event.target.value) event.target.value = digits;
+    }
     readFields();
     refreshEstimate();
     clearError();
     var step = currentStep();
     if (step && step.id === 'welcome') {
       syncWelcomeArrow();
-      if (event.target && event.target.id === 'booking-welcome-place') {
-        schedulePlaceSuggest(event.target);
-        scheduleGeocode();
-      }
+      if (event.target && event.target.id === 'booking-welcome-zip') scheduleGeocode();
     }
     if (step && step.id === 'details' && event.target && event.target.id === 'booking-location') scheduleGeocode();
     if (step && step.id === 'contact' && event.target && event.target.id === 'booking-phone' && !contactValid()) {
