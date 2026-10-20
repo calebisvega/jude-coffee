@@ -298,7 +298,7 @@
                       label: 'Your email',
                       type: 'email',
                       inputmode: 'email',
-                      autocomplete: 'email',
+                      autocomplete: 'off',
                       placeholder: 'you@email.com',
                       value: state.contactEmail
                     }) +
@@ -317,7 +317,7 @@
                           label: 'Event ZIP code',
                           type: 'text',
                           inputmode: 'numeric',
-                          autocomplete: 'postal-code',
+                          autocomplete: 'off',
                           placeholder: '33801',
                           maxlength: '5',
                           pattern: '[0-9]*',
@@ -329,15 +329,15 @@
                   '<div class="booking-welcome__reveal" data-welcome-reveal="guests" inert>' +
                     '<div class="booking-welcome__reveal-clip">' +
                       '<div class="booking-welcome__field">' +
-                        '<span class="booking-welcome__field-label booking-welcome__field-label--choice">Guests</span>' +
-                        welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range', 'booking-welcome__bar--guests') +
+                        '<span class="booking-welcome__field-label">Guests</span>' +
+                        welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range') +
                       '</div>' +
                     '</div>' +
                   '</div>' +
                   '<div class="booking-welcome__reveal" data-welcome-reveal="length" inert>' +
                     '<div class="booking-welcome__reveal-clip">' +
                       '<div class="booking-welcome__field">' +
-                        '<span class="booking-welcome__field-label booking-welcome__field-label--choice">How long should we serve?</span>' +
+                        '<span class="booking-welcome__field-label">How long should we serve?</span>' +
                         welcomeBar(LENGTH_CHOICES, state.hoursChoice, 'data-length') +
                       '</div>' +
                       '<p class="booking-welcome__notice">A rough guess is fine. You can adjust it next.</p>' +
