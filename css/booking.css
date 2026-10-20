@@ -13,9 +13,9 @@
   --booking-logo-width: 6.85rem;
   --booking-welcome-logo-top: 1.55rem;
   --booking-question-size: 1.5rem;
-  --booking-welcome-size: 46px;
-  --booking-welcome-leading: 35px;
-  --booking-welcome-pair-gap: 8px;
+  --booking-welcome-size: 50px;
+  --booking-welcome-leading: 39px;
+  --booking-welcome-pair-gap: 0.35rem;
   --booking-welcome-tracking: -0.04em;
   --booking-welcome-sub: 0.5625rem;
   --booking-ok-radius: 999px;
@@ -1705,6 +1705,47 @@
   border-color: var(--sage);
 }
 
+.booking-welcome__suggest {
+  display: block;
+  width: 100%;
+}
+
+.booking-welcome__suggest-list {
+  list-style: none;
+  margin: 0.28rem 0 0;
+  padding: 0.15rem 0;
+  border: 1px solid rgba(44, 44, 44, 0.18);
+  border-radius: 0.4rem;
+  background: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.booking-welcome__suggest-list[hidden] {
+  display: none;
+}
+
+.booking-welcome__suggest-option {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0.42rem 0.5rem;
+  border: 0;
+  background: transparent;
+  color: var(--charcoal);
+  font-family: var(--font-tagline);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+}
+
+.booking-welcome__suggest-option.is-active,
+.booking-welcome__suggest-option:hover {
+  background: color-mix(in srgb, var(--sage) 16%, #fff);
+}
+
 .booking-welcome__control {
   box-sizing: border-box;
   display: flex;
@@ -1779,7 +1820,7 @@
   flex-direction: column;
   gap: var(--booking-welcome-pair-gap);
   width: 100%;
-  padding: 0.35rem;
+  padding: var(--booking-welcome-pair-gap);
   border: 1px solid rgba(44, 44, 44, 0.18);
   border-radius: 0.4rem;
   background: #fff;

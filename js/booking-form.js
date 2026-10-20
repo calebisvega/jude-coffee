@@ -54,10 +54,10 @@
   ];
 
   var LENGTH_CHOICES = [
-    { id: '1', label: '1', hours: 1 },
-    { id: '2', label: '2', hours: 2 },
-    { id: '3', label: '3', hours: 3 },
-    { id: '4-plus', label: '4+', hours: 4 }
+    { id: '1', label: '1 hr', hours: 1 },
+    { id: '2', label: '2 hr', hours: 2 },
+    { id: '3', label: '3 hr', hours: 3 },
+    { id: '4-plus', label: '4+ hr', hours: 4 }
   ];
 
   var state = {
@@ -86,6 +86,9 @@
   var amountFrame = 0;
   var geocodeTimer = 0;
   var geocodeSeq = 0;
+  var placeTimer = 0;
+  var placeSeq = 0;
+  var placeActive = -1;
 
   var stage = document.getElementById('booking-stage');
   var pageEl = document.getElementById('booking-page');
@@ -128,6 +131,7 @@
         ' type="' + opts.type + '"' +
         (opts.inputmode ? ' inputmode="' + opts.inputmode + '"' : '') +
         (opts.autocomplete ? ' autocomplete="' + opts.autocomplete + '"' : '') +
+        (opts.suggest ? ' role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="' + opts.id + '-list"' : '') +
         (opts.min ? ' min="' + opts.min + '"' : '') +
         (opts.step ? ' step="' + opts.step + '"' : '') +
         (opts.value ? ' value="' + escapeHtml(opts.value) + '"' : '') +
@@ -137,6 +141,9 @@
     var control = opts.suffix
       ? '<span class="booking-welcome__control">' + input + '<span class="booking-welcome__suffix"' + (showSuffix ? '' : ' hidden') + '>' + escapeHtml(opts.suffix) + '</span></span>'
       : input;
+    if (opts.suggest) {
+      control = '<span class="booking-welcome__suggest">' + input + '<ul class="booking-welcome__suggest-list" id="' + opts.id + '-list" role="listbox" hidden></ul></span>';
+    }
     return (
       '<label class="booking-welcome__field" for="' + opts.id + '">' +
         '<span class="booking-welcome__field-label">' + opts.label + '</span>' +
@@ -305,12 +312,12 @@
                         welcomeBar(LENGTH_CHOICES, state.hoursChoice, 'data-length') +
                       '</div>' +
                     '</div>' +
-                  '</div>' +
-                  '<div class="booking-welcome__section">' +
                     welcomeField({
                       id: 'booking-welcome-place',
                       label: 'Location',
                       type: 'text',
+                      autocomplete: 'off',
+                      suggest: true,
                       value: state.locationAddress
                     }) +
                   '</div>' +
@@ -1164,6 +1171,105 @@
     refreshEstimate();
   }
 
+  function placeList(input) {
+    return input && input.parentNode ? input.parentNode.querySelector('.booking-welcome__suggest-list') : null;
+  }
+
+  function hidePlaceSuggest(input) {
+    var list = placeList(input);
+    placeActive = -1;
+    if (!list) return;
+    list.hidden = true;
+    list.innerHTML = '';
+    input.setAttribute('aria-expanded', 'false');
+  }
+
+  function placeSuggestionLabel(row) {
+    var address = row.address || {};
+    var city = address.city || address.town || address.village || address.hamlet || address.municipality;
+    var state = address.state;
+    var road = address.road || address.pedestrian;
+    if (address.house_number && road && city && state) return address.house_number + ' ' + road + ', ' + city + ', ' + state;
+    if (road && city && state) return road + ', ' + city + ', ' + state;
+    if (city && state) return city + ', ' + state;
+    var parts = String(row.display_name || '').split(',').map(function (part) { return part.trim(); }).filter(Boolean);
+    if (parts.length >= 3 && /united states/i.test(parts[parts.length - 1])) return parts[0] + ', ' + parts[parts.length - 2];
+    return parts.slice(0, 2).join(', ');
+  }
+
+  function paintPlaceActive(list) {
+    var options = list.querySelectorAll('[data-place]');
+    Array.prototype.forEach.call(options, function (option, i) {
+      var on = i === placeActive;
+      option.classList.toggle('is-active', on);
+      if (on) option.scrollIntoView({ block: 'nearest' });
+    });
+  }
+
+  function renderPlaceSuggest(input, rows) {
+    var list = placeList(input);
+    var seen = {};
+    var labels = [];
+    if (!list) return;
+    rows.forEach(function (row) {
+      var label = placeSuggestionLabel(row);
+      if (!label || seen[label.toLowerCase()]) return;
+      seen[label.toLowerCase()] = true;
+      labels.push(label);
+    });
+    labels.sort(function (a, b) {
+      return (/florida/i.test(a) ? 0 : 1) - (/florida/i.test(b) ? 0 : 1);
+    });
+    labels = labels.slice(0, 5);
+    if (!labels.length) {
+      hidePlaceSuggest(input);
+      return;
+    }
+    placeActive = -1;
+    list.innerHTML = labels.map(function (label) {
+      return '<li role="presentation"><button type="button" class="booking-welcome__suggest-option" role="option" data-place="' + escapeHtml(label) + '">' + escapeHtml(label) + '</button></li>';
+    }).join('');
+    list.hidden = false;
+    input.setAttribute('aria-expanded', 'true');
+  }
+
+  function applyPlaceSuggestion(input, label) {
+    input.value = label;
+    state.locationAddress = label;
+    hidePlaceSuggest(input);
+    syncWelcomeIntoLaterSteps();
+    scheduleGeocode();
+    syncWelcomeArrow();
+  }
+
+  function schedulePlaceSuggest(input) {
+    window.clearTimeout(placeTimer);
+    var query = String(input.value || '').trim();
+    if (query.length < 2) {
+      hidePlaceSuggest(input);
+      return;
+    }
+    placeTimer = window.setTimeout(function () { fetchPlaceSuggest(input, query); }, 280);
+  }
+
+  function fetchPlaceSuggest(input, query) {
+    var seq = ++placeSeq;
+    var url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=6&countrycodes=us&q=' + encodeURIComponent(query);
+    fetch(url, { headers: { Accept: 'application/json' } })
+      .then(function (res) {
+        if (!res.ok) throw new Error('suggest ' + res.status);
+        return res.json();
+      })
+      .then(function (rows) {
+        if (seq !== placeSeq || document.activeElement !== input) return;
+        renderPlaceSuggest(input, rows || []);
+      })
+      .catch(function () {
+        if (seq !== placeSeq) return;
+        hidePlaceSuggest(input);
+      });
+  }
+
   function scheduleGeocode() {
     window.clearTimeout(geocodeTimer);
     var address = state.locationAddress;
@@ -1272,6 +1378,13 @@
       syncWelcomeArrow();
       return;
     }
+    var placeOpt = event.target.closest('[data-place]');
+    if (placeOpt) {
+      event.preventDefault();
+      var placeInput = stage.querySelector('#booking-welcome-place');
+      if (placeInput) applyPlaceSuggestion(placeInput, placeOpt.getAttribute('data-place'));
+      return;
+    }
     var ok = event.target.closest('[data-ok]');
     if (ok) {
       event.preventDefault();
@@ -1307,7 +1420,10 @@
     var step = currentStep();
     if (step && step.id === 'welcome') {
       syncWelcomeArrow();
-      if (event.target && event.target.id === 'booking-welcome-place') scheduleGeocode();
+      if (event.target && event.target.id === 'booking-welcome-place') {
+        schedulePlaceSuggest(event.target);
+        scheduleGeocode();
+      }
     }
     if (step && step.id === 'details' && event.target && event.target.id === 'booking-location') scheduleGeocode();
     if (step && step.id === 'contact' && event.target && event.target.id === 'booking-phone' && !contactValid()) {
@@ -1316,6 +1432,12 @@
   }
 
   function onStageBlur(event) {
+    if (event.target && event.target.id === 'booking-welcome-place') {
+      var placeInput = event.target;
+      window.setTimeout(function () {
+        if (document.activeElement !== placeInput) hidePlaceSuggest(placeInput);
+      }, 160);
+    }
     if (!event.target || !event.target.classList.contains('booking-input')) return;
     var step = currentStep();
     if (step && step.id === 'contact') {
@@ -1325,8 +1447,35 @@
   }
 
   function onStageKey(event) {
+    var placeInput = event.target && event.target.id === 'booking-welcome-place' ? event.target : null;
+    var list = placeInput ? placeList(placeInput) : null;
+    var open = list && !list.hidden;
+    if (placeInput && open && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+      event.preventDefault();
+      event.stopPropagation();
+      var count = list.querySelectorAll('[data-place]').length;
+      placeActive = event.key === 'ArrowDown'
+        ? Math.min(count - 1, placeActive + 1)
+        : Math.max(0, placeActive - 1);
+      paintPlaceActive(list);
+      return;
+    }
+    if (placeInput && open && event.key === 'Escape') {
+      event.preventDefault();
+      hidePlaceSuggest(placeInput);
+      return;
+    }
     if (event.key === 'Enter' && !event.shiftKey) {
       if (event.target.tagName === 'TEXTAREA') return;
+      if (placeInput && open) {
+        var picked = list.querySelectorAll('[data-place]')[placeActive >= 0 ? placeActive : 0];
+        if (picked) {
+          event.preventDefault();
+          event.stopPropagation();
+          applyPlaceSuggestion(placeInput, picked.getAttribute('data-place'));
+          return;
+        }
+      }
       event.preventDefault();
       go(1);
     }
@@ -1366,6 +1515,13 @@
     setTier(btn.getAttribute('data-tier'), true);
   });
   document.addEventListener('keydown', onGlobalKey);
+  stage.addEventListener('pointerdown', function (event) {
+    var placeOpt = event.target.closest('[data-place]');
+    if (!placeOpt) return;
+    event.preventDefault();
+    var placeInput = stage.querySelector('#booking-welcome-place');
+    if (placeInput) applyPlaceSuggestion(placeInput, placeOpt.getAttribute('data-place'));
+  });
   stage.addEventListener('click', onStageClick);
   stage.addEventListener('input', onStageInput);
   stage.addEventListener('focusout', onStageBlur);
