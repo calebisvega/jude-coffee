@@ -106,17 +106,23 @@
   }
 
   function welcomeField(opts) {
+    var input = (
+      '<input class="booking-welcome__field-input' + (opts.suffix ? ' booking-welcome__field-input--with-suffix' : '') + '" id="' + opts.id + '" name="' + opts.id + '"' +
+        ' type="' + opts.type + '"' +
+        (opts.inputmode ? ' inputmode="' + opts.inputmode + '"' : '') +
+        (opts.autocomplete ? ' autocomplete="' + opts.autocomplete + '"' : '') +
+        (opts.min ? ' min="' + opts.min + '"' : '') +
+        (opts.step ? ' step="' + opts.step + '"' : '') +
+        (opts.value ? ' value="' + escapeHtml(opts.value) + '"' : '') +
+      '>'
+    );
+    var control = opts.suffix
+      ? '<span class="booking-welcome__control">' + input + '<span class="booking-welcome__suffix">' + escapeHtml(opts.suffix) + '</span></span>'
+      : input;
     return (
       '<label class="booking-welcome__field" for="' + opts.id + '">' +
         '<span class="booking-welcome__field-label">' + opts.label + '</span>' +
-        '<input class="booking-welcome__field-input" id="' + opts.id + '" name="' + opts.id + '"' +
-          ' type="' + opts.type + '"' +
-          (opts.inputmode ? ' inputmode="' + opts.inputmode + '"' : '') +
-          (opts.autocomplete ? ' autocomplete="' + opts.autocomplete + '"' : '') +
-          (opts.min ? ' min="' + opts.min + '"' : '') +
-          (opts.step ? ' step="' + opts.step + '"' : '') +
-          (opts.value ? ' value="' + escapeHtml(opts.value) + '"' : '') +
-        '>' +
+        control +
       '</label>'
     );
   }
@@ -257,7 +263,8 @@
                       inputmode: 'decimal',
                       min: '1',
                       step: '0.5',
-                      value: state.durationHours
+                      value: state.durationHours,
+                      suffix: 'HRS'
                     }) +
                     '<div class="booking-welcome__card-foot">' +
                       '<p class="booking-welcome__notice">If you\'re not sure, a ballpark figure helps us give you our best estimate.</p>' +
