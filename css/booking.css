@@ -13,8 +13,8 @@
   --booking-logo-width: 6.85rem;
   --booking-welcome-logo-top: 1.55rem;
   --booking-question-size: 1.5rem;
-  --booking-welcome-size: 50px;
-  --booking-welcome-leading: 39px;
+  --booking-welcome-size: 56px;
+  --booking-welcome-leading: 45px;
   --booking-welcome-pair-gap: 0.35rem;
   --booking-welcome-tracking: -0.04em;
   --booking-welcome-sub: 0.5625rem;
@@ -24,7 +24,7 @@
   --booking-welcome-shift: 0;
   --booking-welcome-radius: 2.5rem;
   --booking-welcome-gutter: 0.95rem;
-  --booking-welcome-type-bottom: 10.25rem;
+  --booking-welcome-offset: 6.5rem;
   --booking-welcome-field-gap: 0.65rem;
   --booking-welcome-chip-height: 30px;
   --booking-welcome-chip-size: 8px;
@@ -1532,7 +1532,7 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   overflow: hidden;
   isolation: isolate;
   box-sizing: border-box;
@@ -1657,10 +1657,25 @@
     0 14px 32px rgba(0, 0, 0, 0.28);
 }
 
-.booking-welcome__section + .booking-welcome__section {
+.booking-welcome__section--size {
   margin-top: 1.2rem;
   padding-top: 1.05rem;
   border-top: 1px solid rgba(44, 44, 44, 0.14);
+}
+
+.booking-welcome__reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s var(--booking-ease);
+}
+
+.booking-welcome__reveal.is-open {
+  grid-template-rows: 1fr;
+}
+
+.booking-welcome__reveal-clip {
+  min-height: 0;
+  overflow: hidden;
 }
 
 .booking-welcome__field {
@@ -1976,14 +1991,16 @@
 .booking-step__inner--welcome {
   position: relative;
   z-index: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   width: 100%;
   max-width: 100%;
   margin-inline: 0;
-  padding: 3.4rem 1.05rem 4.4rem;
-  overflow: auto;
+  padding: var(--booking-welcome-offset) 1.05rem 4.4rem;
+  overflow-x: hidden;
+  overflow-y: auto;
   text-align: left;
   transform: none;
-  overflow: visible;
 }
 
 .booking-welcome__footer {

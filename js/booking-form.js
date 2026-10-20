@@ -302,38 +302,54 @@
                       placeholder: 'you@email.com',
                       value: state.contactEmail
                     }) +
-                    welcomeField({
-                      id: 'booking-welcome-date',
-                      label: 'Event date',
-                      type: 'date',
-                      value: state.eventDate,
-                      min: toISODate(new Date())
-                    }) +
-                    welcomeField({
-                      id: 'booking-welcome-zip',
-                      label: 'Event ZIP code',
-                      type: 'text',
-                      inputmode: 'numeric',
-                      autocomplete: 'postal-code',
-                      placeholder: '33801',
-                      maxlength: '5',
-                      pattern: '[0-9]*',
-                      value: state.eventZip
-                    }) +
-                  '</div>' +
-                  '<div class="booking-welcome__section">' +
-                    '<div class="booking-welcome__field">' +
-                      '<span class="booking-welcome__field-label">Guests</span>' +
-                      welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range', 'booking-welcome__bar--guests') +
+                    '<div class="booking-welcome__reveal" data-welcome-reveal="date" inert>' +
+                      '<div class="booking-welcome__reveal-clip">' +
+                        welcomeField({
+                          id: 'booking-welcome-date',
+                          label: 'Event date',
+                          type: 'date',
+                          value: state.eventDate,
+                          min: toISODate(new Date())
+                        }) +
+                      '</div>' +
                     '</div>' +
-                    '<div class="booking-welcome__field">' +
-                      '<span class="booking-welcome__field-label">How long should we serve?</span>' +
-                      welcomeBar(LENGTH_CHOICES, state.hoursChoice, 'data-length') +
+                    '<div class="booking-welcome__reveal" data-welcome-reveal="zip" inert>' +
+                      '<div class="booking-welcome__reveal-clip">' +
+                        welcomeField({
+                          id: 'booking-welcome-zip',
+                          label: 'Event ZIP code',
+                          type: 'text',
+                          inputmode: 'numeric',
+                          autocomplete: 'postal-code',
+                          placeholder: '33801',
+                          maxlength: '5',
+                          pattern: '[0-9]*',
+                          value: state.eventZip
+                        }) +
+                      '</div>' +
                     '</div>' +
-                    '<p class="booking-welcome__notice">A rough guess is fine. You can adjust it next.</p>' +
                   '</div>' +
-                  '<button type="button" class="booking-ok booking-welcome__estimate' + (welcomeReady() ? ' is-ready' : '') + '" data-ok' + (welcomeReady() ? '' : ' disabled') + '>see what fits.</button>' +
-                  '<p class="booking-welcome__reassure">Free estimate, no commitment.</p>' +
+                  '<div class="booking-welcome__reveal" data-welcome-reveal="guests" inert>' +
+                    '<div class="booking-welcome__reveal-clip">' +
+                      '<div class="booking-welcome__section booking-welcome__section--size">' +
+                        '<div class="booking-welcome__field">' +
+                          '<span class="booking-welcome__field-label">Guests</span>' +
+                          welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range', 'booking-welcome__bar--guests') +
+                        '</div>' +
+                        '<div class="booking-welcome__reveal" data-welcome-reveal="length" inert>' +
+                          '<div class="booking-welcome__reveal-clip">' +
+                            '<div class="booking-welcome__field">' +
+                              '<span class="booking-welcome__field-label">How long should we serve?</span>' +
+                              welcomeBar(LENGTH_CHOICES, state.hoursChoice, 'data-length') +
+                            '</div>' +
+                            '<p class="booking-welcome__notice">A rough guess is fine. You can adjust it next.</p>' +
+                            '<button type="button" class="booking-ok booking-welcome__estimate' + (welcomeReady() ? ' is-ready' : '') + '" data-ok' + (welcomeReady() ? '' : ' disabled') + '>see what fits.</button>' +
+                            '<p class="booking-welcome__reassure">Free estimate, no commitment.</p>' +
+                          '</div>' +
+                        '</div>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
                 '</div>' +
               '</div>' +
             '</div>' +
@@ -751,7 +767,7 @@
     syncChrome();
     focusActive();
     bindWelcomeBars(stage);
-    Array.prototype.forEach.call(stage.querySelectorAll('.booking-welcome__bar'), placeWelcomeThumb);
+    syncWelcomeArrow();
     Array.prototype.forEach.call(stage.querySelectorAll('[data-step="path"]'), bindPathReveal);
   }
 
@@ -950,9 +966,34 @@
     });
   }
 
+  function syncWelcomeReveal(node) {
+    var emailOk = emailLooksValid(state.contactEmail);
+    var dateOk = /^\d{4}-\d{2}-\d{2}$/.test(state.eventDate);
+    var zipOk = zipLooksValid(state.eventZip);
+    var guestsOk = Boolean(state.guestRange);
+    var show = {
+      date: emailOk,
+      zip: emailOk && dateOk,
+      guests: emailOk && dateOk && zipOk,
+      length: emailOk && dateOk && zipOk && guestsOk
+    };
+    Array.prototype.forEach.call(node.querySelectorAll('[data-welcome-reveal]'), function (el) {
+      var open = Boolean(show[el.getAttribute('data-welcome-reveal')]);
+      el.classList.toggle('is-open', open);
+      if (open) el.removeAttribute('inert');
+      else el.setAttribute('inert', '');
+    });
+    if (show.guests) {
+      window.requestAnimationFrame(function () {
+        Array.prototype.forEach.call(node.querySelectorAll('.booking-welcome__bar'), placeWelcomeThumb);
+      });
+    }
+  }
+
   function syncWelcomeArrow(node) {
     node = node || activeNode();
     if (!node || node.getAttribute('data-step') !== 'welcome') return;
+    syncWelcomeReveal(node);
     var arrow = node.querySelector('.booking-welcome__estimate');
     if (!arrow) return;
     var ready = welcomeReady();
