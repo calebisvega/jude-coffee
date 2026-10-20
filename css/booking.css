@@ -26,8 +26,10 @@
   --booking-welcome-gutter: 0.95rem;
   --booking-welcome-type-bottom: 10.25rem;
   --booking-welcome-field-gap: 0.65rem;
-  --booking-welcome-chip-height: 44px;
-  --booking-welcome-chip-size: 14px;
+  --booking-welcome-chip-height: 30px;
+  --booking-welcome-chip-size: 8px;
+  --booking-welcome-hint-size: 0.62rem;
+  --booking-welcome-hint-color: rgba(44, 44, 44, 0.45);
   --booking-welcome-frame: #000;
   --booking-welcome-stage-max: 30rem;
   --booking-welcome-overlay: 0.42;
@@ -1703,8 +1705,15 @@
   color-scheme: light;
 }
 
+.booking-welcome__field-input:not([type="date"]) {
+  font-family: var(--font-tagline);
+  font-size: var(--booking-welcome-hint-size);
+  letter-spacing: -0.03em;
+}
+
 .booking-welcome__field-input::placeholder {
-  color: rgba(44, 44, 44, 0.38);
+  color: var(--booking-welcome-hint-color);
+  opacity: 1;
 }
 
 .booking-welcome__field-input:focus {
@@ -1798,7 +1807,7 @@
 
 .booking-welcome__field-input[type="date"] {
   font-family: var(--font-tagline);
-  font-size: 0.62rem;
+  font-size: var(--booking-welcome-hint-size);
   font-weight: 500;
   letter-spacing: -0.03em;
 }
@@ -1809,7 +1818,7 @@
 .booking-welcome__field-input[type="date"]::-webkit-datetime-edit-month-field,
 .booking-welcome__field-input[type="date"]::-webkit-datetime-edit-day-field,
 .booking-welcome__field-input[type="date"]::-webkit-datetime-edit-year-field {
-  font-size: 0.62rem;
+  font-size: var(--booking-welcome-hint-size);
   padding: 0;
 }
 

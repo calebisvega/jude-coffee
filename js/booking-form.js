@@ -332,7 +332,7 @@
                     '</div>' +
                     '<p class="booking-welcome__notice">A rough guess is fine. You can adjust it next.</p>' +
                   '</div>' +
-                  '<button type="button" class="booking-ok booking-welcome__estimate' + (welcomeReady() ? ' is-ready' : '') + '" data-ok' + (welcomeReady() ? '' : ' disabled') + '>See my estimate.</button>' +
+                  '<button type="button" class="booking-ok booking-welcome__estimate' + (welcomeReady() ? ' is-ready' : '') + '" data-ok' + (welcomeReady() ? '' : ' disabled') + '>see what fits.</button>' +
                   '<p class="booking-welcome__reassure">Free estimate, no commitment.</p>' +
                 '</div>' +
               '</div>' +
