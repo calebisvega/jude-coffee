@@ -27,8 +27,8 @@
   --booking-welcome-offset: 9.5rem;
   --booking-welcome-card-pad: 0.95rem;
   --booking-welcome-field-gap: 0.65rem;
-  --booking-welcome-chip-height: 30px;
-  --booking-welcome-chip-size: 8px;
+  --booking-welcome-chip-height: 40px;
+  --booking-welcome-chip-size: 14px;
   --booking-welcome-hint-size: 0.62rem;
   --booking-welcome-hint-color: rgba(44, 44, 44, 0.45);
   --booking-welcome-frame: #000;
@@ -1634,17 +1634,14 @@
 
 .booking-welcome__card {
   --welcome-scale: 1.18;
-  --welcome-space: calc(0.95rem * var(--welcome-scale));
+  --welcome-space: 0.9rem;
+  --welcome-label-gap: 0.28rem;
   margin-top: 1.15rem;
-  padding: var(--welcome-space);
-  border-radius: 1.35rem;
-  background: rgba(244, 247, 238, 0.36);
-  -webkit-backdrop-filter: blur(18px) saturate(1.2);
-  backdrop-filter: blur(18px) saturate(1.2);
-  color: var(--charcoal);
-  border: 1px solid rgba(255, 255, 255, 0.48);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
-  transition: padding 0.35s var(--booking-ease);
+  padding: 0;
+  background: transparent;
+  color: #fff;
+  border: 0;
+  box-shadow: none;
 }
 
 .booking-welcome__card[data-reveal="2"] { --welcome-scale: 1.08; }
@@ -1652,16 +1649,10 @@
 .booking-welcome__card[data-reveal="4"] { --welcome-scale: 0.94; }
 .booking-welcome__card[data-reveal="5"] { --welcome-scale: 0.9; }
 
-.booking-welcome__section--size {
-  margin-top: var(--welcome-space);
-  padding-top: var(--welcome-space);
-  border-top: 1px solid rgba(44, 44, 44, 0.16);
-}
-
 .booking-welcome__reveal {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.35s var(--booking-ease);
+  transition: grid-template-rows 0.65s var(--booking-ease);
 }
 
 .booking-welcome__reveal.is-open {
@@ -1677,9 +1668,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--welcome-space);
+  gap: var(--welcome-label-gap);
   margin-top: var(--welcome-space);
-  transition: gap 0.35s var(--booking-ease), margin 0.35s var(--booking-ease);
+  transition: gap 0.65s var(--booking-ease), margin 0.65s var(--booking-ease);
 }
 
 .booking-welcome__section .booking-welcome__field:first-child {
@@ -1692,8 +1683,13 @@
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.2;
-  color: var(--charcoal);
-  transition: font-size 0.35s var(--booking-ease);
+  color: #fff;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
+  transition: font-size 0.65s var(--booking-ease);
+}
+
+.booking-welcome__field-label--choice {
+  font-size: 18px;
 }
 
 .booking-welcome__field-input {
@@ -1715,7 +1711,7 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
   appearance: none;
   color-scheme: light;
-  transition: font-size 0.35s var(--booking-ease), height 0.35s var(--booking-ease), border-color 0.2s var(--booking-ease);
+  transition: font-size 0.65s var(--booking-ease), height 0.65s var(--booking-ease), border-color 0.2s var(--booking-ease);
 }
 
 .booking-welcome__field-input:not([type="date"]) {
@@ -1730,6 +1726,87 @@
 
 .booking-welcome__field-input:focus {
   border-color: var(--sage);
+}
+
+.booking-welcome__date-btn {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: max(2.5rem, calc(2.85rem * var(--welcome-scale)));
+  margin: 0;
+  padding: 0 0.7rem;
+  border: 1px solid rgba(44, 44, 44, 0.18);
+  border-radius: 0.4rem;
+  background: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  color: var(--charcoal);
+  font-family: var(--font-tagline);
+  font-size: max(16px, calc(18px * var(--welcome-scale)));
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-align: left;
+  cursor: pointer;
+  transition: font-size 0.65s var(--booking-ease), height 0.65s var(--booking-ease);
+}
+
+.booking-welcome__date-value.is-empty {
+  color: var(--booking-welcome-hint-color);
+}
+
+.booking-welcome__date-drop {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  transition: grid-template-rows 0.65s var(--booking-ease);
+}
+
+.booking-welcome__date-drop.is-open {
+  grid-template-rows: 1fr;
+}
+
+.booking-welcome__date-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.booking-welcome__date-panel {
+  margin-top: 0.4rem;
+  padding: 0.75rem 0.7rem 0.65rem;
+  border-radius: 0.85rem;
+  background: #fff;
+  color: var(--charcoal);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+}
+
+.booking-welcome__date-panel .booking-cal__nav {
+  margin-bottom: 0.45rem;
+}
+
+.booking-welcome__date-panel .booking-cal__label,
+.booking-welcome__date-panel .booking-cal__week,
+.booking-welcome__date-panel .booking-cal__day {
+  color: var(--charcoal);
+}
+
+.booking-welcome__date-panel .booking-cal__week {
+  color: rgba(44, 44, 44, 0.45);
+}
+
+.booking-welcome__date-panel .booking-cal__day.is-today {
+  box-shadow: inset 0 0 0 1px rgba(44, 44, 44, 0.28);
+}
+
+.booking-welcome__date-panel .booking-cal__day.is-selected {
+  background: var(--sage);
+  color: #fff;
+}
+
+.booking-welcome__date-panel .booking-stepper__btn {
+  color: var(--charcoal);
+  border-color: rgba(44, 44, 44, 0.2);
 }
 
 .booking-welcome__suggest {
@@ -1929,24 +2006,26 @@
 }
 
 .booking-welcome__notice {
-  margin: var(--welcome-space) 0 0;
+  margin: 0.7rem 0 0;
   font-family: var(--font-tagline);
   font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.35;
   letter-spacing: -0.01em;
-  color: var(--charcoal);
+  color: #fff;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
 }
 
 .booking-welcome__reassure {
-  margin: var(--welcome-space) 0 0;
+  margin: 0.55rem 0 0;
   font-family: var(--font-tagline);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 500;
   line-height: 1.3;
   letter-spacing: 0.01em;
   text-align: center;
-  color: rgba(44, 44, 44, 0.62);
+  color: #fff;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
 }
 
 .booking-welcome__estimate {
@@ -1954,7 +2033,7 @@
   width: 100%;
   justify-content: center;
   min-height: 44px;
-  margin-top: var(--welcome-space);
+  margin-top: 0.85rem;
   padding: 0.7rem 1.15rem;
   border: 0;
   border-radius: 999px;

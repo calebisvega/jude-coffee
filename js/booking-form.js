@@ -304,13 +304,10 @@
                     }) +
                     '<div class="booking-welcome__reveal" data-welcome-reveal="date" inert>' +
                       '<div class="booking-welcome__reveal-clip">' +
-                        welcomeField({
-                          id: 'booking-welcome-date',
-                          label: 'Event date',
-                          type: 'date',
-                          value: state.eventDate,
-                          min: toISODate(new Date())
-                        }) +
+                        '<div class="booking-welcome__field">' +
+                          '<span class="booking-welcome__field-label">Event date</span>' +
+                          welcomeCalendarMarkup() +
+                        '</div>' +
                       '</div>' +
                     '</div>' +
                     '<div class="booking-welcome__reveal" data-welcome-reveal="zip" inert>' +
@@ -331,23 +328,21 @@
                   '</div>' +
                   '<div class="booking-welcome__reveal" data-welcome-reveal="guests" inert>' +
                     '<div class="booking-welcome__reveal-clip">' +
-                      '<div class="booking-welcome__section booking-welcome__section--size">' +
-                        '<div class="booking-welcome__field">' +
-                          '<span class="booking-welcome__field-label">Guests</span>' +
-                          welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range', 'booking-welcome__bar--guests') +
-                        '</div>' +
-                        '<div class="booking-welcome__reveal" data-welcome-reveal="length" inert>' +
-                          '<div class="booking-welcome__reveal-clip">' +
-                            '<div class="booking-welcome__field">' +
-                              '<span class="booking-welcome__field-label">How long should we serve?</span>' +
-                              welcomeBar(LENGTH_CHOICES, state.hoursChoice, 'data-length') +
-                            '</div>' +
-                            '<p class="booking-welcome__notice">A rough guess is fine. You can adjust it next.</p>' +
-                            '<button type="button" class="booking-ok booking-welcome__estimate' + (welcomeReady() ? ' is-ready' : '') + '" data-ok' + (welcomeReady() ? '' : ' disabled') + '>see what fits.</button>' +
-                            '<p class="booking-welcome__reassure">Free estimate, no commitment.</p>' +
-                          '</div>' +
-                        '</div>' +
+                      '<div class="booking-welcome__field">' +
+                        '<span class="booking-welcome__field-label booking-welcome__field-label--choice">Guests</span>' +
+                        welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range', 'booking-welcome__bar--guests') +
                       '</div>' +
+                    '</div>' +
+                  '</div>' +
+                  '<div class="booking-welcome__reveal" data-welcome-reveal="length" inert>' +
+                    '<div class="booking-welcome__reveal-clip">' +
+                      '<div class="booking-welcome__field">' +
+                        '<span class="booking-welcome__field-label booking-welcome__field-label--choice">How long should we serve?</span>' +
+                        welcomeBar(LENGTH_CHOICES, state.hoursChoice, 'data-length') +
+                      '</div>' +
+                      '<p class="booking-welcome__notice">A rough guess is fine. You can adjust it next.</p>' +
+                      '<button type="button" class="booking-ok booking-welcome__estimate' + (welcomeReady() ? ' is-ready' : '') + '" data-ok' + (welcomeReady() ? '' : ' disabled') + '>See what fits</button>' +
+                      '<p class="booking-welcome__reassure">Free estimate, no commitment.</p>' +
                     '</div>' +
                   '</div>' +
                 '</div>' +
@@ -626,12 +621,62 @@
     );
   }
 
+  function welcomeCalendarMarkup() {
+    var cursor = currentCalMonth();
+    var year = cursor.getFullYear();
+    var month = cursor.getMonth();
+    var firstDow = new Date(year, month, 1).getDay();
+    var dim = new Date(year, month + 1, 0).getDate();
+    var today = toISODate(new Date());
+    var selected = state.eventDate;
+    var label = new Date(year, month, 1).toLocaleString('en-US', { month: 'long', year: 'numeric' });
+    var cells = [];
+    var i;
+    for (i = 0; i < firstDow; i++) cells.push('<span class="booking-cal__blank"></span>');
+    for (i = 1; i <= dim; i++) {
+      var iso = year + '-' + pad2(month + 1) + '-' + pad2(i);
+      var cls = 'booking-cal__day';
+      if (iso === selected) cls += ' is-selected';
+      if (iso === today) cls += ' is-today';
+      if (iso < today) cls += ' is-past';
+      cells.push(
+        '<button type="button" class="' + cls + '" data-pick-date="' + iso + '"' +
+          (iso < today ? ' disabled' : '') +
+          ' aria-pressed="' + (iso === selected) + '">' + i + '</button>'
+      );
+    }
+    var dateLabel = selected ? formatEventDate(selected) : 'mm/dd/yyyy';
+    return (
+      '<div class="booking-welcome__cal" data-cal>' +
+        '<input type="hidden" id="booking-welcome-date" value="' + escapeHtml(selected) + '">' +
+        '<button type="button" class="booking-welcome__date-btn" data-cal-toggle>' +
+          '<span class="booking-welcome__date-value' + (selected ? '' : ' is-empty') + '">' + escapeHtml(dateLabel) + '</span>' +
+        '</button>' +
+        '<div class="booking-welcome__date-drop' + (calOpen ? ' is-open' : '') + '"' + (calOpen ? '' : ' inert') + '>' +
+          '<div class="booking-welcome__date-clip">' +
+            '<div class="booking-welcome__date-panel">' +
+              '<div class="booking-cal__nav">' +
+                '<p class="booking-cal__label">' + label + '</p>' +
+                '<div class="booking-cal__shifts">' +
+                  '<button type="button" class="booking-stepper__btn" data-cal-shift="-1" aria-label="Previous month">' + chevron('down') + '</button>' +
+                  '<button type="button" class="booking-stepper__btn" data-cal-shift="1" aria-label="Next month">' + chevron('up') + '</button>' +
+                '</div>' +
+              '</div>' +
+              '<div class="booking-cal__week" aria-hidden="true"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>' +
+              '<div class="booking-cal__grid">' + cells.join('') + '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
   function paintCalendar() {
     var node = activeNode();
     var cal = node && node.querySelector('[data-cal]');
     if (!cal) return;
     var wrap = document.createElement('div');
-    wrap.innerHTML = calendarMarkup();
+    wrap.innerHTML = node.getAttribute('data-step') === 'welcome' ? welcomeCalendarMarkup() : calendarMarkup();
     cal.replaceWith(wrap.firstElementChild);
   }
 
@@ -1409,10 +1454,12 @@
     if (day && !day.disabled) {
       event.preventDefault();
       state.eventDate = day.getAttribute('data-pick-date');
-      var welcomeDate = stage.querySelector('#booking-welcome-date');
-      if (welcomeDate) welcomeDate.value = state.eventDate;
       calOpen = false;
       paintCalendar();
+      if (currentStep() && currentStep().id === 'welcome') {
+        syncWelcomeArrow();
+        refreshEstimate();
+      }
       clearError();
       return;
     }
