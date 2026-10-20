@@ -221,37 +221,50 @@
                 '<span class="booking-welcome__shade"></span>' +
               '</span>' +
               '<div class="booking-step__inner booking-step__inner--welcome">' +
-                '<h1 class="booking-question">Let us know<br>a little bit<br>about your event.</h1>' +
+                '<h1 class="booking-question">Tell us about<br>your event.</h1>' +
                 '<div class="booking-welcome__card">' +
-                  welcomeField({
-                    id: 'booking-welcome-email',
-                    label: 'Your email',
-                    type: 'email',
-                    inputmode: 'email',
-                    autocomplete: 'email',
-                    value: state.contactEmail
-                  }) +
-                  welcomeField({
-                    id: 'booking-welcome-date',
-                    label: 'Your date',
-                    type: 'date',
-                    value: state.eventDate,
-                    min: toISODate(new Date())
-                  }) +
-                  welcomeField({
-                    id: 'booking-welcome-guests',
-                    label: 'Guest count',
-                    type: 'number',
-                    inputmode: 'numeric',
-                    min: '1',
-                    step: '1',
-                    value: state.guestCount
-                  }) +
-                  '<div class="booking-welcome__card-foot">' +
-                    '<p class="booking-welcome__notice">If you\'re not sure, a ballpark figure helps us give you an accurate quote.</p>' +
-                    '<button type="button" class="booking-ok booking-ok--arrow' + (welcomeReady() ? ' is-ready' : '') + '" data-ok aria-label="Continue"' + (welcomeReady() ? '' : ' disabled') + '>' +
-                      '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>' +
-                    '</button>' +
+                  '<div class="booking-welcome__section">' +
+                    welcomeField({
+                      id: 'booking-welcome-email',
+                      label: 'Your email',
+                      type: 'email',
+                      inputmode: 'email',
+                      autocomplete: 'email',
+                      value: state.contactEmail
+                    }) +
+                    welcomeField({
+                      id: 'booking-welcome-date',
+                      label: 'Your date',
+                      type: 'date',
+                      value: state.eventDate,
+                      min: toISODate(new Date())
+                    }) +
+                  '</div>' +
+                  '<div class="booking-welcome__section">' +
+                    welcomeField({
+                      id: 'booking-welcome-guests',
+                      label: 'Guest count',
+                      type: 'number',
+                      inputmode: 'numeric',
+                      min: '1',
+                      step: '1',
+                      value: state.guestCount
+                    }) +
+                    welcomeField({
+                      id: 'booking-welcome-hours',
+                      label: 'Service length',
+                      type: 'number',
+                      inputmode: 'decimal',
+                      min: '1',
+                      step: '0.5',
+                      value: state.durationHours
+                    }) +
+                    '<div class="booking-welcome__card-foot">' +
+                      '<p class="booking-welcome__notice">If you\'re not sure, a ballpark figure helps us give you an accurate quote.</p>' +
+                      '<button type="button" class="booking-ok booking-ok--arrow' + (welcomeReady() ? ' is-ready' : '') + '" data-ok aria-label="Continue"' + (welcomeReady() ? '' : ' disabled') + '>' +
+                        '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>' +
+                      '</button>' +
+                    '</div>' +
                   '</div>' +
                 '</div>' +
               '</div>' +
@@ -735,6 +748,7 @@
       state.contactEmail = fieldValue(node, 'booking-welcome-email');
       state.eventDate = fieldValue(node, 'booking-welcome-date');
       state.guestCount = fieldValue(node, 'booking-welcome-guests');
+      state.durationHours = fieldValue(node, 'booking-welcome-hours');
       syncWelcomeIntoLaterSteps();
     }
     if (id === 'budget') state.budget = fieldValue(node, 'booking-budget');
@@ -744,6 +758,8 @@
       state.locationAddress = fieldValue(node, 'booking-location');
       var welcomeGuests = stage.querySelector('#booking-welcome-guests');
       if (welcomeGuests && document.activeElement !== welcomeGuests) welcomeGuests.value = state.guestCount;
+      var welcomeHours = stage.querySelector('#booking-welcome-hours');
+      if (welcomeHours && document.activeElement !== welcomeHours) welcomeHours.value = state.durationHours;
     }
     if (id === 'contact') {
       state.contactName = fieldValue(node, 'booking-name');
@@ -761,7 +777,8 @@
   function welcomeReady() {
     return emailLooksValid(state.contactEmail) &&
       /^\d{4}-\d{2}-\d{2}$/.test(state.eventDate) &&
-      parseInt(state.guestCount, 10) > 0;
+      parseInt(state.guestCount, 10) > 0 &&
+      parseFloat(state.durationHours) > 0;
   }
 
   function syncWelcomeIntoLaterSteps() {
@@ -769,6 +786,8 @@
     if (contactEmail) contactEmail.value = state.contactEmail;
     var guests = stage.querySelector('#booking-guests');
     if (guests) guests.value = state.guestCount;
+    var hours = stage.querySelector('#booking-hours');
+    if (hours) hours.value = state.durationHours;
     var dateValue = stage.querySelector('[data-step="details"] .booking-cal__value');
     if (dateValue) dateValue.textContent = state.eventDate ? formatEventDate(state.eventDate) : 'Add a date';
   }
