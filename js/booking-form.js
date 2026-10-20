@@ -210,12 +210,18 @@
                     '<span class="booking-welcome__lead">Let\'s talk<br>about</span>' +
                     '<span class="booking-welcome__line">' +
                       'your event.' +
-                      '<button type="button" class="booking-ok booking-ok--arrow booking-ok--bare" data-ok aria-label="Start">' +
+                      '<button type="button" class="booking-ok booking-ok--arrow booking-ok--bare" data-ok aria-label="Continue"' + (emailLooksValid(state.contactEmail) ? '' : ' hidden') + '>' +
                         '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>' +
                       '</button>' +
                     '</span>' +
                   '</span>' +
                 '</h1>' +
+                '<label class="booking-welcome__email">' +
+                  '<input class="booking-welcome__email-input" id="booking-welcome-email" name="email" type="email" inputmode="email" autocomplete="email" aria-describedby="booking-welcome-email-note"' +
+                    (state.contactEmail ? ' value="' + escapeHtml(state.contactEmail) + '"' : '') +
+                  '>' +
+                  '<span class="booking-welcome__email-note" id="booking-welcome-email-note">Put in your email</span>' +
+                '</label>' +
               '</div>' +
             '</div>' +
             '<footer class="booking-welcome__footer">' +
@@ -693,6 +699,11 @@
     var node = activeNode();
     if (!node) return;
     var id = node.getAttribute('data-step');
+    if (id === 'welcome') {
+      state.contactEmail = fieldValue(node, 'booking-welcome-email');
+      var contactEmail = stage.querySelector('#booking-email');
+      if (contactEmail) contactEmail.value = state.contactEmail;
+    }
     if (id === 'budget') state.budget = fieldValue(node, 'booking-budget');
     if (id === 'details') {
       state.guestCount = fieldValue(node, 'booking-guests');
@@ -703,12 +714,28 @@
       state.contactName = fieldValue(node, 'booking-name');
       state.contactEmail = fieldValue(node, 'booking-email');
       state.contactPhone = fieldValue(node, 'booking-phone');
+      var welcomeEmail = stage.querySelector('#booking-welcome-email');
+      if (welcomeEmail) welcomeEmail.value = state.contactEmail;
     }
+  }
+
+  function emailLooksValid(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim());
+  }
+
+  function syncWelcomeArrow(node) {
+    node = node || activeNode();
+    if (!node || node.getAttribute('data-step') !== 'welcome') return;
+    var input = node.querySelector('#booking-welcome-email');
+    var arrow = node.querySelector('.booking-welcome__line .booking-ok');
+    if (!input || !arrow) return;
+    var ready = emailLooksValid(input.value);
+    arrow.hidden = !ready;
   }
 
   function contactValid() {
     if (state.contactName.length < 2) return 'What should we call you?';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.contactEmail)) return 'Hmm… that email doesn\'t look right.';
+    if (!emailLooksValid(state.contactEmail)) return 'Hmm… that email doesn\'t look right.';
     if (state.contactPhone.replace(/\D/g, '').length < 7) return 'A phone number helps us confirm.';
     return '';
   }
@@ -718,6 +745,7 @@
     if (!step) return true;
     readFields();
     clearError();
+    if (step.id === 'welcome' && !emailLooksValid(state.contactEmail)) return false;
     if (step.id === 'path' && !state.tier) {
       showError('Pick a setup to continue.');
       return false;
@@ -811,7 +839,7 @@
   function focusActive() {
     var node = activeNode();
     if (!node) return;
-    var input = node.querySelector('.booking-input:not([type="date"])');
+    var input = node.querySelector('.booking-welcome__email-input, .booking-input:not([type="date"])');
     if (input) {
       window.setTimeout(function () { input.focus(); }, 280);
     }
@@ -1063,6 +1091,7 @@
     refreshEstimate();
     clearError();
     var step = currentStep();
+    if (step && step.id === 'welcome') syncWelcomeArrow();
     if (step && step.id === 'details' && event.target && event.target.id === 'booking-location') scheduleGeocode();
     if (step && step.id === 'contact' && event.target && event.target.id === 'booking-phone' && !contactValid()) {
       capturePartial();
