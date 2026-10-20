@@ -13,8 +13,8 @@
   --booking-logo-width: 6.85rem;
   --booking-welcome-logo-top: 1.55rem;
   --booking-question-size: 1.5rem;
-  --booking-welcome-size: 56px;
-  --booking-welcome-leading: 45px;
+  --booking-welcome-size: 60px;
+  --booking-welcome-leading: 49px;
   --booking-welcome-pair-gap: 0.35rem;
   --booking-welcome-tracking: -0.04em;
   --booking-welcome-sub: 0.5625rem;
@@ -25,6 +25,7 @@
   --booking-welcome-radius: 2.5rem;
   --booking-welcome-gutter: 0.95rem;
   --booking-welcome-offset: 6.5rem;
+  --booking-welcome-card-pad: 0.95rem;
   --booking-welcome-field-gap: 0.65rem;
   --booking-welcome-chip-height: 30px;
   --booking-welcome-chip-size: 8px;
@@ -1647,7 +1648,7 @@
 
 .booking-welcome__card {
   margin-top: 1.15rem;
-  padding: 1rem 0.95rem var(--booking-welcome-field-gap);
+  padding: var(--booking-welcome-card-pad);
   border-radius: 1.35rem;
   background: linear-gradient(180deg, #ffffff 0%, #f6f6f3 100%);
   color: var(--charcoal);
