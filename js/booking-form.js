@@ -299,14 +299,12 @@
                   '</div>' +
                   '<div class="booking-welcome__section">' +
                     '<div class="booking-welcome__field">' +
-                      '<span class="booking-welcome__field-label">Guest count</span>' +
-                      welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range') +
+                      '<span class="booking-welcome__field-label">Guest Count and Service Length.</span>' +
+                      '<div class="booking-welcome__pair">' +
+                        welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range') +
+                        welcomeBar(LENGTH_CHOICES, state.hoursChoice, 'data-length') +
+                      '</div>' +
                     '</div>' +
-                    '<div class="booking-welcome__field">' +
-                      '<span class="booking-welcome__field-label">Service length</span>' +
-                      welcomeBar(LENGTH_CHOICES, state.hoursChoice, 'data-length') +
-                    '</div>' +
-                    '<p class="booking-welcome__notice">If you\'re not sure, a ballpark figure helps us give you our best estimate.</p>' +
                   '</div>' +
                   '<div class="booking-welcome__section">' +
                     welcomeField({
@@ -317,6 +315,7 @@
                     }) +
                   '</div>' +
                   '<button type="button" class="booking-ok booking-welcome__estimate' + (welcomeReady() ? ' is-ready' : '') + '" data-ok' + (welcomeReady() ? '' : ' disabled') + '>See my estimate.</button>' +
+                  '<p class="booking-welcome__notice">If you\'re not sure, a ballpark figure helps us give you our best estimate.</p>' +
                 '</div>' +
               '</div>' +
             '</div>' +
