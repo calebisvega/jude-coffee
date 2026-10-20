@@ -62,8 +62,8 @@
 
   var state = {
     tier: null,
-    guestCount: '',
-    durationHours: '',
+    guestCount: '24',
+    durationHours: '1',
     addOns: [],
     eventDate: '',
     locationAddress: '',
@@ -73,8 +73,8 @@
     contactName: '',
     contactEmail: '',
     contactPhone: '',
-    guestRange: '',
-    hoursChoice: '',
+    guestRange: 'under-25',
+    hoursChoice: '1',
     partialCaptured: false,
     submitted: false
   };
@@ -145,12 +145,18 @@
     );
   }
 
-  function welcomeChips(items, selectedId, attr) {
+  function welcomeBar(items, selectedId, attr) {
+    var index = 0;
+    var i;
+    for (i = 0; i < items.length; i++) {
+      if (items[i].id === selectedId) index = i;
+    }
     return (
-      '<div class="booking-welcome__chips">' +
+      '<div class="booking-welcome__bar" role="slider" tabindex="0" style="--i:' + index + ';--n:' + items.length + '" aria-valuemin="0" aria-valuemax="' + (items.length - 1) + '" aria-valuenow="' + index + '" aria-valuetext="' + escapeHtml(items[index].label) + '">' +
+        '<span class="booking-welcome__bar-thumb" aria-hidden="true"></span>' +
         items.map(function (item) {
-          var on = item.id === selectedId;
-          return '<button type="button" class="booking-welcome__chip' + (on ? ' is-selected' : '') + '" ' + attr + '="' + item.id + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + escapeHtml(item.label) + '</button>';
+          var on = item.id === items[index].id;
+          return '<button type="button" class="booking-welcome__bar-stop' + (on ? ' is-selected' : '') + '" ' + attr + '="' + item.id + '" tabindex="-1">' + escapeHtml(item.label) + '</button>';
         }).join('') +
       '</div>'
     );
@@ -292,19 +298,20 @@
                     }) +
                   '</div>' +
                   '<div class="booking-welcome__section">' +
-                    '<p class="booking-welcome__field-label">Guest count</p>' +
-                    welcomeChips(GUEST_RANGES, state.guestRange, 'data-guest-range') +
-                    '<p class="booking-welcome__field-label booking-welcome__field-label--follow">Service length</p>' +
-                    '<div class="booking-welcome__hours">' +
-                      welcomeChips(LENGTH_CHOICES, state.hoursChoice, 'data-length') +
-                      '<span class="booking-welcome__hours-unit">hrs</span>' +
+                    '<div class="booking-welcome__field">' +
+                      '<span class="booking-welcome__field-label">Guest count</span>' +
+                      welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range') +
+                    '</div>' +
+                    '<div class="booking-welcome__field">' +
+                      '<span class="booking-welcome__field-label">Service length</span>' +
+                      welcomeBar(LENGTH_CHOICES, state.hoursChoice, 'data-length') +
                     '</div>' +
                     '<p class="booking-welcome__notice">If you\'re not sure, a ballpark figure helps us give you our best estimate.</p>' +
                   '</div>' +
                   '<div class="booking-welcome__section">' +
                     welcomeField({
                       id: 'booking-welcome-place',
-                      label: 'City or zip',
+                      label: 'Location',
                       type: 'text',
                       value: state.locationAddress
                     }) +
@@ -725,6 +732,7 @@
     });
     syncChrome();
     focusActive();
+    bindWelcomeBars(stage);
     Array.prototype.forEach.call(stage.querySelectorAll('[data-step="path"]'), bindPathReveal);
   }
 
@@ -850,11 +858,54 @@
 
   function paintWelcomeChips(group, selectedId) {
     if (!group) return;
-    Array.prototype.forEach.call(group.querySelectorAll('.booking-welcome__chip'), function (chip) {
+    var stops = group.querySelectorAll('.booking-welcome__bar-stop');
+    var index = 0;
+    Array.prototype.forEach.call(stops, function (chip, i) {
       var id = chip.getAttribute('data-guest-range') || chip.getAttribute('data-length');
       var on = id === selectedId;
       chip.classList.toggle('is-selected', on);
-      chip.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (on) index = i;
+    });
+    group.style.setProperty('--i', String(index));
+    group.setAttribute('aria-valuenow', String(index));
+    if (stops[index]) group.setAttribute('aria-valuetext', stops[index].textContent);
+  }
+
+  function bindWelcomeBars(root) {
+    Array.prototype.forEach.call(root.querySelectorAll('.booking-welcome__bar'), function (bar) {
+      var dragging = false;
+      function indexFromEvent(event) {
+        var stops = bar.querySelectorAll('.booking-welcome__bar-stop');
+        var rect = bar.getBoundingClientRect();
+        if (!stops.length || !rect.width) return 0;
+        var x = Math.min(Math.max(event.clientX - rect.left, 0), rect.width - 0.01);
+        return Math.min(stops.length - 1, Math.floor(x / rect.width * stops.length));
+      }
+      function apply(event) {
+        var stops = bar.querySelectorAll('.booking-welcome__bar-stop');
+        var stop = stops[indexFromEvent(event)];
+        if (stop && !stop.classList.contains('is-selected')) stop.click();
+      }
+      bar.addEventListener('pointerdown', function (event) {
+        dragging = true;
+        if (bar.setPointerCapture) bar.setPointerCapture(event.pointerId);
+        apply(event);
+      });
+      bar.addEventListener('pointermove', function (event) {
+        if (!dragging) return;
+        apply(event);
+      });
+      bar.addEventListener('pointerup', function () { dragging = false; });
+      bar.addEventListener('pointercancel', function () { dragging = false; });
+      bar.addEventListener('keydown', function (event) {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        event.preventDefault();
+        event.stopPropagation();
+        var stops = bar.querySelectorAll('.booking-welcome__bar-stop');
+        var current = Number(bar.getAttribute('aria-valuenow')) || 0;
+        var next = event.key === 'ArrowRight' ? Math.min(stops.length - 1, current + 1) : Math.max(0, current - 1);
+        if (stops[next] && next !== current) stops[next].click();
+      });
     });
   }
 
@@ -1289,6 +1340,7 @@
     if (typing && (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
       return;
     }
+    if (event.target && event.target.closest && event.target.closest('.booking-welcome__bar')) return;
     if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
       event.preventDefault();
       go(-1, true);

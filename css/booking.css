@@ -1747,57 +1747,53 @@
   display: none;
 }
 
-.booking-welcome__field-label--follow {
-  margin-top: 0.75rem;
-}
-
-.booking-welcome__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 0.4rem;
-}
-
-.booking-welcome__chip {
-  appearance: none;
+.booking-welcome__bar {
+  --n: 1;
+  --i: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  width: 100%;
+  height: 1.85rem;
   margin: 0;
-  border: 1px solid rgba(44, 44, 44, 0.2);
+  border: 1px solid rgba(44, 44, 44, 0.18);
+  border-radius: 0.4rem;
   background: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+  touch-action: none;
+}
+
+.booking-welcome__bar-thumb {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--i) * 100% / var(--n));
+  width: calc(100% / var(--n));
+  background: var(--sage);
+  pointer-events: none;
+  transition: left 0.22s var(--booking-ease);
+}
+
+.booking-welcome__bar-stop {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 0 0.1rem;
+  border: 0;
+  background: transparent;
   color: var(--charcoal);
-  border-radius: 999px;
-  padding: 0.32rem 0.62rem;
   font-family: var(--font-tagline);
-  font-size: 0.72rem;
+  font-size: 0.62rem;
   font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+  letter-spacing: -0.03em;
+  line-height: 1;
   cursor: pointer;
 }
 
-.booking-welcome__chip.is-selected {
-  background: var(--sage);
-  border-color: var(--sage);
+.booking-welcome__bar-stop.is-selected {
   color: #fff;
-}
-
-.booking-welcome__hours {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.booking-welcome__hours .booking-welcome__chips {
-  margin-top: 0.4rem;
-}
-
-.booking-welcome__hours-unit {
-  margin-top: 0.4rem;
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: var(--charcoal);
 }
 
 .booking-welcome__notice {
