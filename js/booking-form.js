@@ -323,7 +323,7 @@
                   '</div>' +
                   '<button type="button" class="booking-ok booking-welcome__estimate' + (welcomeReady() ? ' is-ready' : '') + '" data-ok' + (welcomeReady() ? '' : ' disabled') + '>See my estimate.</button>' +
                 '</div>' +
-                '<p class="booking-welcome__notice">If you\'re not sure, a ballpark figure helps!</p>' +
+                '<p class="booking-welcome__notice">Not sure yet? A rough guess is perfect. You can adjust it on the next screen.</p>' +
               '</div>' +
             '</div>' +
             '<footer class="booking-welcome__footer">' +
