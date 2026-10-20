@@ -13,8 +13,8 @@
   --booking-logo-width: 6.85rem;
   --booking-welcome-logo-top: 1.55rem;
   --booking-question-size: 1.5rem;
-  --booking-welcome-size: 60px;
-  --booking-welcome-leading: 49px;
+  --booking-welcome-size: 65px;
+  --booking-welcome-leading: 54px;
   --booking-welcome-pair-gap: 0.35rem;
   --booking-welcome-tracking: -0.04em;
   --booking-welcome-sub: 0.5625rem;
@@ -24,7 +24,7 @@
   --booking-welcome-shift: 0;
   --booking-welcome-radius: 2.5rem;
   --booking-welcome-gutter: 0.95rem;
-  --booking-welcome-offset: 6.5rem;
+  --booking-welcome-offset: 9.5rem;
   --booking-welcome-card-pad: 0.95rem;
   --booking-welcome-field-gap: 0.65rem;
   --booking-welcome-chip-height: 30px;
@@ -1581,20 +1581,6 @@
   object-position: 50% 46%;
   transform: scale(var(--booking-welcome-zoom));
   transform-origin: 50% 46%;
-  -webkit-mask-image: linear-gradient(
-    180deg,
-    transparent 0%,
-    #000 9%,
-    #000 88%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    180deg,
-    transparent 0%,
-    #000 9%,
-    #000 88%,
-    transparent 100%
-  );
 }
 
 .booking-welcome__shade {
@@ -1647,21 +1633,29 @@
 }
 
 .booking-welcome__card {
+  --welcome-scale: 1.18;
+  --welcome-space: calc(0.95rem * var(--welcome-scale));
   margin-top: 1.15rem;
-  padding: var(--booking-welcome-card-pad);
+  padding: var(--welcome-space);
   border-radius: 1.35rem;
-  background: linear-gradient(180deg, #ffffff 0%, #f6f6f3 100%);
+  background: rgba(244, 247, 238, 0.36);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  backdrop-filter: blur(18px) saturate(1.2);
   color: var(--charcoal);
-  box-shadow:
-    inset 0 1px 0 #fff,
-    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
-    0 14px 32px rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+  transition: padding 0.35s var(--booking-ease);
 }
 
+.booking-welcome__card[data-reveal="2"] { --welcome-scale: 1.08; }
+.booking-welcome__card[data-reveal="3"] { --welcome-scale: 1; }
+.booking-welcome__card[data-reveal="4"] { --welcome-scale: 0.94; }
+.booking-welcome__card[data-reveal="5"] { --welcome-scale: 0.9; }
+
 .booking-welcome__section--size {
-  margin-top: 1.2rem;
-  padding-top: 1.05rem;
-  border-top: 1px solid rgba(44, 44, 44, 0.14);
+  margin-top: var(--welcome-space);
+  padding-top: var(--welcome-space);
+  border-top: 1px solid rgba(44, 44, 44, 0.16);
 }
 
 .booking-welcome__reveal {
@@ -1683,8 +1677,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.28rem;
-  margin-top: var(--booking-welcome-field-gap);
+  gap: var(--welcome-space);
+  margin-top: var(--welcome-space);
+  transition: gap 0.35s var(--booking-ease), margin 0.35s var(--booking-ease);
 }
 
 .booking-welcome__section .booking-welcome__field:first-child {
@@ -1693,21 +1688,22 @@
 
 .booking-welcome__field-label {
   font-family: var(--font-tagline);
-  font-size: 0.68rem;
+  font-size: calc(1rem * var(--welcome-scale));
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.2;
   color: var(--charcoal);
+  transition: font-size 0.35s var(--booking-ease);
 }
 
 .booking-welcome__field-input {
   box-sizing: border-box;
   width: 100%;
-  height: 1.85rem;
+  height: max(2.5rem, calc(2.85rem * var(--welcome-scale)));
   margin: 0;
-  padding: 0 0.5rem;
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
+  padding: 0 0.7rem;
+  font-family: var(--font-tagline);
+  font-size: max(16px, calc(18px * var(--welcome-scale)));
   font-weight: 500;
   letter-spacing: 0;
   line-height: 1;
@@ -1719,11 +1715,11 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
   appearance: none;
   color-scheme: light;
+  transition: font-size 0.35s var(--booking-ease), height 0.35s var(--booking-ease), border-color 0.2s var(--booking-ease);
 }
 
 .booking-welcome__field-input:not([type="date"]) {
   font-family: var(--font-tagline);
-  font-size: var(--booking-welcome-hint-size);
   letter-spacing: -0.03em;
 }
 
@@ -1823,7 +1819,6 @@
 
 .booking-welcome__field-input[type="date"] {
   font-family: var(--font-tagline);
-  font-size: var(--booking-welcome-hint-size);
   font-weight: 500;
   letter-spacing: -0.03em;
 }
@@ -1834,7 +1829,7 @@
 .booking-welcome__field-input[type="date"]::-webkit-datetime-edit-month-field,
 .booking-welcome__field-input[type="date"]::-webkit-datetime-edit-day-field,
 .booking-welcome__field-input[type="date"]::-webkit-datetime-edit-year-field {
-  font-size: var(--booking-welcome-hint-size);
+  font-size: max(16px, calc(18px * var(--welcome-scale)));
   padding: 0;
 }
 
@@ -1934,7 +1929,7 @@
 }
 
 .booking-welcome__notice {
-  margin: 0.45rem 0 0;
+  margin: var(--welcome-space) 0 0;
   font-family: var(--font-tagline);
   font-size: 0.75rem;
   font-weight: 500;
@@ -1944,7 +1939,7 @@
 }
 
 .booking-welcome__reassure {
-  margin: 0.4rem 0 0;
+  margin: var(--welcome-space) 0 0;
   font-family: var(--font-tagline);
   font-size: 0.68rem;
   font-weight: 500;
@@ -1959,7 +1954,7 @@
   width: 100%;
   justify-content: center;
   min-height: 44px;
-  margin-top: var(--booking-welcome-field-gap);
+  margin-top: var(--welcome-space);
   padding: 0.7rem 1.15rem;
   border: 0;
   border-radius: 999px;
@@ -1997,7 +1992,7 @@
   width: 100%;
   max-width: 100%;
   margin-inline: 0;
-  padding: var(--booking-welcome-offset) 1.05rem 4.4rem;
+  padding: calc(env(safe-area-inset-top, 0px) + var(--booking-welcome-offset)) 1.05rem 4.4rem;
   overflow-x: hidden;
   overflow-y: auto;
   text-align: left;
@@ -2347,19 +2342,18 @@
   }
 }
 
-@media (max-width: 440px) {
+@media (max-width: 820px) {
   html:has(.page-booking-preview),
   body.page-booking-preview {
     height: 100%;
     min-height: 100dvh;
-    min-height: 100svh;
-    background: var(--sage);
+    background: #000;
     overflow: hidden;
   }
 
   .page-booking-preview {
     padding: 0;
-    background: var(--sage);
+    background: #000;
     gap: 0;
     justify-content: stretch;
   }
@@ -2369,14 +2363,15 @@
   }
 
   .booking-phone {
+    position: fixed;
+    inset: 0;
     width: 100%;
     height: 100dvh;
-    height: 100svh;
-    min-height: -webkit-fill-available;
+    min-height: 100dvh;
     border-radius: 0;
     padding: 0;
     box-shadow: none;
-    background: var(--sage);
+    background: #000;
   }
 
   body.page-booking-preview:has(.booking-app.is-welcome),

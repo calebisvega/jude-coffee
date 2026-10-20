@@ -988,6 +988,13 @@
         Array.prototype.forEach.call(node.querySelectorAll('.booking-welcome__bar'), placeWelcomeThumb);
       });
     }
+    var reveal = 1;
+    if (emailOk) reveal = 2;
+    if (emailOk && dateOk) reveal = 3;
+    if (emailOk && dateOk && zipOk) reveal = 4;
+    if (emailOk && dateOk && zipOk && guestsOk) reveal = 5;
+    var card = node.querySelector('.booking-welcome__card');
+    if (card) card.setAttribute('data-reveal', String(reveal));
   }
 
   function syncWelcomeArrow(node) {
