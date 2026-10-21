@@ -2546,11 +2546,8 @@
     height: 100%;
     min-height: 100lvh;
     margin: 0;
-    background-color: #595B5C;
-    background-image: url("/images/IMG_2992.jpg");
-    background-repeat: no-repeat;
-    background-position: center 46%;
-    background-size: cover;
+    background-color: #999B8D;
+    background-image: none;
     overflow: hidden;
   }
 
@@ -2559,7 +2556,7 @@
     --booking-welcome-leading: 51px;
     --booking-welcome-offset: 11.75rem;
     --booking-welcome-control-width: 80%;
-    --booking-welcome-zoom: 1.08;
+    --booking-welcome-zoom: 1;
     padding: 0;
     min-height: 100lvh;
     background: transparent;
@@ -2573,28 +2570,23 @@
 
   .booking-phone {
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: auto;
-    left: 0;
+    inset: 0;
     width: 100%;
-    height: max(100lvh, var(--screen-h, 100lvh));
+    height: 100%;
     min-height: 100lvh;
     border-radius: 0;
     padding: 0;
     margin: 0;
     box-shadow: none;
-    background-color: #595B5C;
-    background-image: url("/images/IMG_2992.jpg");
-    background-repeat: no-repeat;
-    background-position: center 46%;
-    background-size: cover;
+    background: transparent;
+    overflow: visible;
   }
 
   body.page-booking-preview:has(.booking-app.is-welcome),
   .booking-app.is-welcome,
   .booking-welcome,
-  .booking-welcome__stage {
+  .booking-welcome__stage,
+  .booking-pane {
     background-color: transparent;
     background-image: none;
     overflow: visible;
@@ -2607,20 +2599,56 @@
 
   .booking-app.is-welcome {
     background: transparent;
+    overflow: visible;
   }
 
   .booking-welcome__media {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: max(100lvh, var(--screen-h, 100lvh));
-    min-height: 100lvh;
+    z-index: 0;
+    top: -16vmax;
+    left: -16vmax;
+    width: calc(100vw + 32vmax);
+    height: calc(100lvh + 32vmax);
+    min-height: calc(100lvh + 32vmax);
+    overflow: hidden;
+    border-radius: 0;
+  }
+
+  .booking-welcome__bleed {
+    display: none;
+  }
+
+  .booking-welcome__photo {
+    transform: none;
+    object-position: center center;
   }
 
   .booking-step__inner--welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     transform: translateY(calc(-1 * var(--keyboard-lift, 0px)));
     transition: transform 0.55s var(--booking-ease);
+  }
+
+  .booking-welcome .booking-question,
+  .booking-welcome__field-label,
+  .booking-welcome__q {
+    text-align: center;
+  }
+
+  .booking-welcome .booking-question {
+    width: 100%;
+  }
+
+  .booking-welcome__field {
+    align-items: center;
+    width: 100%;
+  }
+
+  .booking-welcome__field-label {
+    width: 100%;
   }
 
   .booking-welcome__media img {
@@ -2628,14 +2656,22 @@
     max-width: none;
     max-height: none;
     object-fit: cover;
-  }
-
-  .booking-welcome__bleed {
-    inset: -18%;
+    object-position: center center;
   }
 
   .booking-welcome__card {
     margin-top: 2.25rem;
+    margin-inline: auto;
+  }
+
+  .booking-welcome__footer {
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+  }
+
+  .booking-welcome__footer-tagline {
+    text-align: center;
   }
 
   .booking-status,
