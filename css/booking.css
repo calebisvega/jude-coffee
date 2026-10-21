@@ -1544,14 +1544,7 @@
 }
 
 .booking-welcome__progress {
-  position: absolute;
-  top: env(safe-area-inset-top, 0px);
-  left: 0;
-  right: 0;
-  z-index: 5;
-  height: 3px;
-  background: transparent;
-  pointer-events: none;
+  display: none;
 }
 
 .booking-welcome__progress-fill {
