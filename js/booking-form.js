@@ -390,7 +390,7 @@
               '</div>' +
               '<div class="booking-step__inner booking-step__inner--welcome">' +
                 '<h1 class="booking-question">Tell us about<br>your event.</h1>' +
-                '<p class="booking-welcome__subtitle">Let us know some basic info, you can adjust this later.</p>' +
+                '<p class="booking-welcome__subtitle">Let us know some basic info. You can adjust this later.</p>' +
                 '<div class="booking-welcome__card">' +
                   welcomeQuestion('email', 'Your email', welcomeField({
                     id: 'booking-welcome-email',
