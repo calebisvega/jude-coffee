@@ -2121,7 +2121,7 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  margin: 0.5rem 0 0;
+  margin: 1.75rem 0 0.85rem;
   font-family: var(--font-tagline);
   font-size: 14px;
   font-weight: 500;
