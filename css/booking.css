@@ -2555,7 +2555,7 @@
     --booking-welcome-size: 62px;
     --booking-welcome-leading: 51px;
     --booking-welcome-offset: 11.75rem;
-    --booking-welcome-control-width: 100%;
+    --booking-welcome-control-width: 80%;
     --booking-welcome-zoom: 1;
     padding: 0;
     min-height: 100lvh;
@@ -2628,40 +2628,39 @@
     flex-direction: column;
     align-items: stretch;
     text-align: left;
-    padding-left: max(1rem, env(safe-area-inset-left, 0px));
-    padding-right: max(1rem, env(safe-area-inset-right, 0px));
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
     transform: translateY(calc(-1 * var(--keyboard-lift, 0px)));
     transition: transform 0.55s var(--booking-ease);
   }
 
   .booking-welcome .booking-question {
-    width: 100%;
-    text-align: center;
+    width: var(--booking-welcome-control-width);
+    margin-inline: auto;
+    text-align: left;
   }
 
   .booking-welcome__field,
   .booking-welcome__q,
   .booking-welcome__field-label,
-  .booking-welcome__checkrow {
+  .booking-welcome__checkrow,
+  .booking-welcome__field-input,
+  .booking-welcome__date-btn {
     text-align: left;
   }
 
   .booking-welcome__field {
-    align-items: flex-start;
+    align-items: stretch;
     width: 100%;
   }
 
-  .booking-welcome__field-label {
-    width: 100%;
-  }
-
+  .booking-welcome__field-label,
   .booking-welcome__field-input,
   .booking-welcome__cal,
   .booking-welcome__bar,
   .booking-welcome__estimate {
-    width: 78%;
-    margin-inline: auto;
-    text-align: left;
+    width: 100%;
+    margin-inline: 0;
   }
 
   .booking-welcome__media img {
