@@ -390,6 +390,7 @@
               '</div>' +
               '<div class="booking-step__inner booking-step__inner--welcome">' +
                 '<h1 class="booking-question">Tell us about<br>your event.</h1>' +
+                '<p class="booking-welcome__subtitle">Let us know some basic info, you can adjust this later.</p>' +
                 '<div class="booking-welcome__card">' +
                   welcomeQuestion('email', 'Your email', welcomeField({
                     id: 'booking-welcome-email',
@@ -431,7 +432,6 @@
                   ) +
                   '<div class="booking-welcome__finish' + (welcomeReady() ? ' is-open' : '') + '">' +
                     '<div class="booking-welcome__finish-clip">' +
-                      '<p class="booking-welcome__notice">A rough guess is fine. You can adjust it next.</p>' +
                       '<button type="button" class="booking-ok booking-welcome__estimate' + (welcomeReady() ? ' is-ready' : '') + '" data-ok' + (welcomeReady() ? '' : ' disabled') + '>See what fits</button>' +
                       '<p class="booking-welcome__reassure">Free estimate, no commitment.</p>' +
                     '</div>' +

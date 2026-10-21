@@ -2117,15 +2117,19 @@
   color: #fff;
 }
 
-.booking-welcome__notice {
-  margin: 0.7rem 0 0;
+.booking-welcome__subtitle {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin: 0.5rem 0 0;
   font-family: var(--font-tagline);
-  font-size: 0.75rem;
+  font-size: 17px;
   font-weight: 500;
   line-height: 1.35;
   letter-spacing: -0.01em;
-  color: #fff;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
+  text-align: left;
+  color: var(--cream);
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.4);
 }
 
 .booking-welcome__reassure {
@@ -2630,7 +2634,8 @@
     transition: transform 0.55s var(--booking-ease);
   }
 
-  .booking-welcome .booking-question {
+  .booking-welcome .booking-question,
+  .booking-welcome__subtitle {
     width: var(--booking-welcome-control-width);
     margin-inline: auto;
     text-align: left;
