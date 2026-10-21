@@ -2546,7 +2546,7 @@
     height: 100%;
     min-height: 100lvh;
     margin: 0;
-    background-color: #999B8D;
+    background-color: #000;
     background-image: none;
     overflow: hidden;
   }
@@ -2564,7 +2564,9 @@
     justify-content: stretch;
   }
 
-  .page-booking-preview .preview-note {
+  .page-booking-preview .preview-note,
+  .page-booking-preview .booking-status,
+  .page-booking-preview .booking-home-bar {
     display: none;
   }
 
@@ -2630,6 +2632,7 @@
     text-align: left;
     padding-left: env(safe-area-inset-left, 0px);
     padding-right: env(safe-area-inset-right, 0px);
+    overflow: visible;
     transform: translateY(calc(-1 * var(--keyboard-lift, 0px)));
     transition: transform 0.55s var(--booking-ease);
   }

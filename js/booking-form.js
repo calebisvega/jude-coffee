@@ -6,6 +6,7 @@
 
   var welcomeScreenH = 0;
   var welcomeLiftTimer = 0;
+  var welcomeLiftSettleTimer = 0;
 
   function welcomeViewportBox() {
     var vv = window.visualViewport;
@@ -20,28 +21,46 @@
     return !!(active && active.closest && active.closest('.booking-step__inner--welcome'));
   }
 
+  function welcomeCalendarPanel() {
+    return document.querySelector('.booking-welcome__date-drop.is-open .booking-welcome__date-panel');
+  }
+
   function applyWelcomeLift() {
     var root = document.documentElement;
-    if (!welcomeFieldOpen() || window.innerWidth > 820) {
+    var panel = welcomeCalendarPanel();
+    var fieldOpen = welcomeFieldOpen();
+    if (window.innerWidth > 820 || (!panel && !fieldOpen)) {
       root.style.setProperty('--keyboard-lift', '0px');
       return;
     }
     var box = welcomeViewportBox();
-    var field = document.activeElement.closest('.booking-welcome__field') || document.activeElement;
-    var rect = field.getBoundingClientRect();
     var current = parseFloat(root.style.getPropertyValue('--keyboard-lift')) || 0;
-    var visibleBottom = box.top + box.height - 18;
-    var covered = Math.max(0, rect.bottom + current - visibleBottom);
-    var overlap = Math.max(0, welcomeScreenH - box.height);
-    var lift = Math.max(covered, Math.round(overlap * 0.22));
-    var minTop = box.top + 10;
-    if (rect.top + current - lift < minTop) lift = Math.max(0, rect.top + current - minTop);
+    var target = panel || document.activeElement.closest('.booking-welcome__field') || document.activeElement;
+    var rect = target.getBoundingClientRect();
+    var height = Math.max(rect.height, target.offsetHeight || 0);
+    var footer = document.querySelector('.booking-welcome__footer');
+    var limit = box.top + box.height - 16;
+    if (footer) limit = Math.min(limit, footer.getBoundingClientRect().top - 12);
+    var covered = Math.max(0, rect.top + height + current - limit);
+    var lift = covered;
+    if (!panel) {
+      var overlap = Math.max(0, welcomeScreenH - box.height);
+      lift = Math.max(covered, Math.round(overlap * 0.22));
+      var minTop = box.top + 10;
+      if (rect.top + current - lift < minTop) lift = Math.max(0, rect.top + current - minTop);
+    }
     root.style.setProperty('--keyboard-lift', Math.round(lift) + 'px');
   }
 
   function queueWelcomeLift() {
     window.clearTimeout(welcomeLiftTimer);
-    welcomeLiftTimer = window.setTimeout(applyWelcomeLift, 80);
+    welcomeLiftTimer = window.setTimeout(applyWelcomeLift, 40);
+  }
+
+  function queueWelcomeLiftSettled() {
+    queueWelcomeLift();
+    window.clearTimeout(welcomeLiftSettleTimer);
+    welcomeLiftSettleTimer = window.setTimeout(applyWelcomeLift, 680);
   }
 
   function lockWelcomeScreen() {
@@ -52,11 +71,11 @@
 
   function onWelcomeViewport() {
     var box = welcomeViewportBox();
-    if (welcomeFieldOpen() && welcomeScreenH - box.height > 140) {
+    if ((welcomeFieldOpen() || welcomeCalendarPanel()) && welcomeScreenH - box.height > 140) {
       queueWelcomeLift();
       return;
     }
-    if (!welcomeFieldOpen()) {
+    if (!welcomeFieldOpen() && !welcomeCalendarPanel()) {
       lockWelcomeScreen();
       document.documentElement.style.setProperty('--keyboard-lift', '0px');
     }
@@ -74,7 +93,7 @@
   document.addEventListener('focusout', function (event) {
     if (!(event.target.closest && event.target.closest('.booking-step__inner--welcome'))) return;
     window.setTimeout(function () {
-      if (!welcomeFieldOpen()) document.documentElement.style.setProperty('--keyboard-lift', '0px');
+      if (!welcomeFieldOpen() && !welcomeCalendarPanel()) document.documentElement.style.setProperty('--keyboard-lift', '0px');
     }, 40);
   });
   if (window.visualViewport) {
@@ -1614,6 +1633,7 @@
       calOpen = false;
       welcomeHold = '';
       paintCalendar();
+      queueWelcomeLiftSettled();
       if (currentStep() && currentStep().id === 'welcome') {
         syncWelcomeArrow();
         refreshEstimate();
@@ -1626,6 +1646,7 @@
       event.preventDefault();
       calOpen = !calOpen;
       paintCalendar();
+      queueWelcomeLiftSettled();
       return;
     }
     var shift = event.target.closest('[data-cal-shift]');
@@ -1635,6 +1656,7 @@
       var cur = currentCalMonth();
       calCursor = new Date(cur.getFullYear(), cur.getMonth() + dir, 1);
       paintCalendar();
+      queueWelcomeLiftSettled();
       return;
     }
     var nudge = event.target.closest('[data-step-for]');
