@@ -2543,10 +2543,10 @@
 @media (max-width: 820px) {
   html:has(.page-booking-preview),
   body.page-booking-preview {
-    height: auto;
-    min-height: var(--vvh, 100dvh);
+    height: 100%;
+    min-height: 100lvh;
     margin: 0;
-    background-color: #111;
+    background-color: #595B5C;
     background-image: url("/images/IMG_2992.jpg");
     background-repeat: no-repeat;
     background-position: center 46%;
@@ -2561,7 +2561,7 @@
     --booking-welcome-control-width: 80%;
     --booking-welcome-zoom: 1.08;
     padding: 0;
-    min-height: var(--vvh, 100dvh);
+    min-height: 100lvh;
     background: transparent;
     gap: 0;
     justify-content: stretch;
@@ -2573,18 +2573,18 @@
 
   .booking-phone {
     position: fixed;
-    top: var(--vv-top, 0px);
+    top: 0;
     right: 0;
     bottom: auto;
     left: 0;
     width: 100%;
-    height: var(--vvh, 100dvh);
-    min-height: var(--vvh, 100dvh);
+    height: max(100lvh, var(--screen-h, 100lvh));
+    min-height: 100lvh;
     border-radius: 0;
     padding: 0;
     margin: 0;
     box-shadow: none;
-    background-color: transparent;
+    background-color: #595B5C;
     background-image: url("/images/IMG_2992.jpg");
     background-repeat: no-repeat;
     background-position: center 46%;
@@ -2592,12 +2592,12 @@
   }
 
   body.page-booking-preview:has(.booking-app.is-welcome),
-  .booking-phone:has(.booking-app.is-welcome),
   .booking-app.is-welcome,
   .booking-welcome,
   .booking-welcome__stage {
     background-color: transparent;
     background-image: none;
+    overflow: visible;
   }
 
   .booking-app {
@@ -2610,11 +2610,17 @@
   }
 
   .booking-welcome__media {
-    position: absolute;
-    inset: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 100%;
-    min-height: 100%;
+    height: max(100lvh, var(--screen-h, 100lvh));
+    min-height: 100lvh;
+  }
+
+  .booking-step__inner--welcome {
+    transform: translateY(calc(-1 * var(--keyboard-lift, 0px)));
+    transition: transform 0.55s var(--booking-ease);
   }
 
   .booking-welcome__media img {

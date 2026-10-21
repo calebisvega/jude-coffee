@@ -4,20 +4,81 @@
   var calc = window.JudeBooking;
   if (!calc) return;
 
-  function syncWelcomeViewport() {
+  var welcomeScreenH = 0;
+  var welcomeLiftTimer = 0;
+
+  function welcomeViewportBox() {
     var vv = window.visualViewport;
-    var height = vv ? vv.height : window.innerHeight;
-    var top = vv ? vv.offsetTop : 0;
-    var root = document.documentElement;
-    root.style.setProperty('--vvh', Math.round(height) + 'px');
-    root.style.setProperty('--vv-top', Math.round(top) + 'px');
+    return {
+      height: vv ? vv.height : window.innerHeight,
+      top: vv ? vv.offsetTop : 0
+    };
   }
-  syncWelcomeViewport();
-  window.addEventListener('resize', syncWelcomeViewport);
-  window.addEventListener('orientationchange', syncWelcomeViewport);
+
+  function welcomeFieldOpen() {
+    var active = document.activeElement;
+    return !!(active && active.closest && active.closest('.booking-step__inner--welcome'));
+  }
+
+  function applyWelcomeLift() {
+    var root = document.documentElement;
+    if (!welcomeFieldOpen() || window.innerWidth > 820) {
+      root.style.setProperty('--keyboard-lift', '0px');
+      return;
+    }
+    var box = welcomeViewportBox();
+    var field = document.activeElement.closest('.booking-welcome__field') || document.activeElement;
+    var rect = field.getBoundingClientRect();
+    var current = parseFloat(root.style.getPropertyValue('--keyboard-lift')) || 0;
+    var visibleBottom = box.top + box.height - 18;
+    var covered = Math.max(0, rect.bottom + current - visibleBottom);
+    var overlap = Math.max(0, welcomeScreenH - box.height);
+    var lift = Math.max(covered, Math.round(overlap * 0.22));
+    var minTop = box.top + 10;
+    if (rect.top + current - lift < minTop) lift = Math.max(0, rect.top + current - minTop);
+    root.style.setProperty('--keyboard-lift', Math.round(lift) + 'px');
+  }
+
+  function queueWelcomeLift() {
+    window.clearTimeout(welcomeLiftTimer);
+    welcomeLiftTimer = window.setTimeout(applyWelcomeLift, 80);
+  }
+
+  function lockWelcomeScreen() {
+    var box = welcomeViewportBox();
+    welcomeScreenH = box.height;
+    document.documentElement.style.setProperty('--screen-h', Math.round(welcomeScreenH) + 'px');
+  }
+
+  function onWelcomeViewport() {
+    var box = welcomeViewportBox();
+    if (welcomeFieldOpen() && welcomeScreenH - box.height > 140) {
+      queueWelcomeLift();
+      return;
+    }
+    if (!welcomeFieldOpen()) {
+      lockWelcomeScreen();
+      document.documentElement.style.setProperty('--keyboard-lift', '0px');
+    }
+  }
+
+  lockWelcomeScreen();
+  window.addEventListener('resize', onWelcomeViewport);
+  window.addEventListener('orientationchange', function () {
+    welcomeScreenH = 0;
+    lockWelcomeScreen();
+  });
+  document.addEventListener('focusin', function (event) {
+    if (event.target.closest && event.target.closest('.booking-step__inner--welcome')) queueWelcomeLift();
+  });
+  document.addEventListener('focusout', function (event) {
+    if (!(event.target.closest && event.target.closest('.booking-step__inner--welcome'))) return;
+    window.setTimeout(function () {
+      if (!welcomeFieldOpen()) document.documentElement.style.setProperty('--keyboard-lift', '0px');
+    }, 40);
+  });
   if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', syncWelcomeViewport);
-    window.visualViewport.addEventListener('scroll', syncWelcomeViewport);
+    window.visualViewport.addEventListener('resize', onWelcomeViewport);
   }
 
   var CAPACITY_NOTE = 'For this many guests in this window, we\'d usually recommend more time or an extra staff member — we\'ll follow up with the right setup before confirming.';
