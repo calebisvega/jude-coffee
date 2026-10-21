@@ -4,6 +4,22 @@
   var calc = window.JudeBooking;
   if (!calc) return;
 
+  function syncWelcomeViewport() {
+    var vv = window.visualViewport;
+    var height = vv ? vv.height : window.innerHeight;
+    var top = vv ? vv.offsetTop : 0;
+    var root = document.documentElement;
+    root.style.setProperty('--vvh', Math.round(height) + 'px');
+    root.style.setProperty('--vv-top', Math.round(top) + 'px');
+  }
+  syncWelcomeViewport();
+  window.addEventListener('resize', syncWelcomeViewport);
+  window.addEventListener('orientationchange', syncWelcomeViewport);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', syncWelcomeViewport);
+    window.visualViewport.addEventListener('scroll', syncWelcomeViewport);
+  }
+
   var CAPACITY_NOTE = 'For this many guests in this window, we\'d usually recommend more time or an extra staff member — we\'ll follow up with the right setup before confirming.';
 
   var ADD_ONS = [
