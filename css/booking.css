@@ -2723,3 +2723,212 @@
     padding-top: calc(env(safe-area-inset-top, 0px) + 8.85rem);
   }
 }
+
+.booking-step.booking-quote {
+  justify-content: stretch;
+  padding: 0;
+  background: #000;
+  overflow: hidden;
+}
+
+.booking-quote__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.booking-quote__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.booking-quote__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, transparent 34%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.78) 0%, transparent 46%),
+    rgba(0, 0, 0, 0.62);
+  pointer-events: none;
+}
+
+.booking-quote__inner {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  width: min(86%, 22.5rem);
+  height: 100%;
+  margin-inline: auto;
+  padding: calc(env(safe-area-inset-top, 0px) + 4.25rem) 0 calc(env(safe-area-inset-bottom, 0px) + 6.4rem);
+  overflow: auto;
+}
+
+.booking-quote .booking-question {
+  width: 100%;
+  font-size: var(--booking-welcome-size);
+  line-height: var(--booking-welcome-leading);
+  letter-spacing: var(--booking-welcome-tracking);
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.35);
+}
+
+.booking-quote__switch {
+  --quote-i: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 1.35rem 0 0;
+  padding: 0.28rem;
+  border: 1px solid rgba(255, 255, 255, 0.46);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.booking-quote__thumb {
+  position: absolute;
+  z-index: 0;
+  top: 0.28rem;
+  bottom: 0.28rem;
+  left: 0.28rem;
+  width: calc((100% - 0.56rem) / 3);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+  transform: translateX(calc(var(--quote-i) * 100%));
+  transition: transform 0.45s var(--booking-ease);
+}
+
+.booking-quote__opt {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 0 0.2rem;
+  height: 2.45rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
+  font-family: var(--font-tagline);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+}
+
+.booking-quote__opt.is-on {
+  color: #fff;
+}
+
+.booking-quote__card {
+  margin-top: 1.15rem;
+  padding: 1.15rem 1.1rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 1.15rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.booking-quote__body {
+  transition: opacity 0.28s var(--booking-ease);
+}
+
+.booking-quote__body.is-out {
+  opacity: 0;
+}
+
+.booking-quote__name {
+  margin: 0;
+  font-family: var(--font-tagline);
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: #fff;
+}
+
+.booking-quote__blurb {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-tagline);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--cream);
+}
+
+.booking-quote__price {
+  margin: 0.85rem 0 0;
+  font-family: var(--font-tagline);
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #fff;
+}
+
+.booking-quote__price span {
+  margin-left: 0.3rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: color-mix(in srgb, var(--cream) 82%, transparent);
+}
+
+.booking-quote__rule {
+  height: 1px;
+  margin: 0.9rem 0 0.85rem;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.booking-quote__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.booking-quote__list li {
+  position: relative;
+  padding-left: 1.4rem;
+  font-family: var(--font-tagline);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.booking-quote__list li::before {
+  content: "";
+  position: absolute;
+  left: 0.05rem;
+  top: 0.32rem;
+  width: 0.62rem;
+  height: 0.34rem;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg);
+}
+
+.booking-quote__budget {
+  display: block;
+  margin-top: 1rem;
+  text-align: center;
+  font-family: var(--font-tagline);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--cream);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.booking-quote .booking-error {
+  color: #fff;
+}
+

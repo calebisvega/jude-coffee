@@ -447,15 +447,18 @@
         );
         break;
       case 'path':
+        if (!state.tier || !tierById(state.tier)) state.tier = 'lean';
         node = el(
-          '<section class="booking-step booking-step--fill" data-step="path">' +
-            '<div class="booking-step__inner booking-step__inner--wide booking-step__inner--fill">' +
-              questionTitle('We\'ve got options.') +
-              '<div class="booking-path-list" role="listbox" aria-label="Setup">' +
-                TIER_CARDS.map(function (item) { return tierRow(item); }).join('') +
-              '</div>' +
-              customQuoteBox() +
-              budgetNote() +
+          '<section class="booking-step booking-quote" data-step="path">' +
+            '<span class="booking-quote__media" aria-hidden="true">' +
+              '<img src="/images/IMG_2992.jpg" alt="" width="1037" height="684">' +
+              '<span class="booking-quote__shade"></span>' +
+            '</span>' +
+            '<div class="booking-quote__inner">' +
+              '<h1 class="booking-question">Your quote<br>customized to<br>your event.</h1>' +
+              quoteSwitch() +
+              quoteCard(tierById(state.tier)) +
+              '<a class="booking-quote__budget" href="' + COLLAB_MAILTO + '">or let us know your budget.</a>' +
               '<p class="booking-error" data-error hidden></p>' +
             '</div>' +
           '</section>'
@@ -581,6 +584,88 @@
         '</span>' +
       '</' + tag + '>'
     );
+  }
+
+  function quoteSwitch() {
+    var active = state.tier;
+    var index = 0;
+    TIER_CARDS.forEach(function (item, i) {
+      if (item.id === active) index = i;
+    });
+    return (
+      '<div class="booking-quote__switch" style="--quote-i:' + index + '" role="tablist" aria-label="Setup">' +
+        '<span class="booking-quote__thumb" aria-hidden="true"></span>' +
+        TIER_CARDS.map(function (item) {
+          var on = item.id === active;
+          return '<button type="button" class="booking-quote__opt' + (on ? ' is-on' : '') + '" role="tab" aria-selected="' + (on ? 'true' : 'false') + '" data-tier="' + item.id + '">' + escapeHtml(item.title) + '</button>';
+        }).join('') +
+      '</div>'
+    );
+  }
+
+  function quoteAmountText() {
+    var q = quote();
+    var tier = state.tier || 'lean';
+    if (q.ready) return { amount: calc.formatMoney(q.amount), caption: 'total' };
+    return { amount: calc.formatMoney(calc.startingAmount(tier)), caption: 'starts at' };
+  }
+
+  function quoteCard(item) {
+    var price = quoteAmountText();
+    return (
+      '<article class="booking-quote__card">' +
+        '<div class="booking-quote__body">' +
+          '<h2 class="booking-quote__name">' + escapeHtml(item.title) + '</h2>' +
+          '<p class="booking-quote__blurb">' + escapeHtml(item.blurb) + '</p>' +
+          '<p class="booking-quote__price">' + price.amount + ' <span>' + price.caption + '</span></p>' +
+          '<div class="booking-quote__rule"></div>' +
+          '<ul class="booking-quote__list">' +
+            item.includes.map(function (line) { return '<li>' + escapeHtml(line) + '</li>'; }).join('') +
+          '</ul>' +
+        '</div>' +
+      '</article>'
+    );
+  }
+
+  function paintQuote(root, animate) {
+    if (!root) return;
+    var item = tierById(state.tier) || TIER_CARDS[0];
+    var index = 0;
+    TIER_CARDS.forEach(function (card, i) {
+      if (card.id === item.id) index = i;
+    });
+    var sw = root.querySelector('.booking-quote__switch');
+    if (sw) sw.style.setProperty('--quote-i', String(index));
+    Array.prototype.forEach.call(root.querySelectorAll('.booking-quote__opt'), function (btn) {
+      var on = btn.getAttribute('data-tier') === item.id;
+      btn.classList.toggle('is-on', on);
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    function apply() {
+      var price = quoteAmountText();
+      var name = root.querySelector('.booking-quote__name');
+      var blurb = root.querySelector('.booking-quote__blurb');
+      var amount = root.querySelector('.booking-quote__price');
+      var list = root.querySelector('.booking-quote__list');
+      if (name) name.textContent = item.title;
+      if (blurb) blurb.textContent = item.blurb;
+      if (amount) amount.innerHTML = price.amount + ' <span>' + price.caption + '</span>';
+      if (list) {
+        list.innerHTML = item.includes.map(function (line) {
+          return '<li>' + escapeHtml(line) + '</li>';
+        }).join('');
+      }
+    }
+    var body = root.querySelector('.booking-quote__body');
+    if (animate && body) {
+      body.classList.add('is-out');
+      window.setTimeout(function () {
+        apply();
+        body.classList.remove('is-out');
+      }, 160);
+      return;
+    }
+    apply();
   }
 
   function tierRow(item) {
@@ -1712,17 +1797,19 @@
     }
     var path = event.target.closest('[data-step="path"]');
     if (event.target.closest('a[href^="mailto:"]')) return;
-    var tierBtn = event.target.closest('[data-tier]');
+    var tierBtn = event.target.closest('.booking-quote__opt');
     if (tierBtn && path) {
       event.preventDefault();
       var nextTier = tierBtn.getAttribute('data-tier');
-      Array.prototype.forEach.call(stage.querySelectorAll('[data-step="path"] [data-tier]'), function (card) {
-        var on = card === tierBtn;
-        card.classList.toggle('is-selected', on);
-        if (card.getAttribute('role') === 'option') card.setAttribute('aria-selected', on ? 'true' : 'false');
-      });
-      setTier(nextTier, true);
-      goSoon(1);
+      if (!nextTier || nextTier === state.tier) return;
+      var reshuffle = (state.tier === 'premium') !== (nextTier === 'premium');
+      if (reshuffle) {
+        setTier(nextTier, true);
+        return;
+      }
+      setTier(nextTier, false);
+      paintQuote(path, true);
+      syncChrome();
       return;
     }
     var addon = event.target.closest('[data-addon]');
