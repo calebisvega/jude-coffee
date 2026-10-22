@@ -15,9 +15,18 @@
   --booking-question-size: 1.5rem;
   --booking-welcome-size: 65px;
   --booking-welcome-leading: 54px;
+  --booking-welcome-sub: 15px;
+  --booking-welcome-label: 17px;
+  --booking-welcome-control-type: 17px;
+  --booking-welcome-control-height: 46px;
+  --booking-welcome-note: 13px;
+  --booking-welcome-footer-size: 12px;
+  --booking-welcome-sub-gap: 20px;
+  --booking-welcome-block-gap: 22px;
+  --booking-welcome-check-gap: 8px;
+  --booking-welcome-button-gap: 16px;
   --booking-welcome-pair-gap: 0.35rem;
   --booking-welcome-tracking: -0.04em;
-  --booking-welcome-sub: 0.5625rem;
   --booking-ok-radius: 999px;
   --booking-ok-size: 2.75rem;
   --booking-welcome-ok-size: 1rem;
@@ -1648,9 +1657,9 @@
 .booking-welcome__card {
   --welcome-scale: 1;
   --welcome-space: 0.9rem;
-  --welcome-label-gap: 0.28rem;
+  --welcome-label-gap: 8px;
   width: var(--booking-welcome-control-width);
-  margin-top: 1.15rem;
+  margin-top: var(--booking-welcome-block-gap);
   padding: 0;
   background: transparent;
   color: #fff;
@@ -1703,13 +1712,13 @@
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  margin: 0 0 0.55rem;
+  margin: 0 0 var(--booking-welcome-check-gap);
   padding: 0;
   border: 0;
   background: none;
   color: #fff;
   font-family: var(--font-tagline);
-  font-size: 0.95rem;
+  font-size: var(--booking-welcome-label);
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -1730,8 +1739,8 @@
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  width: 1.15rem;
-  height: 1.15rem;
+  width: 18px;
+  height: 18px;
   border-radius: 999px;
   background: var(--sage);
   color: #fff;
@@ -1771,7 +1780,7 @@
 
 .booking-welcome__field-label {
   font-family: var(--font-tagline);
-  font-size: calc(1rem * var(--welcome-scale));
+  font-size: var(--booking-welcome-label);
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -1782,17 +1791,17 @@
 
 .booking-welcome__reveal[data-welcome-reveal="date"] .booking-welcome__field,
 .booking-welcome__reveal[data-welcome-reveal="zip"] .booking-welcome__field {
-  margin-top: 1.5rem;
+  margin-top: 0;
 }
 
 .booking-welcome__field-input {
   box-sizing: border-box;
   width: 100%;
-  height: max(2.35rem, calc(2.45rem * var(--welcome-scale)));
+  height: var(--booking-welcome-control-height);
   margin: 0;
   padding: 0 0.7rem;
   font-family: var(--font-tagline);
-  font-size: max(16px, calc(18px * var(--welcome-scale)));
+  font-size: max(16px, var(--booking-welcome-control-type));
   font-weight: 500;
   letter-spacing: 0;
   line-height: 1;
@@ -1844,7 +1853,7 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  height: max(2.35rem, calc(2.45rem * var(--welcome-scale)));
+  height: var(--booking-welcome-control-height);
   margin: 0;
   padding: 0 0.7rem;
   border: 1px solid rgba(44, 44, 44, 0.18);
@@ -1853,7 +1862,7 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
   color: var(--charcoal);
   font-family: var(--font-tagline);
-  font-size: max(16px, calc(18px * var(--welcome-scale)));
+  font-size: max(16px, var(--booking-welcome-control-type));
   font-weight: 500;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -2121,11 +2130,11 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  margin: 1.75rem 0 0.85rem;
+  margin: var(--booking-welcome-sub-gap) 0 0;
   font-family: var(--font-tagline);
-  font-size: 12px;
+  font-size: var(--booking-welcome-sub);
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.4;
   letter-spacing: -0.01em;
   text-align: left;
   color: var(--cream);
@@ -2133,9 +2142,9 @@
 }
 
 .booking-welcome__reassure {
-  margin: 0.55rem 0 0;
+  margin: 10px 0 0;
   font-family: var(--font-tagline);
-  font-size: 0.72rem;
+  font-size: var(--booking-welcome-note);
   font-weight: 500;
   line-height: 1.3;
   letter-spacing: 0.01em;
@@ -2146,11 +2155,16 @@
 
 .booking-welcome__estimate {
   display: flex;
+  align-items: center;
   width: 100%;
   justify-content: center;
-  min-height: 44px;
-  margin-top: 0.85rem;
-  padding: 0.7rem 1.15rem;
+  min-height: var(--booking-welcome-control-height);
+  margin-top: var(--booking-welcome-button-gap);
+  padding: 0 1.15rem;
+  font-family: var(--font-tagline);
+  font-size: var(--booking-welcome-control-type);
+  font-weight: 500;
+  letter-spacing: -0.02em;
   border: 0;
   border-radius: 0.4rem;
   background: var(--sage);
@@ -2213,7 +2227,7 @@
 .booking-welcome__footer-tagline {
   margin: 0;
   font-family: var(--font-tagline);
-  font-size: 0.72rem;
+  font-size: var(--booking-welcome-footer-size);
   font-weight: 500;
   line-height: 1.3;
   letter-spacing: 0.01em;
@@ -2673,7 +2687,7 @@
   }
 
   .booking-welcome__card {
-    margin-top: 2.25rem;
+    margin-top: var(--booking-welcome-block-gap);
     margin-inline: auto;
   }
 
