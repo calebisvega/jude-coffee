@@ -439,10 +439,6 @@
                 '</div>' +
               '</div>' +
             '</div>' +
-            '<footer class="booking-welcome__footer">' +
-              '<a href="mailto:info@judecoffee.com" class="booking-welcome__footer-email">info@judecoffee.com</a>' +
-              '<p class="booking-welcome__footer-tagline">Coffee Anytime Coffee Anywhere</p>' +
-            '</footer>' +
           '</section>'
         );
         break;
@@ -611,10 +607,19 @@
   function partyBits() {
     var hours = Math.max(0, Math.round(parseFloat(state.durationHours) || 0));
     var guests = Math.max(0, parseInt(state.guestCount, 10) || 0);
-    return {
-      hours: hours === 1 ? '1 hour' : hours + ' hours',
-      guests: guests === 1 ? '1 guest' : guests + ' guests'
-    };
+    return { hours: String(hours), guests: String(guests) };
+  }
+
+  function stepGuestRange(dir) {
+    var current = state.guestRange || rangeForCount(parseInt(state.guestCount, 10) || 0);
+    var index = 0;
+    var i;
+    for (i = 0; i < GUEST_RANGES.length; i++) {
+      if (GUEST_RANGES[i].id === current) index = i;
+    }
+    index = Math.max(0, Math.min(GUEST_RANGES.length - 1, index + dir));
+    state.guestRange = GUEST_RANGES[index].id;
+    state.guestCount = String(GUEST_RANGES[index].guests);
   }
 
   function rangeForCount(n) {
@@ -658,22 +663,26 @@
         '<div class="booking-quote__body">' +
           '<h2 class="booking-quote__name">' + escapeHtml(item.title) + '</h2>' +
           '<p class="booking-quote__blurb">' + escapeHtml(item.blurb) + '</p>' +
-          '<p class="booking-quote__price">' +
+          '<div class="booking-quote__price">' +
             '<span class="booking-quote__amount">' + quoteAmountText() + '</span>' +
-            '<span class="booking-quote__for">for ' +
-              '<span class="booking-quote__nudge"><span class="booking-quote__hours">' + party.hours + '</span>' +
+            '<div class="booking-quote__party">' +
+              '<div class="booking-quote__step">' +
+                '<span class="booking-quote__hours">' + party.hours + '</span>' +
                 quoteNudge('hours', 'Add an hour', 'Remove an hour') +
-              '</span>' +
-              ' and ' +
-              '<span class="booking-quote__nudge"><span class="booking-quote__guests">' + party.guests + '</span>' +
-                quoteNudge('guests', 'Add a guest', 'Remove a guest') +
-              '</span>' +
-            '</span>' +
-          '</p>' +
+                '<span class="booking-quote__unit">hrs</span>' +
+              '</div>' +
+              '<div class="booking-quote__step">' +
+                '<span class="booking-quote__guests">' + party.guests + '</span>' +
+                quoteNudge('guests', 'More guests', 'Fewer guests') +
+                '<span class="booking-quote__unit">guests</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
           '<div class="booking-quote__rule"></div>' +
           '<ul class="booking-quote__list">' +
             item.includes.map(function (line) { return '<li>' + escapeHtml(line) + '</li>'; }).join('') +
           '</ul>' +
+          '<button type="button" class="booking-quote__continue" data-ok>Continue</button>' +
         '</div>' +
       '</article>'
     );
@@ -914,8 +923,8 @@
               '<div class="booking-cal__nav">' +
                 '<p class="booking-cal__label">' + label + '</p>' +
                 '<div class="booking-cal__shifts">' +
-                  '<button type="button" class="booking-stepper__btn" data-cal-shift="-1" aria-label="Previous month">' + chevron('down') + '</button>' +
-                  '<button type="button" class="booking-stepper__btn" data-cal-shift="1" aria-label="Next month">' + chevron('up') + '</button>' +
+                  '<button type="button" class="booking-stepper__btn" data-cal-shift="-1" aria-label="Previous month">' + chevron('up') + '</button>' +
+                  '<button type="button" class="booking-stepper__btn" data-cal-shift="1" aria-label="Next month">' + chevron('down') + '</button>' +
                 '</div>' +
               '</div>' +
               '<div class="booking-cal__week" aria-hidden="true"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>' +
@@ -1888,10 +1897,7 @@
         state.durationHours = String(hours);
         state.hoursChoice = hours >= 4 ? '4-plus' : String(hours);
       } else {
-        var guests = (parseInt(state.guestCount, 10) || 1) + dir;
-        guests = Math.max(1, Math.min(500, guests));
-        state.guestCount = String(guests);
-        state.guestRange = rangeForCount(guests);
+        stepGuestRange(dir);
       }
       paintQuote(path, false);
       var welcome = stage.querySelector('[data-step="welcome"]');

@@ -2201,7 +2201,7 @@
   width: 100%;
   max-width: 100%;
   margin-inline: 0;
-  padding: calc(env(safe-area-inset-top, 0px) + var(--booking-welcome-offset)) 0.5rem 4.4rem;
+  padding: calc(env(safe-area-inset-top, 0px) + var(--booking-welcome-offset)) 0.5rem 1.5rem;
   overflow-x: hidden;
   overflow-y: auto;
   text-align: left;
@@ -2563,9 +2563,9 @@
   }
 
   .page-booking-preview {
-    --booking-welcome-size: 62px;
-    --booking-welcome-leading: 51px;
-    --booking-welcome-offset: 11.75rem;
+    --booking-welcome-size: 64px;
+    --booking-welcome-leading: 53px;
+    --booking-welcome-offset: 7.5rem;
     --booking-welcome-control-width: 80%;
     --booking-welcome-zoom: 1;
     padding: 0;
@@ -2776,7 +2776,7 @@
   position: relative;
   z-index: 1;
   box-sizing: border-box;
-  width: min(86%, 22.5rem);
+  width: min(92%, 24rem);
   height: 100%;
   margin-inline: auto;
   padding: calc(env(safe-area-inset-top, 0px) + 4.25rem) 0 calc(env(safe-area-inset-bottom, 0px) + 7.75rem);
@@ -2855,7 +2855,7 @@
 
 .booking-quote__card {
   margin-top: 1.15rem;
-  padding: 1.15rem 1.1rem 1.2rem;
+  padding: 1.35rem 1.15rem 1.15rem;
   border: 1px solid rgba(255, 255, 255, 0.62);
   border-radius: 1.15rem;
   background: rgba(255, 255, 255, 0.08);
@@ -2894,10 +2894,43 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  margin: 0.85rem 0 0;
+  gap: 0.85rem;
+  margin: 1.05rem 0 0;
   font-family: var(--font-tagline);
   color: #fff;
+}
+
+.booking-quote__party {
+  display: grid;
+  gap: 0.55rem;
+  margin-left: auto;
+}
+
+.booking-quote__step {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.booking-quote__hours,
+.booking-quote__guests {
+  min-width: 1.6rem;
+  font-size: 1.65rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-align: right;
+}
+
+.booking-quote__unit {
+  min-width: 3.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--cream) 88%, transparent);
 }
 
 .booking-quote__amount {
@@ -2934,8 +2967,8 @@
 .booking-quote__nudge-btns button {
   display: grid;
   place-items: center;
-  width: 1.15rem;
-  height: 0.72rem;
+  width: 44px;
+  height: 32px;
   margin: 0;
   padding: 0;
   border: 0;
@@ -2946,8 +2979,8 @@
 }
 
 .booking-quote__nudge-btns svg {
-  width: 0.85rem;
-  height: 0.85rem;
+  width: 1.35rem;
+  height: 1.35rem;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
@@ -2973,6 +3006,25 @@
   padding: 0;
   display: grid;
   gap: 0.55rem;
+}
+
+.booking-quote__continue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 46px;
+  margin: 1.15rem 0 0;
+  padding: 0 1rem;
+  border: 0;
+  border-radius: 0.4rem;
+  background: var(--sage);
+  color: #fff;
+  font-family: var(--font-tagline);
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  cursor: pointer;
 }
 
 .booking-quote__list li {
