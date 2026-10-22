@@ -447,7 +447,7 @@
         );
         break;
       case 'path':
-        if (!state.tier || !tierById(state.tier)) state.tier = 'lean';
+        if (!state.tier || !tierById(state.tier)) state.tier = 'standard';
         node = el(
           '<section class="booking-step booking-quote" data-step="path">' +
             '<span class="booking-quote__media" aria-hidden="true">' +
@@ -586,16 +586,21 @@
     );
   }
 
+  function quoteTiers() {
+    return ['standard', 'premium', 'lean'].map(function (id) { return tierById(id); });
+  }
+
   function quoteSwitch() {
     var active = state.tier;
+    var tiers = quoteTiers();
     var index = 0;
-    TIER_CARDS.forEach(function (item, i) {
+    tiers.forEach(function (item, i) {
       if (item.id === active) index = i;
     });
     return (
-      '<div class="booking-quote__switch" style="--quote-i:' + index + '" role="tablist" aria-label="Setup">' +
-        '<span class="booking-quote__thumb" aria-hidden="true"></span>' +
-        TIER_CARDS.map(function (item) {
+      '<div class="booking-quote__switch" role="tablist" aria-label="Setup">' +
+        '<span class="booking-quote__thumb" style="--quote-i:' + index + '" aria-hidden="true"></span>' +
+        tiers.map(function (item) {
           var on = item.id === active;
           return '<button type="button" class="booking-quote__opt' + (on ? ' is-on' : '') + '" role="tab" aria-selected="' + (on ? 'true' : 'false') + '" data-tier="' + item.id + '">' + escapeHtml(item.title) + '</button>';
         }).join('') +
@@ -603,21 +608,68 @@
     );
   }
 
+  function partyBits() {
+    var hours = Math.max(0, Math.round(parseFloat(state.durationHours) || 0));
+    var guests = Math.max(0, parseInt(state.guestCount, 10) || 0);
+    return {
+      hours: hours === 1 ? '1 hour' : hours + ' hours',
+      guests: guests === 1 ? '1 guest' : guests + ' guests'
+    };
+  }
+
+  function rangeForCount(n) {
+    if (n < 25) return 'under-25';
+    if (n <= 50) return '25-50';
+    if (n <= 75) return '51-75';
+    if (n <= 100) return '76-100';
+    return '100-plus';
+  }
+
+  function quoteNudge(key, upLabel, downLabel) {
+    return (
+      '<span class="booking-quote__nudge-btns">' +
+        '<button type="button" data-quote-step="' + key + '" data-quote-dir="1" aria-label="' + upLabel + '">' + chevron('up') + '</button>' +
+        '<button type="button" data-quote-step="' + key + '" data-quote-dir="-1" aria-label="' + downLabel + '">' + chevron('down') + '</button>' +
+      '</span>'
+    );
+  }
+
+  function amountForTier(tier) {
+    var q = calc.calculate({
+      tier: tier,
+      guestCount: state.guestCount,
+      durationHours: state.durationHours,
+      addOns: tier === 'premium' ? state.addOns : [],
+      locationMiles: state.locationMiles,
+      budget: state.budget
+    });
+    if (q.ready) return calc.formatMoney(q.amount);
+    return calc.formatMoney(calc.startingAmount(tier));
+  }
+
   function quoteAmountText() {
-    var q = quote();
-    var tier = state.tier || 'lean';
-    if (q.ready) return { amount: calc.formatMoney(q.amount), caption: 'total' };
-    return { amount: calc.formatMoney(calc.startingAmount(tier)), caption: 'starts at' };
+    return amountForTier(state.tier || 'standard');
   }
 
   function quoteCard(item) {
-    var price = quoteAmountText();
+    var party = partyBits();
     return (
       '<article class="booking-quote__card">' +
         '<div class="booking-quote__body">' +
           '<h2 class="booking-quote__name">' + escapeHtml(item.title) + '</h2>' +
           '<p class="booking-quote__blurb">' + escapeHtml(item.blurb) + '</p>' +
-          '<p class="booking-quote__price">' + price.amount + ' <span>' + price.caption + '</span></p>' +
+          '<p class="booking-quote__price">' +
+            '<span class="booking-quote__amount">' + quoteAmountText() + '</span>' +
+            '<span class="booking-quote__for">for ' +
+              '<span class="booking-quote__nudge"><span class="booking-quote__hours">' + party.hours + '</span>' +
+                quoteNudge('hours', 'Add an hour', 'Remove an hour') +
+              '</span>' +
+              ' and ' +
+              '<span class="booking-quote__nudge"><span class="booking-quote__guests">' + party.guests + '</span>' +
+                quoteNudge('guests', 'Add a guest', 'Remove a guest') +
+              '</span>' +
+            '</span>' +
+          '</p>' +
           '<div class="booking-quote__rule"></div>' +
           '<ul class="booking-quote__list">' +
             item.includes.map(function (line) { return '<li>' + escapeHtml(line) + '</li>'; }).join('') +
@@ -629,27 +681,35 @@
 
   function paintQuote(root, animate) {
     if (!root) return;
-    var item = tierById(state.tier) || TIER_CARDS[0];
+    var item = tierById(state.tier) || quoteTiers()[0];
+    var tiers = quoteTiers();
     var index = 0;
-    TIER_CARDS.forEach(function (card, i) {
+    tiers.forEach(function (card, i) {
       if (card.id === item.id) index = i;
     });
-    var sw = root.querySelector('.booking-quote__switch');
-    if (sw) sw.style.setProperty('--quote-i', String(index));
+    var thumb = root.querySelector('.booking-quote__thumb');
+    if (thumb) thumb.style.setProperty('--quote-i', String(index));
     Array.prototype.forEach.call(root.querySelectorAll('.booking-quote__opt'), function (btn) {
       var on = btn.getAttribute('data-tier') === item.id;
       btn.classList.toggle('is-on', on);
       btn.setAttribute('aria-selected', on ? 'true' : 'false');
     });
     function apply() {
-      var price = quoteAmountText();
+      var party = partyBits();
       var name = root.querySelector('.booking-quote__name');
       var blurb = root.querySelector('.booking-quote__blurb');
-      var amount = root.querySelector('.booking-quote__price');
+      var amount = root.querySelector('.booking-quote__amount');
+      var hours = root.querySelector('.booking-quote__hours');
+      var guests = root.querySelector('.booking-quote__guests');
       var list = root.querySelector('.booking-quote__list');
       if (name) name.textContent = item.title;
       if (blurb) blurb.textContent = item.blurb;
-      if (amount) amount.innerHTML = price.amount + ' <span>' + price.caption + '</span>';
+      if (amount) amount.textContent = quoteAmountText();
+      Array.prototype.forEach.call(root.querySelectorAll('.booking-quote__opt'), function (btn) {
+        btn.setAttribute('data-amount', amountForTier(btn.getAttribute('data-tier')));
+      });
+      if (hours) hours.textContent = party.hours;
+      if (guests) guests.textContent = party.guests;
       if (list) {
         list.innerHTML = item.includes.map(function (line) {
           return '<li>' + escapeHtml(line) + '</li>';
@@ -666,6 +726,25 @@
       return;
     }
     apply();
+  }
+
+  function syncHiddenSteps() {
+    var desired = buildSteps();
+    var pathNode = stage.querySelector('[data-step="path"]');
+    steps = desired;
+    index = desired.findIndex(function (step) { return step.id === 'path'; });
+    if (index < 0) index = 0;
+    desired.forEach(function (step) {
+      if (step.id === 'path') return;
+      if (!stage.querySelector('[data-step="' + step.id + '"]')) stage.appendChild(renderStep(step));
+    });
+    Array.prototype.forEach.call(stage.querySelectorAll('.booking-step'), function (node) {
+      var id = node.getAttribute('data-step');
+      if (id === 'path') return;
+      var keep = desired.some(function (step) { return step.id === id; });
+      if (!keep) node.remove();
+    });
+    if (pathNode) pathNode.classList.add('is-active');
   }
 
   function tierRow(item) {
@@ -1396,6 +1475,7 @@
     requestAnimationFrame(function () {
       next.classList.add('is-active');
       next.classList.remove('is-exit-back');
+      if (steps[to] && steps[to].id === 'path') paintQuote(next, false);
       syncChrome();
       window.setTimeout(function () {
         current.classList.remove('is-exit-back');
@@ -1797,17 +1877,41 @@
     }
     var path = event.target.closest('[data-step="path"]');
     if (event.target.closest('a[href^="mailto:"]')) return;
+    var nudge = event.target.closest('[data-quote-step]');
+    if (nudge && path) {
+      event.preventDefault();
+      var key = nudge.getAttribute('data-quote-step');
+      var dir = Number(nudge.getAttribute('data-quote-dir')) || 0;
+      if (key === 'hours') {
+        var hours = Math.round(parseFloat(state.durationHours) || 1) + dir;
+        hours = Math.max(1, Math.min(12, hours));
+        state.durationHours = String(hours);
+        state.hoursChoice = hours >= 4 ? '4-plus' : String(hours);
+      } else {
+        var guests = (parseInt(state.guestCount, 10) || 1) + dir;
+        guests = Math.max(1, Math.min(500, guests));
+        state.guestCount = String(guests);
+        state.guestRange = rangeForCount(guests);
+      }
+      paintQuote(path, false);
+      var welcome = stage.querySelector('[data-step="welcome"]');
+      if (welcome) {
+        var guestChip = welcome.querySelector('[data-guest-range]');
+        var lengthChip = welcome.querySelector('[data-length]');
+        if (guestChip) paintWelcomeChips(guestChip.closest('.booking-welcome__bar'), state.guestRange);
+        if (lengthChip) paintWelcomeChips(lengthChip.closest('.booking-welcome__bar'), state.hoursChoice);
+      }
+      syncWelcomeIntoLaterSteps();
+      refreshEstimate();
+      return;
+    }
     var tierBtn = event.target.closest('.booking-quote__opt');
     if (tierBtn && path) {
       event.preventDefault();
       var nextTier = tierBtn.getAttribute('data-tier');
       if (!nextTier || nextTier === state.tier) return;
-      var reshuffle = (state.tier === 'premium') !== (nextTier === 'premium');
-      if (reshuffle) {
-        setTier(nextTier, true);
-        return;
-      }
       setTier(nextTier, false);
+      syncHiddenSteps();
       paintQuote(path, true);
       syncChrome();
       return;

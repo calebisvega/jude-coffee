@@ -2765,18 +2765,32 @@
   width: min(86%, 22.5rem);
   height: 100%;
   margin-inline: auto;
-  padding: calc(env(safe-area-inset-top, 0px) + 4.25rem) 0 calc(env(safe-area-inset-bottom, 0px) + 6.4rem);
+  padding: calc(env(safe-area-inset-top, 0px) + 4.25rem) 0 calc(env(safe-area-inset-bottom, 0px) + 7.75rem);
   overflow: auto;
 }
 
-.booking-quote .booking-question {
+.booking-step.booking-quote .booking-question {
   width: 100%;
-  font-size: var(--booking-welcome-size);
-  line-height: var(--booking-welcome-leading);
+  position: static;
+  margin: 0;
+  padding: 0;
+  font-size: 42px;
+  line-height: 36px;
   letter-spacing: var(--booking-welcome-tracking);
   text-align: center;
   color: #fff;
+  background: transparent;
   text-shadow: 0 1px 18px rgba(0, 0, 0, 0.35);
+  outline: none;
+  border: 0;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@property --quote-i {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
 }
 
 .booking-quote__switch {
@@ -2801,7 +2815,7 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.28);
   transform: translateX(calc(var(--quote-i) * 100%));
-  transition: transform 0.45s var(--booking-ease);
+  transition: --quote-i 0.45s var(--booking-ease);
 }
 
 .booking-quote__opt {
@@ -2863,21 +2877,74 @@
 }
 
 .booking-quote__price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
   margin: 0.85rem 0 0;
   font-family: var(--font-tagline);
+  color: #fff;
+}
+
+.booking-quote__amount {
+  flex: 0 0 auto;
   font-size: 2rem;
   font-weight: 500;
   letter-spacing: -0.03em;
   line-height: 1;
-  color: #fff;
 }
 
-.booking-quote__price span {
-  margin-left: 0.3rem;
-  font-size: 0.95rem;
+.booking-quote__for {
+  flex: 1 1 auto;
+  font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0;
-  color: color-mix(in srgb, var(--cream) 82%, transparent);
+  line-height: 1.35;
+  text-align: right;
+  color: color-mix(in srgb, var(--cream) 88%, transparent);
+}
+
+.booking-quote__nudge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  white-space: nowrap;
+}
+
+.booking-quote__nudge-btns {
+  display: inline-flex;
+  flex-direction: column;
+  margin-left: 0.1rem;
+}
+
+.booking-quote__nudge-btns button {
+  display: grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 0.72rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.booking-quote__nudge-btns svg {
+  width: 0.85rem;
+  height: 0.85rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.booking-quote__opt:focus,
+.booking-quote__opt:focus-visible,
+.booking-quote .booking-question:focus {
+  outline: none;
 }
 
 .booking-quote__rule {
@@ -2930,5 +2997,43 @@
 
 .booking-quote .booking-error {
   color: #fff;
+}
+
+.booking-app.is-path {
+  background: #000;
+}
+
+.booking-app.is-path .booking-nav {
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 3.5rem);
+}
+
+.booking-app.is-path .booking-nav__page {
+  display: none;
+}
+
+.booking-app.is-path .booking-nav__cluster {
+  gap: 2.25rem;
+}
+
+.booking-app.is-path .booking-nav button {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  box-shadow: none;
+}
+
+.booking-app.is-path .booking-nav button:hover,
+.booking-app.is-path .booking-nav button:focus,
+.booking-app.is-path .booking-nav button:focus-visible {
+  background: transparent;
+  outline: none;
+}
+
+.booking-app.is-path .booking-nav svg {
+  width: 1.7rem;
+  height: 1.7rem;
 }
 
