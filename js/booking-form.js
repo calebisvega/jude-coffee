@@ -390,7 +390,7 @@
               '</div>' +
               '<div class="booking-step__inner booking-step__inner--welcome">' +
                 '<h1 class="booking-question">Tell us about<br>your event.</h1>' +
-                '<p class="booking-welcome__subtitle">No worries if you\'re not certain, you can always adjust them later.</p>' +
+                '<p class="booking-welcome__subtitle">No worries. If you\'re not certain, you can always adjust this later.</p>' +
                 '<div class="booking-welcome__card">' +
                   welcomeQuestion('email', 'Your email', welcomeField({
                     id: 'booking-welcome-email',
@@ -421,7 +421,7 @@
                   welcomeQuestion('guests', 'Guests',
                     '<div class="booking-welcome__field">' +
                       '<span class="booking-welcome__field-label">Guests</span>' +
-                      welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range') +
+                      welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range', 'booking-welcome__bar--guests') +
                     '</div>'
                   ) +
                   welcomeQuestion('length', 'How long should we serve?',
@@ -432,7 +432,7 @@
                   ) +
                   '<div class="booking-welcome__finish' + (welcomeReady() ? ' is-open' : '') + '">' +
                     '<div class="booking-welcome__finish-clip">' +
-                      '<button type="button" class="booking-ok booking-welcome__estimate' + (welcomeReady() ? ' is-ready' : '') + '" data-ok' + (welcomeReady() ? '' : ' disabled') + '>See what fits</button>' +
+                      '<button type="button" class="booking-ok booking-welcome__estimate' + (welcomeReady() ? ' is-ready' : '') + '" data-ok' + (welcomeReady() ? '' : ' disabled') + '>See your quote</button>' +
                       '<p class="booking-welcome__reassure">Free estimate, no commitment.</p>' +
                     '</div>' +
                   '</div>' +
