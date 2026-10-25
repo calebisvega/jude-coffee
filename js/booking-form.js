@@ -120,24 +120,24 @@
       title: 'Base',
       image: '/images/book-base.jpg',
       extraClass: 'booking-tier-row--base',
-      blurb: 'Cold brew, iced coffee, and hot drip for the crowd.',
-      includes: ['Cold brew', 'Iced coffee', 'Hot drip']
+      blurb: 'A simplified offering, serving our take on the basics',
+      includes: ['cold brew', 'drip coffee', 'a friendly jude barista']
     },
     {
       id: 'standard',
       title: 'Signature',
       image: '/images/book-signature.jpg',
       extraClass: 'booking-tier-row--signature',
-      blurb: 'Lattes, cappuccinos, cold brew, and drip.',
-      includes: ['Lattes & cappuccinos', 'Cold brew', 'Drip']
+      blurb: 'our classic offering',
+      includes: ['full espresso bar', 'house-made syrups', 'cold brew', 'drip coffee', 'a friendly jude barista']
     },
     {
       id: 'premium',
       title: 'Curated',
       image: '/images/book-curated.jpg',
       extraClass: 'booking-tier-row--curated',
-      blurb: 'Full espresso bar with a custom drink, menu, and stamp.',
-      includes: ['Full espresso bar', 'Custom drink', 'Menu & stamp']
+      blurb: 'our classic offering elevated',
+      includes: ['custom stamp designed for you', 'specialty drink for your event', 'full espresso bar', 'house-made syrups', 'cold brew', 'drip coffee', 'a friendly jude barista']
     }
   ];
 
@@ -607,7 +607,12 @@
   function partyBits() {
     var hours = Math.max(0, Math.round(parseFloat(state.durationHours) || 0));
     var guests = Math.max(0, parseInt(state.guestCount, 10) || 0);
-    return { hours: String(hours), guests: String(guests) };
+    return {
+      hours: String(hours),
+      guests: String(guests),
+      hoursLabel: hours === 1 ? 'hour' : 'hours',
+      guestsLabel: guests === 1 ? 'guest' : 'guests'
+    };
   }
 
   function stepGuestRange(dir) {
@@ -667,14 +672,12 @@
             '<span class="booking-quote__amount">' + quoteAmountText() + '</span>' +
             '<div class="booking-quote__party">' +
               '<div class="booking-quote__step">' +
-                '<span class="booking-quote__hours">' + party.hours + '</span>' +
+                '<span class="booking-quote__count"><span class="booking-quote__hours">' + party.hours + '</span> <span class="booking-quote__hours-label">' + party.hoursLabel + '</span></span>' +
                 quoteNudge('hours', 'Add an hour', 'Remove an hour') +
-                '<span class="booking-quote__unit">hrs</span>' +
               '</div>' +
               '<div class="booking-quote__step">' +
-                '<span class="booking-quote__guests">' + party.guests + '</span>' +
+                '<span class="booking-quote__count"><span class="booking-quote__guests">' + party.guests + '</span> <span class="booking-quote__guests-label">' + party.guestsLabel + '</span></span>' +
                 quoteNudge('guests', 'More guests', 'Fewer guests') +
-                '<span class="booking-quote__unit">guests</span>' +
               '</div>' +
             '</div>' +
           '</div>' +
@@ -719,6 +722,10 @@
       });
       if (hours) hours.textContent = party.hours;
       if (guests) guests.textContent = party.guests;
+      var hoursLabel = root.querySelector('.booking-quote__hours-label');
+      var guestsLabel = root.querySelector('.booking-quote__guests-label');
+      if (hoursLabel) hoursLabel.textContent = party.hoursLabel;
+      if (guestsLabel) guestsLabel.textContent = party.guestsLabel;
       if (list) {
         list.innerHTML = item.includes.map(function (line) {
           return '<li>' + escapeHtml(line) + '</li>';
