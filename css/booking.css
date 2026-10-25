@@ -950,13 +950,26 @@
   margin: 0;
 }
 
-.booking-stepper__btns,
-.booking-cal__shifts {
+.booking-stepper__btns {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 0;
   padding-bottom: 0.28rem;
+}
+
+.booking-cal__shifts {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  padding-bottom: 0;
+}
+
+.booking-cal__shifts .booking-stepper__btn {
+  width: 1.35rem;
+  height: 1.35rem;
 }
 
 .booking-stepper__btn {
