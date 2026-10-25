@@ -2838,6 +2838,18 @@
   border: 1px solid rgba(255, 255, 255, 0.46);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.1);
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.booking-quote__switch.is-dragging {
+  cursor: grabbing;
+}
+
+.booking-quote__switch.is-dragging .booking-quote__thumb {
+  transition: none;
 }
 
 .booking-quote__thumb {

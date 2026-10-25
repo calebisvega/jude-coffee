@@ -136,7 +136,7 @@
       title: 'Curated',
       image: '/images/book-curated.jpg',
       extraClass: 'booking-tier-row--curated',
-      blurb: 'our classic offering elevated',
+      blurb: 'our classic offering, elevated',
       includes: ['custom stamp designed for you', 'specialty drink for your event', 'full espresso bar', 'house-made syrups', 'cold brew', 'drip coffee', 'a friendly jude barista']
     }
   ];
@@ -700,7 +700,10 @@
       if (card.id === item.id) index = i;
     });
     var thumb = root.querySelector('.booking-quote__thumb');
-    if (thumb) thumb.style.setProperty('--quote-i', String(index));
+    var quoteSwitchEl = root.querySelector('.booking-quote__switch');
+    if (thumb && !(quoteSwitchEl && quoteSwitchEl.classList.contains('is-dragging'))) {
+      thumb.style.setProperty('--quote-i', String(index));
+    }
     Array.prototype.forEach.call(root.querySelectorAll('.booking-quote__opt'), function (btn) {
       var on = btn.getAttribute('data-tier') === item.id;
       btn.classList.toggle('is-on', on);
@@ -1795,6 +1798,99 @@
       });
   }
 
+  var quoteDrag = null;
+  var quoteDragMoved = false;
+
+  function quoteSwitchSlot(sw) {
+    var rect = sw.getBoundingClientRect();
+    var style = window.getComputedStyle(sw);
+    var padL = parseFloat(style.paddingLeft) || 0;
+    var padR = parseFloat(style.paddingRight) || 0;
+    return Math.max(1, (rect.width - padL - padR) / 3);
+  }
+
+  function onQuotePointerDown(event) {
+    var sw = event.target.closest && event.target.closest('.booking-quote__switch');
+    if (!sw || !sw.closest('[data-step="path"]')) return;
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    var thumb = sw.querySelector('.booking-quote__thumb');
+    var startI = 0;
+    quoteTiers().forEach(function (item, i) {
+      if (item.id === state.tier) startI = i;
+    });
+    if (thumb) {
+      var live = parseFloat(window.getComputedStyle(thumb).getPropertyValue('--quote-i'));
+      if (isFinite(live)) startI = live;
+    }
+    quoteDrag = {
+      sw: sw,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startI: startI,
+      moved: false,
+      index: startI
+    };
+    if (sw.setPointerCapture) {
+      try { sw.setPointerCapture(event.pointerId); } catch (err) { /* synthetic events */ }
+    }
+  }
+
+  function onQuotePointerMove(event) {
+    if (!quoteDrag || event.pointerId !== quoteDrag.pointerId) return;
+    var sw = quoteDrag.sw;
+    var slot = quoteSwitchSlot(sw);
+    if (!quoteDrag.moved && Math.abs(event.clientX - quoteDrag.startX) < 8) return;
+    quoteDrag.moved = true;
+    event.preventDefault();
+    var index = Math.max(0, Math.min(quoteTiers().length - 1, quoteDrag.startI + (event.clientX - quoteDrag.startX) / slot));
+    quoteDrag.index = index;
+    sw.classList.add('is-dragging');
+    var thumb = sw.querySelector('.booking-quote__thumb');
+    if (thumb) thumb.style.setProperty('--quote-i', String(index));
+    var nearest = Math.round(index);
+    var next = quoteTiers()[nearest];
+    var path = sw.closest('[data-step="path"]');
+    if (next && next.id !== state.tier) {
+      setTier(next.id, false);
+      if (path) paintQuote(path, false);
+      syncHiddenSteps();
+      syncChrome();
+      return;
+    }
+    Array.prototype.forEach.call(sw.querySelectorAll('.booking-quote__opt'), function (btn, i) {
+      var on = i === nearest;
+      btn.classList.toggle('is-on', on);
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+  }
+
+  function onQuotePointerUp(event) {
+    if (!quoteDrag || event.pointerId !== quoteDrag.pointerId) return;
+    var drag = quoteDrag;
+    quoteDrag = null;
+    var sw = drag.sw;
+    if (sw.releasePointerCapture) {
+      try { sw.releasePointerCapture(event.pointerId); } catch (err) { /* already released */ }
+    }
+    sw.classList.remove('is-dragging');
+    if (!drag.moved) return;
+    quoteDragMoved = true;
+    window.setTimeout(function () { quoteDragMoved = false; }, 400);
+    var nearest = Math.max(0, Math.min(quoteTiers().length - 1, Math.round(drag.index)));
+    var path = sw.closest('[data-step="path"]');
+    var next = quoteTiers()[nearest];
+    window.requestAnimationFrame(function () {
+      if (next && next.id !== state.tier) {
+        setTier(next.id, false);
+        syncHiddenSteps();
+        if (path) paintQuote(path, false);
+        syncChrome();
+        return;
+      }
+      if (path) paintQuote(path, false);
+    });
+  }
+
   function onStageClick(event) {
     var edit = event.target.closest('[data-welcome-edit]');
     if (edit) {
@@ -1920,6 +2016,10 @@
     }
     var tierBtn = event.target.closest('.booking-quote__opt');
     if (tierBtn && path) {
+      if (quoteDragMoved) {
+        quoteDragMoved = false;
+        return;
+      }
       event.preventDefault();
       var nextTier = tierBtn.getAttribute('data-tier');
       if (!nextTier || nextTier === state.tier) return;
@@ -2039,6 +2139,10 @@
     setTier(btn.getAttribute('data-tier'), true);
   });
   document.addEventListener('keydown', onGlobalKey);
+  stage.addEventListener('pointerdown', onQuotePointerDown);
+  stage.addEventListener('pointermove', onQuotePointerMove);
+  stage.addEventListener('pointerup', onQuotePointerUp);
+  stage.addEventListener('pointercancel', onQuotePointerUp);
   stage.addEventListener('pointerdown', function (event) {
     var placeOpt = event.target.closest('[data-place]');
     if (!placeOpt) return;
