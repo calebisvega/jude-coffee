@@ -364,9 +364,6 @@
   function buildSteps() {
     var list = [{ id: 'welcome' }, { id: 'path' }];
     if (state.tier === 'premium') list.push({ id: 'addons' });
-    list.push({ id: 'details' });
-    list.push({ id: 'contact' });
-    list.push({ id: 'review' });
     list.push({ id: 'done' });
     return list;
   }
@@ -1628,7 +1625,7 @@
       pageEl.hidden = !showPage;
       pageEl.textContent = showPage ? ((pos + 1) + '/' + countable.length) : '';
     }
-    prevBtn.disabled = index <= 0 || (step && step.id === 'done');
+    prevBtn.disabled = index <= 0;
     nextBtn.disabled = !step || step.id === 'done';
     var app = document.getElementById('booking-app');
     app.classList.toggle('is-welcome', Boolean(step && step.id === 'welcome'));
