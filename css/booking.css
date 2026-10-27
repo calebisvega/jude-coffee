@@ -23,7 +23,7 @@
   --booking-welcome-footer-size: 12px;
   --booking-welcome-sub-gap: 20px;
   --booking-welcome-block-gap: 22px;
-  --booking-welcome-check-gap: 8px;
+  --booking-welcome-check-gap: 16px;
   --booking-welcome-button-gap: 16px;
   --booking-welcome-pair-gap: 0.35rem;
   --booking-welcome-tracking: -0.04em;
@@ -1892,8 +1892,9 @@
 }
 
 .booking-welcome__date-panel {
+  --booking-cal-month-gap: 10px;
   margin-top: 0.4rem;
-  padding: 0.7rem 0.35rem 0.55rem;
+  padding: var(--booking-cal-month-gap) 0.35rem 0.55rem;
   border-radius: 0.85rem;
   background: #fff;
   color: var(--charcoal);
@@ -1918,11 +1919,25 @@
 }
 
 .booking-welcome__date-panel .booking-cal__nav {
-  margin-bottom: 0.45rem;
+  align-items: center;
+  margin-bottom: var(--booking-cal-month-gap);
 }
 
 .booking-welcome__date-panel .booking-cal__label {
   margin-left: 0.35rem;
+  line-height: 1;
+}
+
+.booking-welcome__date-panel .booking-cal__shifts {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.1rem;
+  padding-bottom: 0;
+}
+
+.booking-welcome__date-panel .booking-stepper__btn {
+  width: 1.35rem;
+  height: 1.35rem;
 }
 
 .booking-welcome__date-panel .booking-cal__label,

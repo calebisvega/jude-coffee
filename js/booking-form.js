@@ -296,6 +296,8 @@
 
   function chevron(dir) {
     if (dir === 'up') return '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 10l4-4 4 4"/></svg>';
+    if (dir === 'left') return '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>';
+    if (dir === 'right') return '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>';
     return '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>';
   }
 
@@ -387,7 +389,7 @@
               '</div>' +
               '<div class="booking-step__inner booking-step__inner--welcome">' +
                 '<h1 class="booking-question">Tell us about<br>your event.</h1>' +
-                '<p class="booking-welcome__subtitle">No worries. If you\'re not certain, you can always adjust this later.</p>' +
+                '<p class="booking-welcome__subtitle">If you\'re not certain, you can always adjust this later.</p>' +
                 '<div class="booking-welcome__card">' +
                   welcomeQuestion('email', 'Your email', welcomeField({
                     id: 'booking-welcome-email',
@@ -930,8 +932,8 @@
               '<div class="booking-cal__nav">' +
                 '<p class="booking-cal__label">' + label + '</p>' +
                 '<div class="booking-cal__shifts">' +
-                  '<button type="button" class="booking-stepper__btn" data-cal-shift="-1" aria-label="Previous month">' + chevron('up') + '</button>' +
-                  '<button type="button" class="booking-stepper__btn" data-cal-shift="1" aria-label="Next month">' + chevron('down') + '</button>' +
+                  '<button type="button" class="booking-stepper__btn" data-cal-shift="-1" aria-label="Previous month">' + chevron('left') + '</button>' +
+                  '<button type="button" class="booking-stepper__btn" data-cal-shift="1" aria-label="Next month">' + chevron('right') + '</button>' +
                 '</div>' +
               '</div>' +
               '<div class="booking-cal__week" aria-hidden="true"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>' +
