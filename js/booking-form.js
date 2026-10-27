@@ -117,7 +117,7 @@
   var TIER_CARDS = [
     {
       id: 'lean',
-      title: 'Base',
+      title: 'Essentials',
       image: '/images/book-base.jpg',
       extraClass: 'booking-tier-row--base',
       blurb: 'A simplified offering, serving our take on the basics',
@@ -137,16 +137,25 @@
       image: '/images/book-curated.jpg',
       extraClass: 'booking-tier-row--curated',
       blurb: 'our classic offering, elevated',
-      includes: ['custom stamp designed for you', 'specialty drink for your event', 'full espresso bar', 'house-made syrups', 'cold brew', 'drip coffee', 'a friendly jude barista']
+      includesLead: 'Everything in Signature, plus:',
+      includes: ['custom stamp designed for you', 'specialty drink for your event']
     }
   ];
 
   var GUEST_RANGES = [
     { id: 'under-25', label: 'Under 25', guests: 24 },
-    { id: '25-50', label: '25\u201350', guests: 50 },
+    { id: '26-50', label: '26\u201350', guests: 50 },
     { id: '51-75', label: '51\u201375', guests: 75 },
     { id: '76-100', label: '76\u2013100', guests: 100 },
-    { id: '100-plus', label: '100+', guests: 125 }
+    { id: '101-plus', label: '101+', guests: 125 }
+  ];
+
+  var BUDGET_CHOICES = [
+    { id: 'under-750', label: 'Under $750', ceiling: 749, say: 'Under $750' },
+    { id: '750-1250', label: '$750\u2013$1,250', ceiling: 1250, say: '$1,000' },
+    { id: '1250-2000', label: '$1,250\u2013$2,000', ceiling: 2000, say: '$1,600' },
+    { id: '2000-plus', label: '$2,000+', ceiling: 20000, say: '$2,000+' },
+    { id: 'unsure', label: 'Not sure yet, show me what\u2019s popular', ceiling: 0, say: '' }
   ];
 
   var LENGTH_CHOICES = [
@@ -163,6 +172,9 @@
     addOns: [],
     eventDate: '',
     eventZip: '',
+    eventCity: '',
+    budgetChoice: '',
+    contactNote: '',
     locationAddress: '',
     locationMiles: null,
     locationStatus: 'idle',
@@ -220,6 +232,15 @@
 
   function questionTitle(title) {
     return '<h2 class="booking-question">' + title + '</h2>';
+  }
+
+  function sheetMedia() {
+    return (
+      '<span class="booking-quote__media" aria-hidden="true">' +
+        '<img src="/images/IMG_2992.jpg" alt="" width="1037" height="684">' +
+        '<span class="booking-quote__shade"></span>' +
+      '</span>'
+    );
   }
 
   function welcomeField(opts) {
@@ -364,10 +385,13 @@
   }
 
   function buildSteps() {
-    var list = [{ id: 'welcome' }, { id: 'path' }];
-    if (state.tier === 'premium') list.push({ id: 'addons' });
-    list.push({ id: 'done' });
-    return list;
+    return [
+      { id: 'welcome' },
+      { id: 'path' },
+      { id: 'followup' },
+      { id: 'budget' },
+      { id: 'done' }
+    ];
   }
 
   function renderStep(step) {
@@ -389,37 +413,37 @@
               '</div>' +
               '<div class="booking-step__inner booking-step__inner--welcome">' +
                 '<h1 class="booking-question">Tell us about<br>your event.</h1>' +
-                '<p class="booking-welcome__subtitle">If you\'re not certain, you can always adjust this later.</p>' +
+                '<p class="booking-welcome__subtitle">Rough numbers are totally fine. You can fine-tune everything on the next screen.</p>' +
                 '<div class="booking-welcome__card">' +
-                  welcomeQuestion('email', 'Your email', welcomeField({
+                  welcomeQuestion('email', 'Where should we send your quote?', welcomeField({
                     id: 'booking-welcome-email',
-                    label: 'Your email',
+                    label: 'Where should we send your quote?',
                     type: 'email',
                     inputmode: 'email',
                     autocomplete: 'off',
                     placeholder: 'you@email.com',
                     value: state.contactEmail
                   })) +
-                  welcomeQuestion('date', 'Event date',
+                  welcomeQuestion('date', 'When\u2019s the event?',
                     '<div class="booking-welcome__field">' +
-                      '<span class="booking-welcome__field-label">Event date</span>' +
+                      '<span class="booking-welcome__field-label">When\u2019s the event?</span>' +
                       welcomeCalendarMarkup() +
                     '</div>'
                   ) +
-                  welcomeQuestion('zip', 'Event ZIP code', welcomeField({
+                  welcomeQuestion('zip', 'Where\u2019s it happening?', welcomeField({
                     id: 'booking-welcome-zip',
-                    label: 'Event ZIP code',
+                    label: 'Where\u2019s it happening?',
                     type: 'text',
                     inputmode: 'numeric',
                     autocomplete: 'off',
-                    placeholder: '33801',
+                    placeholder: 'ZIP code',
                     maxlength: '5',
                     pattern: '[0-9]*',
                     value: state.eventZip
                   })) +
-                  welcomeQuestion('guests', 'Guests',
+                  welcomeQuestion('guests', 'How many guests?',
                     '<div class="booking-welcome__field">' +
-                      '<span class="booking-welcome__field-label">Guests</span>' +
+                      '<span class="booking-welcome__field-label">How many guests?</span>' +
                       welcomeBar(GUEST_RANGES, state.guestRange, 'data-guest-range', 'booking-welcome__bar--guests') +
                     '</div>'
                   ) +
@@ -450,22 +474,12 @@
               '<span class="booking-quote__shade"></span>' +
             '</span>' +
             '<div class="booking-quote__inner">' +
-              '<h1 class="booking-question">Your quote<br>customized to<br>your event.</h1>' +
+              '<h1 class="booking-question">Here\u2019s your Jude setup.</h1>' +
+              '<p class="booking-quote__echo">' + escapeHtml(quoteEcho()) + '</p>' +
               quoteSwitch() +
               quoteCard(tierById(state.tier)) +
-              '<a class="booking-quote__budget" href="' + COLLAB_MAILTO + '">or let us know your budget.</a>' +
+              quoteDock() +
               '<p class="booking-error" data-error hidden></p>' +
-            '</div>' +
-          '</section>'
-        );
-        break;
-      case 'budget':
-        node = el(
-          '<section class="booking-step" data-step="budget">' +
-            '<div class="booking-step__inner">' +
-              questionTitle('What budget are you working with?') +
-              inputBlock({ id: 'booking-budget', label: 'Event budget', type: 'text', inputmode: 'numeric', placeholder: 'e.g. 1800', value: state.budget }) +
-              continueArrow() +
             '</div>' +
           '</section>'
         );
@@ -533,6 +547,42 @@
               '<p class="booking-lead">Our team will take a look and confirm for your event.</p>' +
               reviewCard() +
               lockedInButton() +
+            '</div>' +
+          '</section>'
+        );
+        break;
+      case 'followup':
+        node = el(
+          '<section class="booking-step booking-sheet" data-step="followup">' +
+            sheetMedia() +
+            '<div class="booking-quote__inner booking-sheet__inner">' +
+              questionTitle('Who\u2019s this for?') +
+              '<p class="booking-sheet__sub">Optional. Your email is enough if you\u2019d rather we just reply there.</p>' +
+              '<label class="booking-sheet__field"><span>Name</span><input id="booking-follow-name" type="text" autocomplete="name" placeholder="Jane" value="' + escapeHtml(state.contactName) + '"></label>' +
+              '<label class="booking-sheet__field"><span>Phone, if you want a call</span><input id="booking-follow-phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(863) 555-0100" value="' + escapeHtml(state.contactPhone) + '"></label>' +
+              '<label class="booking-sheet__field"><span>Anything else we should know?</span><textarea id="booking-follow-note" rows="3" placeholder="Venue, event type, timing">' + escapeHtml(state.contactNote) + '</textarea></label>' +
+              '<button type="button" class="booking-quote__continue" data-goto="done">Send this to the Jude team</button>' +
+              '<button type="button" class="booking-sheet__skip" data-goto="done">Skip for now</button>' +
+            '</div>' +
+          '</section>'
+        );
+        break;
+      case 'budget':
+        node = el(
+          '<section class="booking-step booking-sheet" data-step="budget">' +
+            sheetMedia() +
+            '<div class="booking-quote__inner booking-sheet__inner">' +
+              questionTitle('Working with a budget? Perfect.') +
+              '<p class="booking-sheet__sub">Tell us your number and we\u2019ll show you the best Jude setup that fits.</p>' +
+              '<div class="booking-sheet__chips" role="group" aria-label="Budget">' +
+                BUDGET_CHOICES.map(function (choice) {
+                  var on = state.budgetChoice === choice.id;
+                  return '<button type="button" class="booking-sheet__chip' + (on ? ' is-on' : '') + '" data-budget="' + choice.id + '">' + escapeHtml(choice.label) + '</button>';
+                }).join('') +
+              '</div>' +
+              '<article class="booking-sheet__result" data-budget-result hidden></article>' +
+              '<button type="button" class="booking-quote__continue" data-budget-send disabled>Send this to the Jude team</button>' +
+              '<button type="button" class="booking-sheet__back" data-goto="path">\u2190 back to my quote</button>' +
             '</div>' +
           '</section>'
         );
@@ -627,20 +677,73 @@
   }
 
   function rangeForCount(n) {
-    if (n < 25) return 'under-25';
-    if (n <= 50) return '25-50';
+    if (n < 26) return 'under-25';
+    if (n <= 50) return '26-50';
     if (n <= 75) return '51-75';
     if (n <= 100) return '76-100';
-    return '100-plus';
+    return '101-plus';
   }
 
-  function quoteNudge(key, upLabel, downLabel) {
+  function quotePill(key, countHtml, downLabel, upLabel) {
     return (
-      '<span class="booking-quote__nudge-btns">' +
-        '<button type="button" data-quote-step="' + key + '" data-quote-dir="1" aria-label="' + upLabel + '">' + chevron('up') + '</button>' +
-        '<button type="button" data-quote-step="' + key + '" data-quote-dir="-1" aria-label="' + downLabel + '">' + chevron('down') + '</button>' +
+      '<span class="booking-quote__pill">' +
+        '<button type="button" data-quote-step="' + key + '" data-quote-dir="-1" aria-label="' + downLabel + '">\u2212</button>' +
+        '<span class="booking-quote__count">' + countHtml + '</span>' +
+        '<button type="button" data-quote-step="' + key + '" data-quote-dir="1" aria-label="' + upLabel + '">+</button>' +
       '</span>'
     );
+  }
+
+  function tierAmount(tier) {
+    var q = calc.calculate({
+      tier: tier,
+      guestCount: state.guestCount,
+      durationHours: state.durationHours,
+      addOns: tier === 'premium' ? state.addOns : [],
+      locationMiles: state.locationMiles,
+      budget: state.budget
+    });
+    if (q.ready) return q.amount;
+    return calc.startingAmount(tier);
+  }
+
+  function formatEstimate(amount) {
+    var n = Math.max(0, Math.round(Number(amount) || 0));
+    return 'Est. $' + n.toLocaleString('en-US');
+  }
+
+  function curatedIsValue() {
+    var gap = tierAmount('premium') - tierAmount('standard');
+    return gap > 0 && gap <= 100;
+  }
+
+  function quoteListHtml(item) {
+    var html = '';
+    if (item.includesLead) html += '<li class="is-lead">' + escapeHtml(item.includesLead) + '</li>';
+    html += (item.includes || []).map(function (line) {
+      return '<li>' + escapeHtml(line) + '</li>';
+    }).join('');
+    return html;
+  }
+
+  function shortEventDate(iso) {
+    var full = formatEventDate(iso);
+    return full ? full.replace(/, \d{4}$/, '') : '';
+  }
+
+  function quoteEcho() {
+    var bits = [];
+    var when = shortEventDate(state.eventDate);
+    if (when) bits.push(when);
+    if (state.eventCity) bits.push(state.eventCity);
+    else if (state.eventZip) bits.push(state.eventZip);
+    var range = guestRangeById(state.guestRange);
+    if (range) {
+      if (range.id === 'under-25') bits.push('Under 25');
+      else if (range.id === '101-plus') bits.push('101+ guests');
+      else bits.push(range.guests + ' guests');
+    }
+    return bits.join(' \u00b7 ');
   }
 
   function amountForTier(tier) {
@@ -657,36 +760,37 @@
   }
 
   function quoteAmountText() {
-    return amountForTier(state.tier || 'standard');
+    return formatEstimate(tierAmount(state.tier || 'standard'));
   }
 
   function quoteCard(item) {
-    var party = partyBits();
+    var value = item.id === 'premium' && curatedIsValue();
     return (
       '<article class="booking-quote__card">' +
         '<div class="booking-quote__body">' +
-          '<h2 class="booking-quote__name">' + escapeHtml(item.title) + '</h2>' +
+          '<h2 class="booking-quote__name">' + escapeHtml(item.title) + (value ? '<span class="booking-quote__tag">Best value</span>' : '') + '</h2>' +
           '<p class="booking-quote__blurb">' + escapeHtml(item.blurb) + '</p>' +
-          '<div class="booking-quote__price">' +
-            '<span class="booking-quote__amount">' + quoteAmountText() + '</span>' +
-            '<div class="booking-quote__party">' +
-              '<div class="booking-quote__step">' +
-                '<span class="booking-quote__count"><span class="booking-quote__hours">' + party.hours + '</span> <span class="booking-quote__hours-label">' + party.hoursLabel + '</span></span>' +
-                quoteNudge('hours', 'Add an hour', 'Remove an hour') +
-              '</div>' +
-              '<div class="booking-quote__step">' +
-                '<span class="booking-quote__count"><span class="booking-quote__guests">' + party.guests + '</span> <span class="booking-quote__guests-label">' + party.guestsLabel + '</span></span>' +
-                quoteNudge('guests', 'More guests', 'Fewer guests') +
-              '</div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="booking-quote__rule"></div>' +
-          '<ul class="booking-quote__list">' +
-            item.includes.map(function (line) { return '<li>' + escapeHtml(line) + '</li>'; }).join('') +
-          '</ul>' +
-          '<button type="button" class="booking-quote__continue" data-ok>Continue</button>' +
+          '<ul class="booking-quote__list">' + quoteListHtml(item) + '</ul>' +
         '</div>' +
       '</article>'
+    );
+  }
+
+  function quoteDock() {
+    var party = partyBits();
+    return (
+      '<div class="booking-quote__dock">' +
+        '<div class="booking-quote__price">' +
+          '<span class="booking-quote__amount">' + quoteAmountText() + '</span>' +
+          '<div class="booking-quote__party">' +
+            quotePill('hours', '<span class="booking-quote__hours">' + party.hours + '</span> <span class="booking-quote__hours-label">' + party.hoursLabel + '</span>', 'Remove an hour', 'Add an hour') +
+            quotePill('guests', '<span class="booking-quote__guests">' + party.guests + '</span> <span class="booking-quote__guests-label">' + party.guestsLabel + '</span>', 'Fewer guests', 'More guests') +
+          '</div>' +
+        '</div>' +
+        '<button type="button" class="booking-quote__continue" data-goto="followup">Send my quote to the Jude team</button>' +
+        '<p class="booking-quote__fine">No payment yet. We\u2019ll confirm your date before anything is locked in.</p>' +
+        '<button type="button" class="booking-quote__budget" data-goto="budget">Working with a budget?</button>' +
+      '</div>'
     );
   }
 
@@ -716,9 +820,11 @@
       var hours = root.querySelector('.booking-quote__hours');
       var guests = root.querySelector('.booking-quote__guests');
       var list = root.querySelector('.booking-quote__list');
-      if (name) name.textContent = item.title;
+      if (name) name.innerHTML = escapeHtml(item.title) + (item.id === 'premium' && curatedIsValue() ? '<span class="booking-quote__tag">Best value</span>' : '');
       if (blurb) blurb.textContent = item.blurb;
       if (amount) amount.textContent = quoteAmountText();
+      var echo = root.querySelector('.booking-quote__echo');
+      if (echo) echo.textContent = quoteEcho();
       Array.prototype.forEach.call(root.querySelectorAll('.booking-quote__opt'), function (btn) {
         btn.setAttribute('data-amount', amountForTier(btn.getAttribute('data-tier')));
       });
@@ -728,11 +834,7 @@
       var guestsLabel = root.querySelector('.booking-quote__guests-label');
       if (hoursLabel) hoursLabel.textContent = party.hoursLabel;
       if (guestsLabel) guestsLabel.textContent = party.guestsLabel;
-      if (list) {
-        list.innerHTML = item.includes.map(function (line) {
-          return '<li>' + escapeHtml(line) + '</li>';
-        }).join('');
-      }
+      if (list) list.innerHTML = quoteListHtml(item);
     }
     var body = root.querySelector('.booking-quote__body');
     if (animate && body) {
@@ -1157,7 +1259,9 @@
     if (id === 'welcome') {
       state.contactEmail = fieldValue(node, 'booking-welcome-email');
       state.eventDate = fieldValue(node, 'booking-welcome-date');
-      state.eventZip = fieldValue(node, 'booking-welcome-zip');
+      var nextZip = fieldValue(node, 'booking-welcome-zip');
+      if (nextZip !== state.eventZip) state.eventCity = '';
+      state.eventZip = nextZip;
       syncWelcomeIntoLaterSteps();
     }
     if (id === 'budget') state.budget = fieldValue(node, 'booking-budget');
@@ -1176,6 +1280,11 @@
       state.contactPhone = fieldValue(node, 'booking-phone');
       var welcomeEmail = stage.querySelector('#booking-welcome-email');
       if (welcomeEmail) welcomeEmail.value = state.contactEmail;
+    }
+    if (id === 'followup') {
+      state.contactName = fieldValue(node, 'booking-follow-name');
+      state.contactPhone = fieldValue(node, 'booking-follow-phone');
+      state.contactNote = fieldValue(node, 'booking-follow-note');
     }
   }
 
@@ -1228,15 +1337,36 @@
     return 'wait';
   }
 
+  function welcomeAnswer(id) {
+    if (id === 'email') return state.contactEmail || 'Where should we send your quote?';
+    if (id === 'date') return shortEventDate(state.eventDate) || 'When\u2019s the event?';
+    if (id === 'zip') return state.eventCity || state.eventZip || 'Where\u2019s it happening?';
+    if (id === 'guests') {
+      var range = guestRangeById(state.guestRange);
+      if (!range) return 'How many guests?';
+      if (range.id === 'under-25') return 'Under 25';
+      if (range.id === '101-plus') return '101+ guests';
+      return range.guests + ' guests';
+    }
+    if (id === 'length') {
+      var choice = lengthChoiceById(state.hoursChoice);
+      if (!choice) return 'How long should we serve?';
+      if (choice.id === '4-plus') return '4+ hours';
+      return choice.hours === 1 ? '1 hour' : choice.hours + ' hours';
+    }
+    return '';
+  }
+
   function welcomeQuestion(id, label, body) {
     var stateName = welcomeQState(id);
+    var answer = welcomeAnswer(id);
     return (
       '<div class="booking-welcome__q" data-welcome-q="' + id + '" data-state="' + stateName + '">' +
         '<div class="booking-welcome__q-done"' + (stateName === 'done' ? '' : ' inert') + '>' +
           '<div class="booking-welcome__q-clip">' +
-            '<button type="button" class="booking-welcome__checkrow" data-welcome-edit="' + id + '">' +
+            '<button type="button" class="booking-welcome__checkrow" data-welcome-edit="' + id + '" aria-label="Edit ' + escapeHtml(answer) + '">' +
               '<span class="booking-welcome__check" aria-hidden="true"><svg viewBox="0 0 16 16" width="11" height="11"><path d="M3.2 8.4 6.4 11.5 12.8 4.7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>' +
-              '<span>' + label + '</span>' +
+              '<span class="booking-welcome__answer">' + escapeHtml(answer) + '</span>' +
             '</button>' +
           '</div>' +
         '</div>' +
@@ -1375,6 +1505,11 @@
       }
       if (stateName === 'wait') el.setAttribute('inert', '');
       else el.removeAttribute('inert');
+      var answerEl = el.querySelector('.booking-welcome__answer');
+      var answer = welcomeAnswer(id);
+      if (answerEl) answerEl.textContent = answer;
+      var editBtn = el.querySelector('[data-welcome-edit]');
+      if (editBtn) editBtn.setAttribute('aria-label', 'Edit ' + answer);
     });
     var progress = node.querySelector('.booking-welcome__progress');
     var fill = node.querySelector('.booking-welcome__progress-fill');
@@ -1468,6 +1603,98 @@
     window.setTimeout(attempt, 180);
   }
 
+  function budgetChoiceById(id) {
+    var i;
+    for (i = 0; i < BUDGET_CHOICES.length; i++) {
+      if (BUDGET_CHOICES[i].id === id) return BUDGET_CHOICES[i];
+    }
+    return null;
+  }
+
+  function packageQuote(tier, hours, guests) {
+    return calc.calculate({
+      tier: tier,
+      guestCount: guests,
+      durationHours: hours,
+      locationMiles: state.locationMiles,
+      addOns: []
+    });
+  }
+
+  function budgetOffer(choice) {
+    if (!choice || choice.id === 'unsure') {
+      var popular = packageQuote('standard', 2, 50);
+      return { tier: 'standard', hours: 2, guests: 50, amount: popular.amount };
+    }
+    var tiers = ['premium', 'standard', 'lean'];
+    var hoursOpts = [4, 3, 2, 1];
+    var guestOpts = [125, 100, 75, 50, 24];
+    var best = null;
+    tiers.forEach(function (tier, ti) {
+      hoursOpts.forEach(function (hours) {
+        guestOpts.forEach(function (guests) {
+          var q = packageQuote(tier, hours, guests);
+          if (!q.ready || q.amount > choice.ceiling) return;
+          var score = (3 - ti) * 1000000 + q.amount;
+          if (!best || score > best.score) {
+            best = { tier: tier, hours: hours, guests: guests, amount: q.amount, score: score };
+          }
+        });
+      });
+    });
+    return best;
+  }
+
+  function budgetSentence(choice, offer) {
+    if (!offer) return 'That range is under our $500 minimum. Try the next one up, or send a note and we\u2019ll look.';
+    var tier = tierById(offer.tier);
+    var name = tier ? tier.title : 'Signature';
+    var hours = offer.hours === 1 ? '1 hour' : offer.hours + ' hours';
+    var guests = offer.guests === 24 ? 'under 25 guests' : 'up to ' + offer.guests + ' guests';
+    var setup = name + ', ' + hours + ', ' + guests + '. ' + formatEstimate(offer.amount) + '.';
+    if (choice.id === 'unsure') return 'Here\u2019s what\u2019s popular: ' + setup;
+    return 'Here\u2019s what ' + choice.say + ' gets you: ' + setup;
+  }
+
+  function paintBudget(root) {
+    if (!root) return;
+    var choice = budgetChoiceById(state.budgetChoice);
+    Array.prototype.forEach.call(root.querySelectorAll('[data-budget]'), function (btn) {
+      btn.classList.toggle('is-on', Boolean(choice && btn.getAttribute('data-budget') === choice.id));
+    });
+    var result = root.querySelector('[data-budget-result]');
+    var send = root.querySelector('[data-budget-send]');
+    if (!choice) {
+      if (result) result.hidden = true;
+      if (send) send.disabled = true;
+      return;
+    }
+    var offer = budgetOffer(choice);
+    if (result) {
+      result.hidden = false;
+      result.textContent = budgetSentence(choice, offer);
+    }
+    if (send) send.disabled = !offer;
+  }
+
+  function applyBudgetChoice() {
+    var choice = budgetChoiceById(state.budgetChoice);
+    var offer = budgetOffer(choice);
+    if (!offer) return;
+    state.tier = offer.tier;
+    state.durationHours = String(offer.hours);
+    state.hoursChoice = offer.hours >= 4 ? '4-plus' : String(offer.hours);
+    state.guestCount = String(offer.guests);
+    state.guestRange = rangeForCount(offer.guests);
+    state.budget = choice && choice.ceiling ? String(Math.min(choice.ceiling, 20000)) : '';
+  }
+
+  function goTo(id) {
+    var to = steps.findIndex(function (step) { return step.id === id; });
+    if (to < 0 || to === index) return;
+    go(to - index, true);
+  }
+
   function go(delta, force) {
     if (animating) return;
     if (delta > 0 && !force && !validate()) return;
@@ -1494,6 +1721,7 @@
       next.classList.add('is-active');
       next.classList.remove('is-exit-back');
       if (steps[to] && steps[to].id === 'path') paintQuote(next, false);
+      if (steps[to] && steps[to].id === 'budget') paintBudget(next);
       syncChrome();
       window.setTimeout(function () {
         current.classList.remove('is-exit-back');
@@ -1556,7 +1784,7 @@
   function refreshEstimate() {
     var q = quote();
     var step = currentStep();
-    var show = Boolean(state.tier && step && step.id !== 'welcome' && step.id !== 'path' && step.id !== 'done');
+    var show = Boolean(state.tier && step && step.id !== 'welcome' && step.id !== 'path' && step.id !== 'followup' && step.id !== 'budget' && step.id !== 'done');
     estimateEl.classList.toggle('is-visible', show);
     if (state.tier === 'custom') {
       estimateLabel.textContent = q.recommendedLabel ? 'Looks like' : 'Estimate';
@@ -1623,7 +1851,7 @@
     var countable = steps.filter(function (s) { return s.id !== 'welcome' && s.id !== 'done'; });
     var pos = countable.findIndex(function (s) { return step && s.id === step.id; });
     if (pageEl) {
-      var showPage = Boolean(step && step.id !== 'welcome' && step.id !== 'done' && pos >= 0);
+      var showPage = Boolean(step && step.id !== 'welcome' && step.id !== 'path' && step.id !== 'followup' && step.id !== 'budget' && step.id !== 'done' && pos >= 0);
       pageEl.hidden = !showPage;
       pageEl.textContent = showPage ? ((pos + 1) + '/' + countable.length) : '';
     }
@@ -1632,11 +1860,13 @@
     var app = document.getElementById('booking-app');
     app.classList.toggle('is-welcome', Boolean(step && step.id === 'welcome'));
     app.classList.toggle('is-path', Boolean(step && step.id === 'path'));
+    var quiet = Boolean(step && (step.id === 'path' || step.id === 'followup' || step.id === 'budget' || step.id === 'done'));
+    app.classList.toggle('is-quiet', quiet);
     if (step && step.id === 'path') {
       var pathNode = stage.querySelector('[data-step="path"].is-active') || stage.querySelector('[data-step="path"]');
       if (pathNode) bindPathReveal(pathNode);
     }
-    var showTiers = state.tier && step && step.id !== 'welcome' && step.id !== 'path' && step.id !== 'done';
+    var showTiers = state.tier && step && !quiet && step.id !== 'welcome';
     tiersEl.hidden = !showTiers;
     tiersEl.classList.toggle('is-visible', showTiers);
     document.getElementById('booking-app').classList.toggle('has-tiers', showTiers);
@@ -1770,7 +2000,7 @@
   function geocodeAddress(address) {
     var seq = ++geocodeSeq;
     var query = address + (/,?\s*(fl|florida)\b/i.test(address) ? '' : ', Florida');
-    var url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query);
+    var url = 'https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q=' + encodeURIComponent(query);
     fetch(url, { headers: { Accept: 'application/json' } })
       .then(function (res) {
         if (!res.ok) throw new Error('geocode ' + res.status);
@@ -1787,6 +2017,12 @@
         );
         state.locationMiles = miles;
         state.locationStatus = 'ready';
+        var address = rows[0].address || {};
+        state.eventCity = address.city || address.town || address.village || address.hamlet || address.municipality || '';
+        var welcomeNode = stage.querySelector('[data-step="welcome"]');
+        if (welcomeNode) syncWelcomeArrow(welcomeNode);
+        var echo = stage.querySelector('.booking-quote__echo');
+        if (echo) echo.textContent = quoteEcho();
         refreshEstimate();
       })
       .catch(function () {
@@ -1827,7 +2063,8 @@
       startX: event.clientX,
       startI: startI,
       moved: false,
-      index: startI
+      index: startI,
+      target: event.target
     };
     if (sw.setPointerCapture) {
       try { sw.setPointerCapture(event.pointerId); } catch (err) { /* synthetic events */ }
@@ -1872,11 +2109,21 @@
       try { sw.releasePointerCapture(event.pointerId); } catch (err) { /* already released */ }
     }
     sw.classList.remove('is-dragging');
-    if (!drag.moved) return;
+    var path = sw.closest('[data-step="path"]');
+    if (!drag.moved) {
+      var tapped = drag.target && drag.target.closest ? drag.target.closest('.booking-quote__opt') : null;
+      if (!tapped) return;
+      var tappedTier = tapped.getAttribute('data-tier');
+      if (!tappedTier || tappedTier === state.tier) return;
+      setTier(tappedTier, false);
+      syncHiddenSteps();
+      if (path) paintQuote(path, true);
+      syncChrome();
+      return;
+    }
     quoteDragMoved = true;
     window.setTimeout(function () { quoteDragMoved = false; }, 400);
     var nearest = Math.max(0, Math.min(quoteTiers().length - 1, Math.round(drag.index)));
-    var path = sw.closest('[data-step="path"]');
     var next = quoteTiers()[nearest];
     window.requestAnimationFrame(function () {
       if (next && next.id !== state.tier) {
@@ -1900,6 +2147,28 @@
       var question = edit.closest('[data-welcome-q]');
       var focusEl = question && question.querySelector('input, .booking-welcome__date-btn, .booking-welcome__bar');
       if (focusEl) focusEl.focus();
+      return;
+    }
+    var budgetBtn = event.target.closest('[data-budget]');
+    if (budgetBtn) {
+      event.preventDefault();
+      state.budgetChoice = budgetBtn.getAttribute('data-budget');
+      paintBudget(budgetBtn.closest('[data-step]'));
+      return;
+    }
+    var sendBudget = event.target.closest('[data-budget-send]');
+    if (sendBudget) {
+      event.preventDefault();
+      if (sendBudget.disabled) return;
+      applyBudgetChoice();
+      goTo('followup');
+      return;
+    }
+    var jump = event.target.closest('[data-goto]');
+    if (jump) {
+      event.preventDefault();
+      readFields();
+      goTo(jump.getAttribute('data-goto'));
       return;
     }
     var day = event.target.closest('[data-pick-date]');
@@ -2130,7 +2399,14 @@
     if (choice) choice.click();
   }
 
-  prevBtn.addEventListener('click', function () { go(-1, true); });
+  prevBtn.addEventListener('click', function () {
+    var step = currentStep();
+    if (step && (step.id === 'budget' || step.id === 'followup' || step.id === 'done')) {
+      goTo('path');
+      return;
+    }
+    go(-1, true);
+  });
   nextBtn.addEventListener('click', function () { go(1); });
   tiersEl.addEventListener('click', function (event) {
     var btn = event.target.closest('[data-tier]');

@@ -59,7 +59,7 @@
   };
 
   var TIER_LABELS = {
-    lean: 'Base',
+    lean: 'Essentials',
     standard: 'Signature',
     premium: 'Curated',
     custom: 'Custom'
