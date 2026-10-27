@@ -2,5 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /book-preview
 Disallow: /book-preview.html
+Disallow: /quote-calculator
+Disallow: /quote-calculator.html
 
 Sitemap: https://judecoffee.com/sitemap.xml

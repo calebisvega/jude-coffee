@@ -4,6 +4,8 @@
   var calc = window.JudeBooking;
   if (!calc) return;
 
+  var teamQuote = document.body.classList.contains('page-quote-calculator');
+
   var welcomeScreenH = 0;
   var welcomeLiftTimer = 0;
   var welcomeLiftSettleTimer = 0;
@@ -187,6 +189,14 @@
     partialCaptured: false,
     submitted: false
   };
+
+  if (teamQuote) {
+    state.tier = 'standard';
+    state.guestCount = '50';
+    state.guestRange = '26-50';
+    state.durationHours = '2';
+    state.hoursChoice = '2';
+  }
 
   var steps = [];
   var index = 0;
@@ -385,11 +395,11 @@
   }
 
   function buildSteps() {
+    if (teamQuote) return [{ id: 'path' }, { id: 'budget' }];
     return [
       { id: 'welcome' },
       { id: 'path' },
       { id: 'followup' },
-      { id: 'budget' },
       { id: 'done' }
     ];
   }
@@ -415,9 +425,9 @@
                 '<h1 class="booking-question">Tell us about<br>your event.</h1>' +
                 '<p class="booking-welcome__subtitle">Rough numbers are totally fine. You can fine-tune everything on the next screen.</p>' +
                 '<div class="booking-welcome__card">' +
-                  welcomeQuestion('email', 'Where should we send your quote?', welcomeField({
+                  welcomeQuestion('email', 'Where should we contact you?', welcomeField({
                     id: 'booking-welcome-email',
-                    label: 'Where should we send your quote?',
+                    label: 'Where should we contact you?',
                     type: 'email',
                     inputmode: 'email',
                     autocomplete: 'off',
@@ -430,9 +440,9 @@
                       welcomeCalendarMarkup() +
                     '</div>'
                   ) +
-                  welcomeQuestion('zip', 'Where\u2019s it happening?', welcomeField({
+                  welcomeQuestion('zip', 'Where\u2019s it happening (zip code)', welcomeField({
                     id: 'booking-welcome-zip',
-                    label: 'Where\u2019s it happening?',
+                    label: 'Where\u2019s it happening (zip code)',
                     type: 'text',
                     inputmode: 'numeric',
                     autocomplete: 'off',
@@ -474,8 +484,8 @@
               '<span class="booking-quote__shade"></span>' +
             '</span>' +
             '<div class="booking-quote__inner">' +
-              '<h1 class="booking-question">Here\u2019s your Jude setup.</h1>' +
-              '<p class="booking-quote__echo">' + escapeHtml(quoteEcho()) + '</p>' +
+              '<h1 class="booking-question">' + (teamQuote ? 'Quote calculator.' : 'Here\u2019s your Jude setup.') + '</h1>' +
+              '<p class="booking-quote__echo">' + (teamQuote ? 'For the Jude team. Not linked from the site.' : escapeHtml(quoteEcho())) + '</p>' +
               quoteSwitch() +
               quoteCard(tierById(state.tier)) +
               quoteDock() +
@@ -764,7 +774,7 @@
   }
 
   function quoteCard(item) {
-    var value = item.id === 'premium' && curatedIsValue();
+    var value = teamQuote && item.id === 'premium' && curatedIsValue();
     return (
       '<article class="booking-quote__card">' +
         '<div class="booking-quote__body">' +
@@ -776,19 +786,35 @@
     );
   }
 
+  function quoteBreakdownHtml() {
+    var q = quote();
+    if (!q.ready) return '';
+    return breakdownRows(q);
+  }
+
   function quoteDock() {
     var party = partyBits();
+    var pills =
+      '<div class="booking-quote__party">' +
+        quotePill('hours', '<span class="booking-quote__hours">' + party.hours + '</span> <span class="booking-quote__hours-label">' + party.hoursLabel + '</span>', 'Remove an hour', 'Add an hour') +
+        quotePill('guests', '<span class="booking-quote__guests">' + party.guests + '</span> <span class="booking-quote__guests-label">' + party.guestsLabel + '</span>', 'Fewer guests', 'More guests') +
+      '</div>';
+    if (!teamQuote) {
+      return (
+        '<div class="booking-quote__dock">' +
+          '<div class="booking-quote__price">' + pills + '</div>' +
+          '<button type="button" class="booking-quote__continue" data-goto="followup">Send my quote to the Jude team</button>' +
+          '<p class="booking-quote__fine">No payment yet. We\u2019ll confirm your date before anything is locked in.</p>' +
+        '</div>'
+      );
+    }
     return (
       '<div class="booking-quote__dock">' +
         '<div class="booking-quote__price">' +
           '<span class="booking-quote__amount">' + quoteAmountText() + '</span>' +
-          '<div class="booking-quote__party">' +
-            quotePill('hours', '<span class="booking-quote__hours">' + party.hours + '</span> <span class="booking-quote__hours-label">' + party.hoursLabel + '</span>', 'Remove an hour', 'Add an hour') +
-            quotePill('guests', '<span class="booking-quote__guests">' + party.guests + '</span> <span class="booking-quote__guests-label">' + party.guestsLabel + '</span>', 'Fewer guests', 'More guests') +
-          '</div>' +
+          pills +
         '</div>' +
-        '<button type="button" class="booking-quote__continue" data-goto="followup">Send my quote to the Jude team</button>' +
-        '<p class="booking-quote__fine">No payment yet. We\u2019ll confirm your date before anything is locked in.</p>' +
+        '<div class="booking-quote__breakdown">' + quoteBreakdownHtml() + '</div>' +
         '<button type="button" class="booking-quote__budget" data-goto="budget">Working with a budget?</button>' +
       '</div>'
     );
@@ -820,11 +846,13 @@
       var hours = root.querySelector('.booking-quote__hours');
       var guests = root.querySelector('.booking-quote__guests');
       var list = root.querySelector('.booking-quote__list');
-      if (name) name.innerHTML = escapeHtml(item.title) + (item.id === 'premium' && curatedIsValue() ? '<span class="booking-quote__tag">Best value</span>' : '');
+      if (name) name.innerHTML = escapeHtml(item.title) + (teamQuote && item.id === 'premium' && curatedIsValue() ? '<span class="booking-quote__tag">Best value</span>' : '');
+      var breakdown = root.querySelector('.booking-quote__breakdown');
+      if (breakdown) breakdown.innerHTML = quoteBreakdownHtml();
       if (blurb) blurb.textContent = item.blurb;
       if (amount) amount.textContent = quoteAmountText();
       var echo = root.querySelector('.booking-quote__echo');
-      if (echo) echo.textContent = quoteEcho();
+      if (echo && !teamQuote) echo.textContent = quoteEcho();
       Array.prototype.forEach.call(root.querySelectorAll('.booking-quote__opt'), function (btn) {
         btn.setAttribute('data-amount', amountForTier(btn.getAttribute('data-tier')));
       });
@@ -1338,9 +1366,9 @@
   }
 
   function welcomeAnswer(id) {
-    if (id === 'email') return state.contactEmail || 'Where should we send your quote?';
+    if (id === 'email') return state.contactEmail || 'Where should we contact you?';
     if (id === 'date') return shortEventDate(state.eventDate) || 'When\u2019s the event?';
-    if (id === 'zip') return state.eventCity || state.eventZip || 'Where\u2019s it happening?';
+    if (id === 'zip') return state.eventCity || state.eventZip || 'Where\u2019s it happening (zip code)';
     if (id === 'guests') {
       var range = guestRangeById(state.guestRange);
       if (!range) return 'How many guests?';
@@ -2022,7 +2050,7 @@
         var welcomeNode = stage.querySelector('[data-step="welcome"]');
         if (welcomeNode) syncWelcomeArrow(welcomeNode);
         var echo = stage.querySelector('.booking-quote__echo');
-        if (echo) echo.textContent = quoteEcho();
+        if (echo && !teamQuote) echo.textContent = quoteEcho();
         refreshEstimate();
       })
       .catch(function () {

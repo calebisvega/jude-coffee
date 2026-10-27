@@ -2993,6 +2993,34 @@
   min-width: 0;
 }
 
+.booking-quote__price:not(:has(.booking-quote__amount)) .booking-quote__party {
+  margin-left: 0;
+}
+
+.booking-quote__breakdown {
+  margin-top: 0.75rem;
+  display: grid;
+  gap: 0.28rem;
+  color: rgba(255, 255, 255, 0.88);
+  font-family: var(--font-tagline);
+  font-size: 0.8125rem;
+  line-height: 1.35;
+}
+
+.booking-quote__breakdown .booking-summary__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.booking-quote__breakdown .booking-summary__row span:last-child {
+  font-variant-numeric: tabular-nums;
+}
+
+.page-quote-calculator .booking-quote__inner {
+  overflow: auto;
+}
+
 .booking-quote__step {
   display: flex;
   align-items: center;
