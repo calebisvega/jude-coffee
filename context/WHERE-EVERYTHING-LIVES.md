@@ -10,7 +10,7 @@ Use this if you lose Cursor access. The site source of truth is **GitHub + copie
 | Default branch | `main` |
 | Live site | `https://judecoffee.com` (Cloudflare Pages from `main`) |
 | Mac working copy | `/Users/CalebVega/jude-coffee` |
-| Boris drive working copy | `/Volumes/Boris/07_JUDE/JUDE-SITE` |
+| Boris drive clone | `/Volumes/Boris/JUDE/jude-coffee-github` |
 
 Clone anytime (any computer, any account):
 
