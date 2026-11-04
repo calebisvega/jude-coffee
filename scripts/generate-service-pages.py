@@ -60,12 +60,12 @@ SERVICE_PAGES = [
             "Wellness weeks",
             "All-hands and town halls",
         ],
-        "steps_title": "How corporate coffee catering works",
+        "steps_title": "How booking corporate coffee works",
         "steps": [
-            ("Get a quote", "Share the date, venue, guest count, and what you are hosting."),
-            ("Customize", "We tailor the menu and timing to your agenda."),
-            ("Confirm", "Lock the date and we handle logistics."),
-            ("We show up", "Setup, service, and pack-out — you host."),
+            ("Share the day", "Date, venue, headcount, and what you’re gathering for."),
+            ("We shape the pour", "Menu and timing sized to your agenda and rush windows."),
+            ("Lock the plan", "Logistics cleared so your team can stay focused on the event."),
+            ("We host", "Setup, service, and a clean pack-out while you lead the room."),
         ],
         "faqs": [
             (
@@ -129,12 +129,12 @@ SERVICE_PAGES = [
             "Rehearsal dinners",
             "Day-after brunch",
         ],
-        "steps_title": "How wedding coffee cart booking works",
+        "steps_title": "How booking a wedding coffee cart works",
         "steps": [
-            ("Share wedding details", "Date, venue, guest count, and when you want coffee service."),
-            ("Get a custom quote", "We reply with pricing for your window and menu."),
-            ("Confirm the plan", "Lock timing with your planner or venue contact."),
-            ("Celebrate", "We set up, serve, and pack out."),
+            ("Share the day", "Date, venue, guest count, and when coffee belongs on the timeline."),
+            ("We shape the pour", "Menu and staffing sized to guest flow and the feel of the celebration."),
+            ("Lock it with your planner", "Timing, placement, and power — nothing left fuzzy."),
+            ("We host the moment", "Early arrival, warm service, clean pack-out while you stay present."),
         ],
         "faqs": [
             (
@@ -194,12 +194,12 @@ SERVICE_PAGES = [
             "Garden parties",
             "Holiday open houses",
         ],
-        "steps_title": "How private party bookings work",
+        "steps_title": "How booking a private party cart works",
         "steps": [
-            ("Tell us the celebration", "Date, place, guest count, and vibe."),
-            ("Get a quote", "Clear pricing for your window."),
-            ("Confirm", "We lock logistics."),
-            ("Host", "We handle the coffee bar."),
+            ("Share the celebration", "Date, place, guest count, and the vibe you’re after."),
+            ("We send a clear quote", "Pricing for your window — no surprise add-ons midstream."),
+            ("Lock the logistics", "We handle load-in details so you can keep hosting."),
+            ("We pour for the room", "Warm service from first guest to clean pack-out."),
         ],
         "faqs": [
             (
@@ -255,12 +255,12 @@ SERVICE_PAGES = [
             "New Year gatherings",
             "Seasonal brand events",
         ],
-        "steps_title": "How holiday bookings work",
+        "steps_title": "How booking holiday coffee works",
         "steps": [
-            ("Request a quote early", "Holiday weekends fill fast."),
-            ("Confirm timing", "We align with dinner and program cues."),
-            ("Show up ready", "Setup before guests hit the coffee window."),
-            ("Pack out clean", "You close the night without a mess."),
+            ("Reach out early", "Holiday weekends fill — we’ll hold a thoughtful slot."),
+            ("Align the timing", "Dinner, speeches, dessert — coffee lands where it belongs."),
+            ("We arrive ready", "Setup before guests find the bar."),
+            ("You close the night", "We pack out clean so the party ends soft."),
         ],
         "faqs": [
             (
@@ -316,12 +316,12 @@ SERVICE_PAGES = [
             "Campus and tour stops",
             "Press and media mornings",
         ],
-        "steps_title": "How brand activation bookings work",
+        "steps_title": "How booking a brand activation works",
         "steps": [
-            ("Brief us", "Date, location, audience size, and campaign goals."),
-            ("Quote & plan", "We map menu and service window."),
-            ("On-site", "Quiet setup, strong service, clean pack-out."),
-            ("Follow up", "Tell us what to improve for the next market."),
+            ("Brief the moment", "Date, place, audience, and what the campaign needs to feel like."),
+            ("We map the pour", "Menu and window shaped to foot traffic and brand cues."),
+            ("On-site calm", "Quiet setup, confident service, clean pack-out."),
+            ("Learn for next time", "A short debrief so the next market lands even better."),
         ],
         "faqs": [
             (
@@ -373,12 +373,12 @@ SERVICE_PAGES = [
             "Festival side activations",
             "Collab days with local shops",
         ],
-        "steps_title": "How pop-up bookings work",
+        "steps_title": "How booking a brand pop-up works",
         "steps": [
-            ("Share the site plan", "Hours, expected traffic, power."),
-            ("Get a quote", "We price the window and staffing."),
-            ("Launch day", "We serve through the rush."),
-            ("Reset", "Pack-out when you wrap."),
+            ("Share the site plan", "Hours, expected traffic, and power."),
+            ("We price the window", "Staffing matched to the rush you expect."),
+            ("Launch day", "We keep the line kind and the drinks dialed."),
+            ("Clean reset", "Pack-out when you wrap — space left tidy."),
         ],
         "faqs": [
             (
@@ -426,12 +426,12 @@ SERVICE_PAGES = [
             "Open house recruiting",
             "Vendor appreciation",
         ],
-        "steps_title": "How office bookings work",
+        "steps_title": "How booking office coffee works",
         "steps": [
-            ("Request a quote", "Share floor access and timing."),
-            ("Confirm logistics", "Power, footprint, security notes."),
-            ("Serve", "We run the cart through your window."),
-            ("Repeat", "Ask about standing monthly or quarterly visits."),
+            ("Share access & timing", "Floor notes, security, and when people gather."),
+            ("We clear logistics", "Power and footprint figured out before we roll in."),
+            ("We host the morning", "Espresso through your window — line stays humane."),
+            ("Make it a rhythm", "Ask about monthly or quarterly visits that stick."),
         ],
         "faqs": [
             (
@@ -479,12 +479,12 @@ SERVICE_PAGES = [
             "Training institutes",
             "Industry summits",
         ],
-        "steps_title": "How conference bookings work",
+        "steps_title": "How booking conference coffee works",
         "steps": [
-            ("Share the agenda", "Peak times and booth rules."),
-            ("Quote staffing", "We match volume expectations."),
-            ("Load-in", "Coordinate with venue ops."),
-            ("Serve the day", "Espresso through your window."),
+            ("Share the agenda", "Peak breaks, booth rules, and where coffee should live."),
+            ("We staff for volume", "Enough hands for the rush without a chaotic line."),
+            ("Coordinate load-in", "Venue ops, power, and footprint — handled."),
+            ("We hold the day", "Espresso from open through the last break."),
         ],
         "faqs": [
             (
@@ -536,12 +536,12 @@ SERVICE_PAGES = [
             "Holiday parties",
             "Pop-ups",
         ],
-        "steps_title": "How coffee cart rental booking works",
+        "steps_title": "How booking coffee cart rental works",
         "steps": [
-            ("Request a quote", "Date, location, guests, service window."),
-            ("Review the plan", "Menu and timing confirmation."),
-            ("Book", "Lock your date."),
-            ("Event day", "We run the cart."),
+            ("Share the essentials", "Date, place, guests, and service window."),
+            ("Review the plan together", "Menu and timing confirmed in plain language."),
+            ("Lock the date", "Your slot is held — logistics stay on us."),
+            ("Event day", "Full-service cart, baristas, and a clean finish."),
         ],
         "faqs": [
             (
@@ -780,8 +780,8 @@ def page(c: dict) -> str:
 
     <section class="svc-close" aria-labelledby="svc-close-title">
       <div class="svc-close__inner">
-        <h2 id="svc-close-title" class="svc-close__title">Ready to book {esc(c["short"].lower())}?</h2>
-        <p class="svc-close__lead">Share the date, venue, and guest count — we will follow up with a custom quote.</p>
+        <h2 id="svc-close-title" class="svc-close__title">Ready for {esc(c["short"].lower())} that feels considered?</h2>
+        <p class="svc-close__lead">Tell us the date, venue, and guest count — we’ll send a thoughtful quote and make the next steps feel easy.</p>
         <a class="btn" href="/contact">Get a quote</a>
       </div>
     </section>

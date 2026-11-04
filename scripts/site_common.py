@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import html
 
-CACHE = "20261104rev1"
+CACHE = "20261104voice1"
 
 HUBS = [
     ("lakeland", "Lakeland, FL"),
@@ -140,10 +140,10 @@ def stars_html() -> str:
 
 def reviews_section(
     *,
-    title: str = "What our Central Florida clients say",
+    title: str = "Kind words from the room",
     lead: str = (
-        "Don’t just take our word for it — see what others are saying about "
-        "Jude coffee catering across Central Florida."
+        "Real notes from weddings, offices, markets, and parties — the kind of "
+        "hospitality people remember after the last cup."
     ),
 ) -> str:
     cards = []
@@ -192,10 +192,6 @@ def mega_footer() -> str:
     hubs = "\n".join(
         f'            <li><a href="/{slug}">{esc(label)}</a></li>' for slug, label in HUBS
     )
-    nearby = (
-        "Hyde Park, Winter Park, Lakewood Ranch, Siesta Key, Celebration, "
-        "Lake Nona, Westshore, Clearwater Beach, FishHawk, Lake Mirror"
-    )
     return f'''  <footer class="site-footer site-footer--mega">
     <div class="footer-mega">
       <div class="footer-mega__brand">
@@ -224,8 +220,6 @@ def mega_footer() -> str:
         <ul class="footer-mega__list">
 {hubs}
         </ul>
-        <h3 class="footer-mega__sub">Central Florida hubs</h3>
-        <p class="footer-mega__nearby">{esc(nearby)}</p>
       </div>
       <div class="footer-mega__col">
         <h2 class="footer-mega__heading">Contact Info</h2>

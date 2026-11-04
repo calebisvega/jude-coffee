@@ -15,16 +15,20 @@ from site_common import CACHE, mega_footer  # noqa: E402
 
 TODAY = date.today().isoformat()
 
-PHOTOS = [
+# Never use geo-setup.jpg (lifestyle drinker) as a location hero.
+HERO_PHOTOS = [
     "/images/geo-cart.jpg",
     "/images/geo-cup.jpg",
     "/images/geo-close.jpg",
     "/images/geo-detail.jpg",
-    "/images/geo-setup.jpg",
     "/images/geo-cart-alt.jpg",
     "/images/geo-deep-wedding.jpg",
     "/images/geo-latte.jpg",
+    "/images/geo-deep-corporate.jpg",
 ]
+
+# Allowed in body sections only (not heroes).
+BODY_PHOTOS = HERO_PHOTOS + ["/images/geo-setup.jpg"]
 
 # Primary hubs Jude should rank for (existing + new)
 HUBS = [
@@ -430,8 +434,10 @@ def service_areas_html(current_slug: str) -> str:
 def page(c: dict, photo_i: int) -> str:
     slug = c["slug"]
     name = c["name"]
-    hero = PHOTOS[photo_i % len(PHOTOS)]
-    services_img = PHOTOS[(photo_i + 2) % len(PHOTOS)]
+    hero = HERO_PHOTOS[photo_i % len(HERO_PHOTOS)]
+    services_img = BODY_PHOTOS[(photo_i + 2) % len(BODY_PHOTOS)]
+    if services_img == hero:
+        services_img = BODY_PHOTOS[(photo_i + 3) % len(BODY_PHOTOS)]
     desc = (
         f"Coffee cart catering in {name} — mobile espresso for weddings, corporate events, "
         f"and private parties across {c['region']}. Get a quote from Jude."
@@ -586,14 +592,14 @@ def page(c: dict, photo_i: int) -> str:
     )
 
     services = [
-        ("Corporate Events", "Espresso for meetings, offices, and team gatherings."),
-        ("Conferences", "A cart at your booth or throughout the day."),
-        ("Brand Activations", "Branded cups and drinks that fit the campaign."),
-        ("Brand Pop-Ups", "For launches, sampling days, and retail takeovers."),
-        ("Office Coffee", "One visit or a recurring cart at the office."),
-        ("Weddings", "A coffee bar for cocktail hour, the reception, or both."),
-        ("Private Parties", "Birthdays, anniversaries, and gatherings at home or a venue."),
-        ("Holiday Parties", "Seasonal drinks for company parties and celebrations."),
+        ("Corporate Events", "Meetings, appreciation mornings, and client days that feel considered — not cafeteria."),
+        ("Conferences", "A cart that draws people in and keeps the day moving with real espresso."),
+        ("Brand Activations", "Drinks and cups that match the campaign, served with calm confidence."),
+        ("Brand Pop-Ups", "Launches, sampling days, and takeovers with a bar guests actually linger at."),
+        ("Office Coffee", "A one-day treat or a recurring rhythm that makes the office feel human again."),
+        ("Weddings", "Cocktail hour, dessert, or late night — a coffee bar that cares for your guests."),
+        ("Private Parties", "Birthdays, showers, and gatherings where hospitality is the gift."),
+        ("Holiday Parties", "Seasonal pours for company parties that deserve better than a carafe."),
     ]
     services_html = "\n".join(
         f'''          <div class="geo-service">
@@ -604,35 +610,35 @@ def page(c: dict, photo_i: int) -> str:
     )
 
     includes = [
-        "Setup and breakdown",
-        "Espresso machine, grinder, and supplies",
-        "Specialty espresso drinks pulled to order",
-        "House syrups and oat milk",
-        "Cups, lids, and service ware",
-        "Trained Jude baristas",
+        "Quiet setup and a clean pack-out",
+        "Professional espresso machine, grinder, and bar kit",
+        "Drinks pulled to order — not sitting in a pot",
+        "House syrups and oat milk, ready for the menu",
+        "Cups, lids, and everything guests need in hand",
+        "Jude baristas who host as carefully as they pour",
     ]
     includes_html = "\n".join(f"          <li>{esc(x)}</li>" for x in includes)
 
     book_steps = [
         (
             "01",
-            "Tell us the event",
-            "Send the date, venue, guest count, service window, and event type so we can check availability.",
+            "Share the day",
+            "Send the date, place, guest count, and what you’re celebrating. We’ll check the calendar and reply with care — not a ticket number.",
         ),
         (
             "02",
-            "Shape the service",
-            "We recommend a service shape for speed, guest mix, season, and the tone of the event.",
+            "We shape the pour",
+            "Menu, pacing, and staffing sized to your people and the tone of the room. You get a clear plan; we carry the details.",
         ),
         (
             "03",
-            "Confirm setup",
-            "We align on load-in, power, weather coverage, cart placement, and timing with the venue or planner.",
+            "Lock the logistics",
+            "Load-in, power, weather coverage, and where the cart lives. We coordinate with your venue or planner so nothing is left fuzzy.",
         ),
         (
             "04",
-            "Serve the room",
-            "A Jude barista team arrives with the coffee bar, dials in, serves guests, and breaks down after service.",
+            "We host the moment",
+            "Jude arrives early, dials in, serves with warmth, and packs out clean — so you stay present with your guests.",
         ),
     ]
     book_steps_html = "\n".join(
@@ -643,6 +649,8 @@ def page(c: dict, photo_i: int) -> str:
           </li>'''
         for num, title, copy in book_steps
     )
+
+    article = "an" if name[:1].lower() in "aeiou" else "a"
 
     schema_json = json.dumps(schema, indent=2, ensure_ascii=False)
 
@@ -720,7 +728,7 @@ def page(c: dict, photo_i: int) -> str:
     <section class="geo-services" aria-labelledby="geo-services-title">
       <div class="geo-services__intro">
         <div class="geo-services__intro-copy">
-          <h2 id="geo-services-title" class="geo-services__title">Coffee catering for<br>weddings, offices,<br>and parties</h2>
+          <h2 id="geo-services-title" class="geo-services__title">Hospitality that<br>travels well —<br>weddings to offices</h2>
           <p class="geo-services__lead">{esc(c["services_lead"])}</p>
         </div>
         <a class="btn geo-btn geo-btn--ghost" href="/contact">Get a quote</a>
@@ -745,7 +753,7 @@ def page(c: dict, photo_i: int) -> str:
 
     <section class="geo-book" aria-labelledby="geo-book-title">
       <div class="geo-book__inner">
-        <h2 id="geo-book-title" class="geo-book__title">How to book a {esc(name)} coffee cart without making the planner chase details.</h2>
+        <h2 id="geo-book-title" class="geo-book__title">How to book {article} {esc(name)} coffee cart in four easy steps</h2>
         <ol class="geo-book__list">
 {book_steps_html}
         </ol>
@@ -757,20 +765,20 @@ def page(c: dict, photo_i: int) -> str:
         <figure class="geo-include__figure">
           <img
             class="geo-include__photo"
-            src="/images/geo-latte.jpg?v=20261103latte1"
-            alt="Latte art in a Jude paper cup"
-            width="768"
-            height="1024"
+            src="/images/geo-setup.jpg"
+            alt="Guest enjoying a Jude coffee at an outdoor gathering"
+            width="1348"
+            height="1791"
             loading="lazy"
             decoding="async"
           >
         </figure>
-        <h2 id="geo-include-title" class="geo-include__title">Features</h2>
-        <p class="geo-include__lead">What's included with every Jude coffee cart for your {esc(name)} event — we bring the bar, you host.</p>
+        <h2 id="geo-include-title" class="geo-include__title">What arrives with Jude</h2>
+        <p class="geo-include__lead">A complete specialty coffee experience for your {esc(name)} gathering — polished gear, practiced hands, and hospitality that feels like a gift to the room.</p>
         <ul class="geo-include__list">
 {includes_html}
         </ul>
-        <p class="geo-include__note">See the <a href="/menu">event menu</a> or explore more on <a href="/services">services</a>.</p>
+        <p class="geo-include__note">Peek the <a href="/menu">event menu</a> or browse everything we pour on <a href="/services">services</a>.</p>
       </div>
     </section>
 
@@ -898,11 +906,11 @@ def page(c: dict, photo_i: int) -> str:
         <div class="geo-close__shade"></div>
       </div>
       <div class="geo-close__inner">
-        <h2 id="geo-close-title" class="geo-close__title">Get a coffee cart quote for {esc(name)}</h2>
-        <p class="geo-close__lead">Share the date, venue, and guest count — we will follow up with a custom quote for your {esc(name)} event.</p>
+        <h2 id="geo-close-title" class="geo-close__title">Ready for beautiful coffee in {esc(name)}?</h2>
+        <p class="geo-close__lead">Tell us the date, venue, and guest count — we’ll send a thoughtful quote and make booking feel easy from the first note.</p>
         <div class="geo-close__actions">
           <a class="btn" href="/contact">Get a quote</a>
-          <a class="tagline-underline" href="/reach-out">Or reach out</a>
+          <a class="tagline-underline" href="/reach-out">Or say hello</a>
         </div>
       </div>
     </section>
