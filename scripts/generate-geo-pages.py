@@ -15,20 +15,26 @@ from site_common import CACHE, mega_footer  # noqa: E402
 
 TODAY = date.today().isoformat()
 
-# Never use as location heroes: geo-setup.jpg (lifestyle drinker), geo-latte.jpg (tight crop).
+# Location heroes: full cart / brand scenes only.
+# Banned as heroes (too tight, square, or candid crops):
+#   geo-setup.jpg, geo-latte.jpg, geo-deep-wedding.jpg,
+#   geo-deep-corporate.jpg, geo-deep-private.jpg
 HERO_PHOTOS = [
     "/images/geo-cart.jpg",
     "/images/geo-cup.jpg",
     "/images/geo-close.jpg",
     "/images/geo-detail.jpg",
     "/images/geo-cart-alt.jpg",
+]
+
+# Allowed in body sections only (not heroes).
+BODY_PHOTOS = HERO_PHOTOS + [
+    "/images/geo-setup.jpg",
+    "/images/geo-latte.jpg",
     "/images/geo-deep-wedding.jpg",
     "/images/geo-deep-corporate.jpg",
     "/images/geo-deep-private.jpg",
 ]
-
-# Allowed in body sections only (not heroes).
-BODY_PHOTOS = HERO_PHOTOS + ["/images/geo-setup.jpg", "/images/geo-latte.jpg"]
 
 # Primary hubs Jude should rank for (existing + new)
 HUBS = [

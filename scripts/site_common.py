@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import html
 
-CACHE = "20261104fix2"
+CACHE = "20261104hero3"
 
 HUBS = [
     ("lakeland", "Lakeland, FL"),
