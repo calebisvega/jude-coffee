@@ -1,5 +1,72 @@
 # Session Handoff
 
+## 2026-11-03 22:25 — City SEO depth pass (ready to push)
+
+### Goal
+Make `/tampa` `/orlando` `/lakeland` compete for Central Florida coffee-cart queries.
+
+### Progress
+- Done: keyword titles/meta; unique wedding/corporate/private copy; what’s included; FAQs + FAQPage schema; richer Service schema; services page city links; sitemap priority bump for city URLs; homepage offer areaServed expanded.
+- Not done: deploy/push; Google Search Console sitemap submit; Google Business Profile posts linking to city URLs; review velocity (off-site).
+
+### Next action
+Commit + push when Caleb says go. Then submit `https://judecoffee.com/sitemap.xml` in Search Console and request indexing for the three city URLs.
+
+---
+
+## 2026-11-03 22:25 — City SEO depth pass (ready to push)
+
+### Goal
+Make `/tampa` `/orlando` `/lakeland` compete for Central Florida coffee-cart queries.
+
+### Progress
+- Done: keyword titles/meta; unique wedding/corporate/private copy; what’s included; FAQs + FAQPage schema; richer Service schema; services page city links; sitemap priority bump for city URLs; homepage offer areaServed expanded.
+- Not done: deploy/push; Google Search Console sitemap submit; Google Business Profile posts linking to city URLs; review velocity (off-site).
+
+### Next action
+Commit + push when Caleb says go. Then submit `https://judecoffee.com/sitemap.xml` in Search Console and request indexing for the three city URLs.
+
+---
+
+
+
+## 2026-11-03 21:35 — City SEO pages built (awaiting photo confirm + push)
+
+### Goal
+SEO audit + hidden-but-indexable city pages at `/tampa`, `/orlando`, `/lakeland` (Solo-inspired services pattern, Jude voice/brand).
+
+### Progress
+- Done:
+  - SEO audit: homepage/meta/schema already solid; expanded `areaServed` + copy to Tampa/Orlando; sitemap updated with city URLs; robots already allow crawl (preview routes still disallowed).
+  - City pages: `tampa.html`, `orlando.html`, `lakeland.html` — not linked from main nav; footer “Also serving” cross-links only; in `sitemap.xml`.
+  - Solo-inspired services block (headline + lead + Book CTA + photo + 8 service rows) with original Jude copy.
+  - Styles in `css/styles.css` (`.page-geo…`); motion in `js/geo.js`.
+  - Photos imported from Boris `02_JUDE/JUDE-SITE/images/IMG_0316–0321.JPEG` → `images/geo-*.jpg` (web-sized).
+- In progress: confirm these are the intended “new photos”; push live when Caleb says go.
+- Not started: Search Console sitemap ping / live phone QA after deploy.
+
+### Decisions / requirements
+- URLs: lowercase `/tampa` `/orlando` `/lakeland` (CF Pages maps `.html`).
+- Not in primary nav; discoverable via sitemap + search + footer cross-links.
+- Brand: sage/cream/existing system; sentence-case headlines on geo pages.
+- Photos used: Oct 5 Portra set on Boris under `JUDE-SITE/images/` — ask if another drop exists.
+
+### Blockers
+- Confirm photo source. Searched `/Volumes/Boris/JUDE`, `/Volumes/Boris/02_JUDE/JUDE-SITE`, repo `images/` — used IMG_0316–0321. No separate newer drop found.
+
+### Next action
+1. Caleb confirms photos (or points to another folder).
+2. Commit + push to `main` for Cloudflare Pages.
+3. Spot-check live `/tampa` `/orlando` `/lakeland` + sitemap.
+
+### Read first
+- `tampa.html` / `orlando.html` / `lakeland.html`
+- `sitemap.xml`, `index.html` (schema areaServed)
+- `css/styles.css` (geo section at end)
+- `context/references/solo-services-section.png`
+
+---
+
 ## 2026-11-03 21:20 — SEO + geo landing pages (Tampa / Orlando / Lakeland)
 
 ### Goal
