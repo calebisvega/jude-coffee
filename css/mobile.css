@@ -1017,9 +1017,9 @@
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
-    min-height: 0;
+    min-height: 100dvh;
     height: auto;
-    overflow: hidden;
+    overflow: visible;
     padding: 0;
   }
 
@@ -1034,17 +1034,12 @@
   }
 
   .page-services #main > .site-footer {
-    display: block !important;
-    position: absolute;
-    z-index: 5;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    flex: none;
-    width: auto;
-    background: transparent;
-    color: var(--cream);
-    pointer-events: none;
+    display: none !important;
+  }
+
+  .page-services .site-footer--mega {
+    position: relative;
+    z-index: 100;
   }
 
   .page-services .footer-bar.footer-bar--simple {
