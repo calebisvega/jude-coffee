@@ -11,7 +11,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from site_common import BANNED_HERO_IMAGES, CACHE, mega_footer  # noqa: E402
+from site_common import (  # noqa: E402
+    BANNED_HERO_IMAGES,
+    CACHE,
+    faq_details_html,
+    lined,
+    mega_footer,
+    shared_faqs,
+)
 
 TODAY = date.today().isoformat()
 
@@ -443,34 +450,8 @@ def page(c: dict, photo_i: int) -> str:
     og_title = f"Coffee Cart Catering in {name}, FL | Jude"
     hero_alt = f"Jude coffee cart catering in {name}"
 
-    faq = [
-        {
-            "q": f"Do you provide coffee cart catering in {name}?",
-            "a": c["faq_serve"],
-        },
-        {
-            "q": f"What areas near {name} do you serve?",
-            "a": c["faq_areas"],
-        },
-        {
-            "q": f"How much does a coffee cart cost in {name}?",
-            "a": (
-                f"Every {name} event is custom-quoted from guest count, service length, and menu needs. "
-                "Start with Get a quote and we will send pricing for your date and venue."
-            ),
-        },
-        {
-            "q": "What drinks are on the coffee cart menu?",
-            "a": (
-                "Espresso-based drinks, drip, and cold brew with house-made syrups. "
-                f"See the full Jude menu, then tell us if you want a signature drink for your {name} event."
-            ),
-            "a_html": (
-                "Espresso-based drinks, drip, and cold brew with house-made syrups. "
-                f'<a href="/menu">See the full Jude menu</a>, then tell us if you want a signature drink for your {esc(name)} event.'
-            ),
-        },
-    ]
+    faq_pairs = shared_faqs(name)
+    faq = [{"q": q, "a": a} for q, a in faq_pairs]
 
     schema = {
         "@context": "https://schema.org",
@@ -581,16 +562,7 @@ def page(c: dict, photo_i: int) -> str:
         ],
     }
 
-    faq_html = "\n".join(
-        f'''        <details class="geo-faq__item">
-          <summary class="geo-faq__q">
-            <span class="geo-faq__q-text">{esc(item["q"])}</span>
-            <span class="geo-faq__icon" aria-hidden="true"></span>
-          </summary>
-          <p class="geo-faq__a">{item.get("a_html") or esc(item["a"])}</p>
-        </details>'''
-        for item in faq
-    )
+    faq_html = faq_details_html(faq_pairs)
 
     services = [
         ("Corporate Events", "Meetings, appreciation mornings, and client days that feel considered — not cafeteria."),
@@ -623,29 +595,29 @@ def page(c: dict, photo_i: int) -> str:
     book_steps = [
         (
             "01",
-            "Share the day",
+            "Share\nthe day",
             "Send the date, place, guest count, and what you’re celebrating. We’ll check the calendar and reply with care — not a ticket number.",
         ),
         (
             "02",
-            "We shape the pour",
+            "We shape\nthe pour",
             "Menu, pacing, and staffing sized to your people and the tone of the room. You get a clear plan; we carry the details.",
         ),
         (
             "03",
-            "Lock the logistics",
+            "Lock the\nlogistics",
             "Load-in, power, weather coverage, and where the cart lives. We coordinate with your venue or planner so nothing is left fuzzy.",
         ),
         (
             "04",
-            "We host the moment",
+            "We host\nthe moment",
             "Jude arrives early, dials in, serves with warmth, and packs out clean — so you stay present with your guests.",
         ),
     ]
     book_steps_html = "\n".join(
         f'''          <li class="geo-book__step">
             <span class="geo-book__num" aria-hidden="true">{num}</span>
-            <h3 class="geo-book__step-title">{esc(title)}</h3>
+            <h3 class="geo-book__step-title">{lined(title)}</h3>
             <p class="geo-book__step-copy">{esc(copy)}</p>
           </li>'''
         for num, title, copy in book_steps
@@ -864,29 +836,11 @@ def page(c: dict, photo_i: int) -> str:
           through service in public and private events.
         </p>
       </div>
-      <div
-        class="geo-about__drag"
-        id="geo-about-drag"
-        data-geo-about-drag
-        role="img"
-        aria-label="Latte art in a Jude cup"
-        tabindex="0"
-      >
-        <img
-          class="geo-about__photo"
-          src="/images/geo-latte.jpg?v=20261103latte1"
-          alt=""
-          width="768"
-          height="1024"
-          draggable="false"
-          decoding="async"
-        >
-      </div>
     </section>
 
     <section class="geo-faq" aria-labelledby="geo-faq-title">
       <div class="geo-faq__inner">
-        <h2 id="geo-faq-title" class="geo-faq__title">Coffee cart FAQs for {esc(name)}</h2>
+        <h2 id="geo-faq-title" class="geo-faq__title">Frequently asked questions</h2>
 {faq_html}
       </div>
     </section>
@@ -909,7 +863,6 @@ def page(c: dict, photo_i: int) -> str:
         <p class="geo-close__lead">Tell us the date, venue, and guest count — we’ll send a thoughtful quote and make booking feel easy from the first note.</p>
         <div class="geo-close__actions">
           <a class="btn" href="/contact">Get a quote</a>
-          <a class="tagline-underline" href="/reach-out">Or say hello</a>
         </div>
       </div>
     </section>

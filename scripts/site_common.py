@@ -5,7 +5,68 @@ from __future__ import annotations
 
 import html
 
-CACHE = "20261104book2"
+CACHE = "20261104scroll2"
+
+
+def lined(text: str) -> str:
+    """Escape title copy but keep intentional line breaks for two-line rhythm."""
+    return "<br>".join(html.escape(part, quote=False) for part in text.split("\n"))
+
+
+# Shared FAQ set — keep identical wording everywhere FAQs appear.
+CORE_FAQS = [
+    (
+        "What kind of service can the coffee cart provide?",
+        (
+            "The cart is built around traditional coffee service with housemade syrups, "
+            "farm-fresh whole milk, and oat and macadamia milk alternatives. "
+            "Final setup is confirmed for each event."
+        ),
+    ),
+    (
+        "Can the service be tailored to the event?",
+        (
+            "Yes. We shape the coffee service around your wedding, office, or brand event "
+            "so it fits the room, the pace, and the guest count."
+        ),
+    ),
+    (
+        "What do you need from the venue?",
+        (
+            "We confirm layout, guest count, service window, load-in access, and power during booking. "
+            "Outdoor events need weather coverage and a backup plan before service is confirmed."
+        ),
+    ),
+]
+
+
+def quote_faq(place: str | None = None) -> tuple[str, str]:
+    if place:
+        question = f"How do I get a quote for a {place} coffee cart event?"
+    else:
+        question = "How do I get a quote for a coffee cart event?"
+    answer = (
+        "Use the catering inquiry form with your event date, location, guest count, "
+        "service window, and event type. We’ll reply with availability and a quote."
+    )
+    return (question, answer)
+
+
+def shared_faqs(place: str | None = None) -> list[tuple[str, str]]:
+    return [*CORE_FAQS, quote_faq(place)]
+
+
+def faq_details_html(faqs: list[tuple[str, str]]) -> str:
+    return "\n".join(
+        f'''          <details class="geo-faq__item">
+            <summary class="geo-faq__q">
+              <span class="geo-faq__q-text">{esc(q)}</span>
+              <span class="geo-faq__icon" aria-hidden="true"></span>
+            </summary>
+            <p class="geo-faq__a">{esc(a)}</p>
+          </details>'''
+        for q, a in faqs
+    )
 
 # Never use these as page heroes (location or service).
 BANNED_HERO_IMAGES = frozenset(

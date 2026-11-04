@@ -16,8 +16,11 @@ from site_common import (  # noqa: E402
     HUBS,
     SERVICES,
     esc,
+    faq_details_html,
+    lined,
     mega_footer,
     reviews_section,
+    shared_faqs,
 )
 
 TODAY = date.today().isoformat()
@@ -36,12 +39,13 @@ SERVICE_PAGES = [
         "og_title": "Corporate Coffee Catering | Jude",
         "hero_img": "/images/barista.png",
         "hero_alt": "Jude baristas with the coffee cart at a corporate event",
+        "steps_img": "/images/team.png",
         "why_title": "Why companies book a mobile coffee cart",
         "why": [
-            ("Boost team morale", "A real café moment shows employees you value them — more memorable than another tray of pastries."),
-            ("Impress clients", "Hand guests a cortado or latte at the door and the meeting starts warmer."),
-            ("Drive event engagement", "At conferences and brand days, the cart becomes a natural gathering point."),
-            ("Hassle-free setup", "We bring the machine, supplies, and baristas — then pack out so hosting stays simple."),
+            ("Boost team\nmorale", "A real café moment shows employees you value them — more memorable than another tray of pastries."),
+            ("Impress\nclients", "Hand guests a cortado or latte at the door and the meeting starts warmer."),
+            ("Drive event\nengagement", "At conferences and brand days, the cart becomes a natural gathering point."),
+            ("Hassle-free\nsetup", "We bring the machine, supplies, and baristas — then pack out so hosting stays simple."),
         ],
         "body_sections": [
             (
@@ -70,28 +74,10 @@ SERVICE_PAGES = [
         ],
         "steps_title": "How booking corporate coffee works",
         "steps": [
-            ("Share the day", "Date, venue, headcount, and what you’re gathering for."),
-            ("We shape the pour", "Menu and timing sized to your agenda and rush windows."),
-            ("Lock the plan", "Logistics cleared so your team can stay focused on the event."),
-            ("We host", "Setup, service, and a clean pack-out while you lead the room."),
-        ],
-        "faqs": [
-            (
-                "Can you serve large corporate events?",
-                "Yes. Tell us your headcount and service length — we recommend staffing so guests are not stuck in a long line. Multi-hour windows and peak rush periods are normal for corporate coffee catering.",
-            ),
-            (
-                "Do you invoice for corporate accounting?",
-                "Yes. We provide clear quotes and invoices for your team. Start with Get a quote and share any billing notes with your request.",
-            ),
-            (
-                "Can you set up in an office lobby or conference room?",
-                "Usually yes. We need a workable footprint and power for the espresso machine. We will confirm logistics once we know the venue.",
-            ),
-            (
-                "How far in advance should we book?",
-                "Two to four weeks is ideal. Peak wedding and holiday seasons fill faster — reach out early if your date is fixed.",
-            ),
+            ("Share\nthe day", "Date, venue, headcount, and what you’re gathering for."),
+            ("We shape\nthe pour", "Menu and timing sized to your agenda and rush windows."),
+            ("Lock\nthe plan", "Logistics cleared so your team can stay focused on the event."),
+            ("We host\nthe room", "Setup, service, and a clean pack-out while you lead the room."),
         ],
     },
     {
@@ -105,12 +91,13 @@ SERVICE_PAGES = [
         "og_title": "Wedding Coffee Cart | Jude",
         "hero_img": "/images/popup.png",
         "hero_alt": "Jude coffee cart at a wedding celebration",
+        "steps_img": "/images/barista.png",
         "why_title": "Why couples book a wedding coffee cart",
         "why": [
-            ("A guest favorite", "Espresso drinks become a talking point — and a softer landing after dinner or dancing."),
-            ("Flexible timing", "Cocktail hour, dessert service, or late-night — we match your timeline."),
-            ("Fits the venue", "Barns, hotels, backyards, and waterfront setups across Central Florida."),
-            ("We handle the bar", "Machine, supplies, cups, and baristas included — you stay present with guests."),
+            ("A guest\nfavorite", "Espresso drinks become a talking point — and a softer landing after dinner or dancing."),
+            ("Flexible\ntiming", "Cocktail hour, dessert service, or late-night — we match your timeline."),
+            ("Fits the\nvenue", "Barns, hotels, backyards, and waterfront setups across Central Florida."),
+            ("We handle\nthe bar", "Machine, supplies, cups, and baristas included — you stay present with guests."),
         ],
         "body_sections": [
             (
@@ -139,28 +126,10 @@ SERVICE_PAGES = [
         ],
         "steps_title": "How booking a wedding coffee cart works",
         "steps": [
-            ("Share the day", "Date, venue, guest count, and when coffee belongs on the timeline."),
-            ("We shape the pour", "Menu and staffing sized to guest flow and the feel of the celebration."),
-            ("Lock it with your planner", "Timing, placement, and power — nothing left fuzzy."),
-            ("We host the moment", "Early arrival, warm service, clean pack-out while you stay present."),
-        ],
-        "faqs": [
-            (
-                "When during the wedding should we schedule the coffee cart?",
-                "Cocktail hour, post-dinner dessert, and late night are the most popular. We will help you pick a window that fits your timeline and guest flow.",
-            ),
-            (
-                "Can you work with our venue and planner?",
-                "Yes. Share venue rules and load-in details when you request a quote — we coordinate arrival and power needs ahead of time.",
-            ),
-            (
-                "Do you offer a signature wedding drink?",
-                "Often yes. Tell us the flavor direction and we will suggest a drink that fits espresso, drip, or cold brew service.",
-            ),
-            (
-                "How many guests can you serve?",
-                "We size service to your headcount and window. Share your guest count for a clear recommendation.",
-            ),
+            ("Share\nthe day", "Date, venue, guest count, and when coffee belongs on the timeline."),
+            ("We shape\nthe pour", "Menu and staffing sized to guest flow and the feel of the celebration."),
+            ("Lock it with\nyour planner", "Timing, placement, and power — nothing left fuzzy."),
+            ("We host\nthe moment", "Early arrival, warm service, clean pack-out while you stay present."),
         ],
     },
     {
@@ -174,12 +143,13 @@ SERVICE_PAGES = [
         "og_title": "Private Party Coffee Cart | Jude",
         "hero_img": "/images/team.png",
         "hero_alt": "Guests gathering near the Jude coffee cart at a private event",
+        "steps_img": "/images/popup.png",
         "why_title": "Why hosts book Jude for private parties",
         "why": [
-            ("Feels special", "Guests order real drinks — a warmer centerpiece than a static beverage table."),
-            ("Works at home or a venue", "Backyards, clubhouses, barns, and private dining rooms."),
-            ("Easy on the host", "We run the cart so you can stay in the conversation."),
-            ("Flexible menus", "Espresso, drip, cold brew, and house syrups for mixed crowds."),
+            ("Feels\nspecial", "Guests order real drinks — a warmer centerpiece than a static beverage table."),
+            ("Works at home\nor a venue", "Backyards, clubhouses, barns, and private dining rooms."),
+            ("Easy on\nthe host", "We run the cart so you can stay in the conversation."),
+            ("Flexible\nmenus", "Espresso, drip, cold brew, and house syrups for mixed crowds."),
         ],
         "body_sections": [
             (
@@ -204,24 +174,10 @@ SERVICE_PAGES = [
         ],
         "steps_title": "How booking a private party cart works",
         "steps": [
-            ("Share the celebration", "Date, place, guest count, and the vibe you’re after."),
-            ("We send a clear quote", "Pricing for your window — no surprise add-ons midstream."),
-            ("Lock the logistics", "We handle load-in details so you can keep hosting."),
-            ("We pour for the room", "Warm service from first guest to clean pack-out."),
-        ],
-        "faqs": [
-            (
-                "Can you set up in a backyard?",
-                "Often yes, as long as we have a safe footprint and power. Share photos or a venue note with your quote request.",
-            ),
-            (
-                "Is there a minimum guest count?",
-                "Every event is custom-quoted. Smaller gatherings are welcome — tell us the details and we will let you know what works.",
-            ),
-            (
-                "Do you serve non-coffee drinkers?",
-                "We can include options beyond espresso — ask about drip, cold brew, and house syrups for your crowd.",
-            ),
+            ("Share the\ncelebration", "Date, place, guest count, and the vibe you’re after."),
+            ("We send a\nclear quote", "Pricing for your window — no surprise add-ons midstream."),
+            ("Lock the\nlogistics", "We handle load-in details so you can keep hosting."),
+            ("We pour for\nthe room", "Warm service from first guest to clean pack-out."),
         ],
     },
     {
@@ -235,12 +191,13 @@ SERVICE_PAGES = [
         "og_title": "Holiday Party Coffee Cart | Jude",
         "hero_img": "/images/geo-close.jpg",
         "hero_alt": "Jude coffee cart set up for a celebration",
+        "steps_img": "/images/geo-cart-alt.jpg",
         "why_title": "Why holiday parties book a coffee cart",
         "why": [
-            ("Seasonal energy", "Warm drinks that fit winter parties and festive menus."),
-            ("Works with catering", "Coffee pairs with dessert or after-dinner service."),
-            ("Corporate-ready", "Clear quotes and reliable timing for company events."),
-            ("Guest flow", "A natural break in the evening that keeps people mingling."),
+            ("Seasonal\nenergy", "Warm drinks that fit winter parties and festive menus."),
+            ("Works with\ncatering", "Coffee pairs with dessert or after-dinner service."),
+            ("Corporate\nready", "Clear quotes and reliable timing for company events."),
+            ("Guest\nflow", "A natural break in the evening that keeps people mingling."),
         ],
         "body_sections": [
             (
@@ -265,24 +222,10 @@ SERVICE_PAGES = [
         ],
         "steps_title": "How booking holiday coffee works",
         "steps": [
-            ("Reach out early", "Holiday weekends fill — we’ll hold a thoughtful slot."),
-            ("Align the timing", "Dinner, speeches, dessert — coffee lands where it belongs."),
-            ("We arrive ready", "Setup before guests find the bar."),
-            ("You close the night", "We pack out clean so the party ends soft."),
-        ],
-        "faqs": [
-            (
-                "When should we book a holiday coffee cart?",
-                "As soon as your date is firm. November and December weekends go first.",
-            ),
-            (
-                "Can you serve after dinner?",
-                "Yes — dessert and post-program windows are popular for holiday parties.",
-            ),
-            (
-                "Do you travel for holiday events outside Lakeland?",
-                "Yes. We regularly serve Tampa Bay, Orlando, and surrounding Central Florida hubs.",
-            ),
+            ("Reach out\nearly", "Holiday weekends fill — we’ll hold a thoughtful slot."),
+            ("Align the\ntiming", "Dinner, speeches, dessert — coffee lands where it belongs."),
+            ("We arrive\nready", "Setup before guests find the bar."),
+            ("You close\nthe night", "We pack out clean so the party ends soft."),
         ],
     },
     {
@@ -296,12 +239,13 @@ SERVICE_PAGES = [
         "og_title": "Brand Activation Coffee Cart | Jude",
         "hero_img": "/images/geo-detail.jpg",
         "hero_alt": "Jude coffee service at a brand event",
+        "steps_img": "/images/barista.png",
         "why_title": "Why brands book Jude",
         "why": [
-            ("Foot traffic magnet", "A working espresso bar draws people and holds them longer."),
-            ("On-brand hospitality", "Menu cues and service style that match the campaign tone."),
-            ("Reliable ops", "We run the cart so your team can run the activation."),
-            ("Central Florida reach", "Lakeland home base with Tampa and Orlando travel."),
+            ("Foot traffic\nmagnet", "A working espresso bar draws people and holds them longer."),
+            ("On-brand\nhospitality", "Menu cues and service style that match the campaign tone."),
+            ("Reliable\nops", "We run the cart so your team can run the activation."),
+            ("Central Florida\nreach", "Lakeland home base with Tampa and Orlando travel."),
         ],
         "body_sections": [
             (
@@ -326,24 +270,10 @@ SERVICE_PAGES = [
         ],
         "steps_title": "How booking a brand activation works",
         "steps": [
-            ("Brief the moment", "Date, place, audience, and what the campaign needs to feel like."),
-            ("We map the pour", "Menu and window shaped to foot traffic and brand cues."),
-            ("On-site calm", "Quiet setup, confident service, clean pack-out."),
-            ("Learn for next time", "A short debrief so the next market lands even better."),
-        ],
-        "faqs": [
-            (
-                "Can drinks be named for the campaign?",
-                "Often yes — share naming ideas with your quote request.",
-            ),
-            (
-                "Do you work with agencies and experiential teams?",
-                "Yes. Share the producer contact and load-in plan when you inquire.",
-            ),
-            (
-                "Can you serve outdoor activations?",
-                "Many outdoor setups work with power and a safe footprint. We confirm details per site.",
-            ),
+            ("Brief the\nmoment", "Date, place, audience, and what the campaign needs to feel like."),
+            ("We map\nthe pour", "Menu and window shaped to foot traffic and brand cues."),
+            ("On-site\ncalm", "Quiet setup, confident service, clean pack-out."),
+            ("Learn for\nnext time", "A short debrief so the next market lands even better."),
         ],
     },
     {
@@ -357,12 +287,13 @@ SERVICE_PAGES = [
         "og_title": "Brand Pop-Up Coffee Cart | Jude",
         "hero_img": "/images/geo-cart.jpg",
         "hero_alt": "Jude coffee cart ready for a pop-up event",
+        "steps_img": "/images/prep.png",
         "why_title": "Why pop-ups book a coffee cart",
         "why": [
-            ("Instant hospitality", "Guests arrive and have something to do — order a drink."),
-            ("Flexible sites", "Retail floors, plazas, studios, and parking-lot pop-ups."),
-            ("Fast service", "Baristas keep lines moving during peak traffic."),
-            ("Clean exit", "We pack out so the space resets quickly."),
+            ("Instant\nhospitality", "Guests arrive and have something to do — order a drink."),
+            ("Flexible\nsites", "Retail floors, plazas, studios, and parking-lot pop-ups."),
+            ("Fast\nservice", "Baristas keep lines moving during peak traffic."),
+            ("Clean\nexit", "We pack out so the space resets quickly."),
         ],
         "body_sections": [
             (
@@ -383,20 +314,10 @@ SERVICE_PAGES = [
         ],
         "steps_title": "How booking a brand pop-up works",
         "steps": [
-            ("Share the site plan", "Hours, expected traffic, and power."),
-            ("We price the window", "Staffing matched to the rush you expect."),
-            ("Launch day", "We keep the line kind and the drinks dialed."),
-            ("Clean reset", "Pack-out when you wrap — space left tidy."),
-        ],
-        "faqs": [
-            (
-                "How long should a pop-up coffee window be?",
-                "Two to four hours is common. Share your traffic plan and we will recommend a window.",
-            ),
-            (
-                "Can you handle a lunchtime rush?",
-                "Yes — tell us peak timing so we staff and prep accordingly.",
-            ),
+            ("Share the\nsite plan", "Hours, expected traffic, and power."),
+            ("We price\nthe window", "Staffing matched to the rush you expect."),
+            ("Launch\nday", "We keep the line kind and the drinks dialed."),
+            ("Clean\nreset", "Pack-out when you wrap — space left tidy."),
         ],
     },
     {
@@ -410,12 +331,13 @@ SERVICE_PAGES = [
         "og_title": "Office Coffee Cart | Jude",
         "hero_img": "/images/prep.png",
         "hero_alt": "Barista pulling espresso for an office gathering",
+        "steps_img": "/images/team.png",
         "why_title": "Why offices book Jude",
         "why": [
-            ("Morale you can taste", "A café morning beats another box of grocery-store coffee."),
-            ("Client-ready", "Impress visitors without leaving the building."),
-            ("One visit or recurring", "Book a single morning or talk to us about a repeat cadence."),
-            ("Minimal disruption", "We set up for your lobby or common area and pack out clean."),
+            ("Morale you\ncan taste", "A café morning beats another box of grocery-store coffee."),
+            ("Client\nready", "Impress visitors without leaving the building."),
+            ("One visit or\nrecurring", "Book a single morning or talk to us about a repeat cadence."),
+            ("Minimal\ndisruption", "We set up for your lobby or common area and pack out clean."),
         ],
         "body_sections": [
             (
@@ -436,20 +358,10 @@ SERVICE_PAGES = [
         ],
         "steps_title": "How booking office coffee works",
         "steps": [
-            ("Share access & timing", "Floor notes, security, and when people gather."),
-            ("We clear logistics", "Power and footprint figured out before we roll in."),
-            ("We host the morning", "Espresso through your window — line stays humane."),
-            ("Make it a rhythm", "Ask about monthly or quarterly visits that stick."),
-        ],
-        "faqs": [
-            (
-                "Can we book recurring office coffee?",
-                "Often yes. Share the cadence you want and we will discuss availability.",
-            ),
-            (
-                "Do you need a kitchen?",
-                "No kitchen required — we need power and a workable footprint.",
-            ),
+            ("Share access\n& timing", "Floor notes, security, and when people gather."),
+            ("We clear\nlogistics", "Power and footprint figured out before we roll in."),
+            ("We host\nthe morning", "Espresso through your window — line stays humane."),
+            ("Make it\na rhythm", "Ask about monthly or quarterly visits that stick."),
         ],
     },
     {
@@ -463,12 +375,13 @@ SERVICE_PAGES = [
         "og_title": "Conference Coffee Cart | Jude",
         "hero_img": "/images/geo-cart.jpg",
         "hero_alt": "Jude mobile coffee cart ready for event service",
+        "steps_img": "/images/geo-cart-alt.jpg",
         "why_title": "Why conferences book a coffee cart",
         "why": [
-            ("Booth magnet", "Attendees follow the espresso."),
-            ("All-day energy", "Service windows that match agendas and breaks."),
-            ("Professional presence", "Trained baristas who keep the line respectful of session timing."),
-            ("Simple vendor story", "One cart, clear setup, clean pack-out."),
+            ("Booth\nmagnet", "Attendees follow the espresso."),
+            ("All-day\nenergy", "Service windows that match agendas and breaks."),
+            ("Professional\npresence", "Trained baristas who keep the line respectful of session timing."),
+            ("Simple vendor\nstory", "One cart, clear setup, clean pack-out."),
         ],
         "body_sections": [
             (
@@ -489,20 +402,10 @@ SERVICE_PAGES = [
         ],
         "steps_title": "How booking conference coffee works",
         "steps": [
-            ("Share the agenda", "Peak breaks, booth rules, and where coffee should live."),
-            ("We staff for volume", "Enough hands for the rush without a chaotic line."),
-            ("Coordinate load-in", "Venue ops, power, and footprint — handled."),
-            ("We hold the day", "Espresso from open through the last break."),
-        ],
-        "faqs": [
-            (
-                "Can you work inside a trade-show booth?",
-                "Often yes if footprint and power allow. Send booth specs with your inquiry.",
-            ),
-            (
-                "How do you handle rush breaks?",
-                "We prep for peak windows — tell us when sessions let out.",
-            ),
+            ("Share the\nagenda", "Peak breaks, booth rules, and where coffee should live."),
+            ("We staff\nfor volume", "Enough hands for the rush without a chaotic line."),
+            ("Coordinate\nload-in", "Venue ops, power, and footprint — handled."),
+            ("We hold\nthe day", "Espresso from open through the last break."),
         ],
     },
     {
@@ -516,12 +419,13 @@ SERVICE_PAGES = [
         "og_title": "Coffee Cart Rental Central Florida | Jude",
         "hero_img": "/images/geo-close.jpg",
         "hero_alt": "Jude mobile coffee cart",
+        "steps_img": "/images/story-cart.png",
         "why_title": "What coffee cart rental with Jude includes",
         "why": [
-            ("Full service", "Equipment, supplies, and trained baristas — not a bare rental."),
-            ("Event-ready menu", "Espresso-based drinks, drip, and cold brew with house syrups."),
-            ("Central Florida travel", "Lakeland based, serving Tampa Bay, Orlando, and nearby hubs."),
-            ("Clear quoting", "Custom pricing from date, guest count, and service length."),
+            ("Full\nservice", "Equipment, supplies, and trained baristas — not a bare rental."),
+            ("Event-ready\nmenu", "Espresso-based drinks, drip, and cold brew with house syrups."),
+            ("Central Florida\ntravel", "Lakeland based, serving Tampa Bay, Orlando, and nearby hubs."),
+            ("Clear\nquoting", "Custom pricing from date, guest count, and service length."),
         ],
         "body_sections": [
             (
@@ -546,24 +450,10 @@ SERVICE_PAGES = [
         ],
         "steps_title": "How booking coffee cart rental works",
         "steps": [
-            ("Share the essentials", "Date, place, guests, and service window."),
-            ("Review the plan together", "Menu and timing confirmed in plain language."),
-            ("Lock the date", "Your slot is held — logistics stay on us."),
-            ("Event day", "Full-service cart, baristas, and a clean finish."),
-        ],
-        "faqs": [
-            (
-                "Is this a DIY cart rental?",
-                "No. Jude is full-service coffee catering with baristas. We do not drop off an unattended cart.",
-            ),
-            (
-                "What areas do you serve?",
-                "Lakeland and Central Florida hubs including Tampa, St. Petersburg, Orlando, Winter Haven, Bradenton, Sarasota, and more.",
-            ),
-            (
-                "How much does coffee cart rental cost?",
-                "Every event is custom-quoted. Share your details through Get a quote for pricing.",
-            ),
+            ("Share the\nessentials", "Date, place, guests, and service window."),
+            ("Review the plan\ntogether", "Menu and timing confirmed in plain language."),
+            ("Lock the\ndate", "Your slot is held — logistics stay on us."),
+            ("Event\nday", "Full-service cart, baristas, and a clean finish."),
         ],
     },
 ]
@@ -573,7 +463,7 @@ def page(c: dict) -> str:
     slug = c["slug"]
     why_html = "\n".join(
         f'''          <article class="svc-why__item">
-            <h3 class="svc-why__item-title">{esc(t)}</h3>
+            <h3 class="svc-why__item-title">{lined(t)}</h3>
             <p>{esc(d)}</p>
           </article>'''
         for t, d in c["why"]
@@ -586,26 +476,27 @@ def page(c: dict) -> str:
         for t, p in c["body_sections"]
     )
     types_html = "\n".join(f"          <li>{esc(t)}</li>" for t in c["types"])
+    steps_img = c.get("steps_img") or ""
+    if steps_img and steps_img == c.get("hero_img"):
+        raise SystemExit(f"steps_img must differ from hero on {c['slug']}: {steps_img}")
     steps_html = "\n".join(
         f'''          <li class="svc-steps__item">
-            <span class="svc-steps__num">{i}</span>
-            <div>
-              <h3 class="svc-steps__title">{esc(t)}</h3>
+            <span class="svc-steps__num" aria-hidden="true">{i:02d}</span>
+            <div class="svc-steps__copy">
+              <h3 class="svc-steps__title">{lined(t)}</h3>
               <p>{esc(d)}</p>
             </div>
           </li>'''
         for i, (t, d) in enumerate(c["steps"], 1)
     )
-    faq_html = "\n".join(
-        f'''          <details class="geo-faq__item">
-            <summary class="geo-faq__q">
-              <span class="geo-faq__q-text">{esc(q)}</span>
-              <span class="geo-faq__icon" aria-hidden="true"></span>
-            </summary>
-            <p class="geo-faq__a">{esc(a)}</p>
-          </details>'''
-        for q, a in c["faqs"]
-    )
+    steps_figure = ""
+    if steps_img:
+        steps_figure = f'''
+        <figure class="svc-steps__figure">
+          <img class="svc-steps__photo" src="{steps_img}" alt="" width="900" height="1200" loading="lazy" decoding="async">
+        </figure>'''
+    faqs = shared_faqs()
+    faq_html = faq_details_html(faqs)
     schema = {
         "@context": "https://schema.org",
         "@graph": [
@@ -660,7 +551,7 @@ def page(c: dict) -> str:
                         "name": q,
                         "acceptedAnswer": {"@type": "Answer", "text": a},
                     }
-                    for q, a in c["faqs"]
+                    for q, a in faqs
                 ],
             },
         ],
@@ -744,10 +635,12 @@ def page(c: dict) -> str:
 
     <section class="svc-steps" aria-labelledby="svc-steps-title">
       <div class="svc-steps__inner">
-        <h2 id="svc-steps-title" class="svc-steps__title">{esc(c["steps_title"])}</h2>
-        <ol class="svc-steps__list">
+        <h2 id="svc-steps-title" class="svc-steps__heading">{esc(c["steps_title"])}</h2>
+        <div class="svc-steps__layout">
+          <ol class="svc-steps__list">
 {steps_html}
-        </ol>
+          </ol>{steps_figure}
+        </div>
       </div>
     </section>
 

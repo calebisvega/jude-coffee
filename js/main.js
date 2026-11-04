@@ -10,22 +10,19 @@
   function syncMobilePageLocks() {
     var isMobile = mobileLockMq.matches;
     var isHome = document.body.classList.contains('page-home');
-    var canLockMobile =
-      isHome ||
-      document.body.classList.contains('page-menu') ||
-      document.body.classList.contains('page-services') ||
-      document.body.classList.contains('page-contact');
-    // Viewport locks are mobile-only (desktop keeps normal scroll).
-    var pageLocked = isMobile && canLockMobile;
+    // Home keeps its intentional single-viewport mobile shell.
+    // Every other page (menu, services, contact, geo, svc) scrolls normally
+    // like a standard marketing site — locking was collapsing #main to 0px
+    // and leaving only the mega footer visible.
+    var homeLocked = isMobile && isHome;
 
-    document.documentElement.classList.toggle('is-home-locked', isMobile && isHome);
-    document.documentElement.classList.toggle('is-page-locked', pageLocked);
-    document.body.classList.toggle('is-home-locked', isMobile && isHome);
-    document.body.classList.toggle('is-page-locked', pageLocked);
+    document.documentElement.classList.toggle('is-home-locked', homeLocked);
+    document.documentElement.classList.toggle('is-page-locked', false);
+    document.body.classList.toggle('is-home-locked', homeLocked);
+    document.body.classList.toggle('is-page-locked', false);
 
-    var locked = document.body.classList.contains('is-home-locked') || document.body.classList.contains('is-page-locked');
-    document.documentElement.style.overflow = locked ? 'hidden' : '';
-    document.body.style.overflow = locked ? 'hidden' : '';
+    document.documentElement.style.overflow = homeLocked ? 'hidden' : '';
+    document.body.style.overflow = homeLocked ? 'hidden' : '';
   }
 
   syncMobilePageLocks();
@@ -899,214 +896,76 @@
     updateScrollPageState();
   }
 
-  // Menu page — draggable menu over editorial type (desktop + mobile)
+  // Menu page — desktop keeps draggable menu; mobile is a normal scrolling stack
   if (document.body.classList.contains('page-menu')) {
     var menuDrag = document.getElementById('menu-asset-drag');
     var menuSection = document.querySelector('.section--menu-asset');
-    var menuEditorial = document.querySelector('.menu-editorial');
     var menuEditorialBody = document.querySelector('.menu-editorial__body');
+    var menuMobileMq = window.matchMedia('(max-width: 768px)');
 
-    function fitMenuEditorialType() {
-      if (!menuEditorial || !menuEditorialBody) return;
-
-      // Desktop keeps the original large type CSS — only fit on mobile locked menu
-      if (!window.matchMedia('(max-width: 768px)').matches) {
-        menuEditorialBody.style.fontSize = '';
-        menuEditorialBody.style.letterSpacing = '';
-        menuEditorialBody.style.textAlign = '';
-        menuEditorialBody.style.width = '';
-        return;
-      }
-
-      var availableHeight = menuEditorial.clientHeight;
-      var availableWidth = menuEditorial.clientWidth;
-      if (availableHeight <= 0 || availableWidth <= 0) return;
-
-      // Prefer a solid bottom-weighted block; leave slack for descenders (g/y/p)
-      var targetHeight = Math.floor(availableHeight * 0.84);
-      var minPx = 10;
-      var maxPx = Math.min(240, Math.round(availableHeight * 0.5));
-      var editorialBottom = menuEditorial.getBoundingClientRect().bottom;
-
-      menuEditorialBody.style.width = '100%';
-      menuEditorialBody.style.textAlign = 'left';
+    function clearMenuInlineType() {
+      if (!menuEditorialBody) return;
+      menuEditorialBody.style.fontSize = '';
       menuEditorialBody.style.letterSpacing = '';
-
-      function lastLineFillRatio() {
-        var range = document.createRange();
-        range.selectNodeContents(menuEditorialBody);
-        var rects = range.getClientRects();
-        if (!rects.length) return 1;
-        return rects[rects.length - 1].width / availableWidth;
-      }
-
-      function overflowsEditorial() {
-        var range = document.createRange();
-        range.selectNodeContents(menuEditorialBody);
-        var rects = range.getClientRects();
-        if (!rects.length) return menuEditorialBody.scrollHeight > targetHeight;
-        var last = rects[rects.length - 1];
-        // Extra 2px slack so glyph margins don't kiss the clip edge
-        return last.bottom > editorialBottom - 2 || menuEditorialBody.scrollHeight > targetHeight;
-      }
-
-      function scoreSize(px, tracking) {
-        menuEditorialBody.style.fontSize = px + 'px';
-        menuEditorialBody.style.letterSpacing = tracking;
-
-        if (overflowsEditorial()) {
-          return -1;
-        }
-
-        var fill = menuEditorialBody.scrollHeight / targetHeight;
-        var lastFill = lastLineFillRatio();
-        // Penalize orphans (short last line)
-        if (lastFill < 0.45) {
-          return fill * 0.3 + lastFill * 0.25;
-        }
-        return fill * 0.65 + Math.min(lastFill, 1) * 0.35;
-      }
-
-      var lo = minPx;
-      var hi = maxPx;
-      var maxFit = minPx;
-
-      while (lo <= hi) {
-        var mid = Math.floor((lo + hi) / 2);
-        menuEditorialBody.style.fontSize = mid + 'px';
-        menuEditorialBody.style.letterSpacing = '-0.05em';
-        if (!overflowsEditorial()) {
-          maxFit = mid;
-          lo = mid + 1;
-        } else {
-          hi = mid - 1;
-        }
-      }
-
-      var bestPx = maxFit;
-      var bestTrack = '-0.05em';
-      var bestScore = -1;
-      var trackOpts = ['-0.06em', '-0.05em', '-0.04em', '-0.03em'];
-      var windowStart = Math.max(minPx, maxFit - 20);
-
-      for (var px = windowStart; px <= maxFit; px++) {
-        for (var t = 0; t < trackOpts.length; t++) {
-          var s = scoreSize(px, trackOpts[t]);
-          if (s > bestScore) {
-            bestScore = s;
-            bestPx = px;
-            bestTrack = trackOpts[t];
-          }
-        }
-      }
-
-      menuEditorialBody.style.fontSize = bestPx + 'px';
-      menuEditorialBody.style.letterSpacing = bestTrack;
+      menuEditorialBody.style.textAlign = '';
+      menuEditorialBody.style.width = '';
     }
 
-    if (menuEditorial && menuEditorialBody) {
-      window.addEventListener('load', fitMenuEditorialType);
-      window.addEventListener('resize', fitMenuEditorialType);
+    clearMenuInlineType();
+    window.addEventListener('resize', clearMenuInlineType);
 
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(fitMenuEditorialType);
-      }
-
-      requestAnimationFrame(fitMenuEditorialType);
-    }
-
-    if (menuDrag && menuSection) {
+    if (menuDrag && menuSection && !menuMobileMq.matches) {
       var menuDragging = false;
       var menuPointerId = null;
       var menuGrabOffsetX = 0;
       var menuGrabOffsetY = 0;
-      var menuMobileMq = window.matchMedia('(max-width: 768px)');
 
       function placeMenu(x, y) {
-        var maxX;
-        var maxY;
-
-        if (menuMobileMq.matches) {
-          // Free drag across the full viewport — including over the logo/footer
-          maxX = Math.max(0, window.innerWidth - menuDrag.offsetWidth);
-          maxY = Math.max(0, window.innerHeight - menuDrag.offsetHeight);
-          menuDrag.style.position = 'fixed';
-          menuDrag.style.zIndex = '500';
-        } else {
-          maxX = Math.max(0, menuSection.clientWidth - menuDrag.offsetWidth);
-          maxY = Math.max(0, menuSection.clientHeight - menuDrag.offsetHeight);
-          menuDrag.style.position = 'absolute';
-          menuDrag.style.zIndex = '';
-        }
-
+        var maxX = Math.max(0, menuSection.clientWidth - menuDrag.offsetWidth);
+        var maxY = Math.max(0, menuSection.clientHeight - menuDrag.offsetHeight);
+        menuDrag.style.position = 'absolute';
+        menuDrag.style.zIndex = '';
         menuDrag.style.left = Math.min(Math.max(0, x), maxX) + 'px';
         menuDrag.style.top = Math.min(Math.max(0, y), maxY) + 'px';
         menuDrag.style.transform = 'none';
       }
 
-      function defaultMenuPosition() {
+      function initMenuPosition() {
         if (menuMobileMq.matches) {
-          placeMenu(
-            (window.innerWidth - menuDrag.offsetWidth) / 2,
-            Math.max(0, window.innerHeight * 0.42 - menuDrag.offsetHeight / 2)
-          );
+          menuDrag.style.position = '';
+          menuDrag.style.left = '';
+          menuDrag.style.top = '';
+          menuDrag.style.transform = '';
+          menuDrag.style.zIndex = '';
           return;
         }
-
         placeMenu(
           (menuSection.clientWidth - menuDrag.offsetWidth) / 2,
           Math.max(0, menuSection.clientHeight * 0.42 - menuDrag.offsetHeight / 2)
         );
       }
 
-      function initMenuPosition() {
-        defaultMenuPosition();
-      }
-
       window.addEventListener('load', initMenuPosition);
       window.addEventListener('resize', function () {
-        fitMenuEditorialType();
-        if (!menuDragging) {
-          initMenuPosition();
-        }
+        if (!menuDragging) initMenuPosition();
       });
 
       menuDrag.addEventListener('pointerdown', function (e) {
-        if (e.button !== 0) return;
-
+        if (menuMobileMq.matches || e.button !== 0) return;
         menuDragging = true;
         menuPointerId = e.pointerId;
         menuDrag.classList.add('is-dragging');
         menuDrag.setPointerCapture(e.pointerId);
-
         var dragRect = menuDrag.getBoundingClientRect();
+        var sectionRect = menuSection.getBoundingClientRect();
         menuGrabOffsetX = e.clientX - dragRect.left;
         menuGrabOffsetY = e.clientY - dragRect.top;
-
-        if (menuMobileMq.matches) {
-          placeMenu(dragRect.left, dragRect.top);
-        } else {
-          var sectionRect = menuSection.getBoundingClientRect();
-          placeMenu(
-            dragRect.left - sectionRect.left,
-            dragRect.top - sectionRect.top
-          );
-        }
-
+        placeMenu(dragRect.left - sectionRect.left, dragRect.top - sectionRect.top);
         e.preventDefault();
       });
 
       menuDrag.addEventListener('pointermove', function (e) {
-        if (!menuDragging || e.pointerId !== menuPointerId) return;
-
-        if (menuMobileMq.matches) {
-          placeMenu(
-            e.clientX - menuGrabOffsetX,
-            e.clientY - menuGrabOffsetY
-          );
-          return;
-        }
-
+        if (!menuDragging || e.pointerId !== menuPointerId || menuMobileMq.matches) return;
         var sectionRect = menuSection.getBoundingClientRect();
         placeMenu(
           e.clientX - sectionRect.left - menuGrabOffsetX,
@@ -1117,20 +976,16 @@
       function endMenuDrag(e) {
         if (!menuDragging) return;
         if (e && e.pointerId !== menuPointerId) return;
-
         menuDragging = false;
         menuDrag.classList.remove('is-dragging');
-
         try {
           menuDrag.releasePointerCapture(menuPointerId);
         } catch (err) {}
-
         menuPointerId = null;
       }
 
       menuDrag.addEventListener('pointerup', endMenuDrag);
       menuDrag.addEventListener('pointercancel', endMenuDrag);
-
       requestAnimationFrame(initMenuPosition);
     }
   }
@@ -1241,13 +1096,100 @@
     track.innerHTML = buildServicesMarqueeItems(servicesMarqueePhrases, 2);
   });
 
-  // Services page — multi-direction marquee frame
+  // Services page — full-bleed photo stage + legacy mobile flip
   if (document.body.classList.contains('page-services')) {
-    document.documentElement.style.overscrollBehavior = 'none';
-
     document.querySelectorAll('.page-services .fade-in').forEach(function (el) {
       el.classList.add('is-visible');
     });
+
+    // Full-bleed stage — hover/focus a service name to reveal its photo
+    (function initServicesStage() {
+      var stage = document.querySelector('[data-services-stage]');
+      if (!stage) return;
+
+      var links = Array.prototype.slice.call(
+        stage.querySelectorAll('.services-stage__link[data-service-key]')
+      );
+      var photos = Array.prototype.slice.call(
+        stage.querySelectorAll('.services-stage__photo[data-service-photo]')
+      );
+      if (!links.length || !photos.length) return;
+
+      var defaultKey =
+        (links.find(function (link) {
+          return link.classList.contains('is-active');
+        }) ||
+          links[0]).getAttribute('data-service-key') || '';
+      var activeKey = defaultKey;
+      var leaveTimer = null;
+
+      function setActive(key, hot) {
+        if (!key) return;
+        activeKey = key;
+        stage.classList.toggle('is-hot', !!hot);
+
+        links.forEach(function (link) {
+          var match = link.getAttribute('data-service-key') === key;
+          link.classList.toggle('is-active', match);
+        });
+
+        photos.forEach(function (photo) {
+          photo.classList.toggle(
+            'is-active',
+            photo.getAttribute('data-service-photo') === key
+          );
+        });
+      }
+
+      function clearLeave() {
+        if (leaveTimer) {
+          window.clearTimeout(leaveTimer);
+          leaveTimer = null;
+        }
+      }
+
+      links.forEach(function (link) {
+        var key = link.getAttribute('data-service-key');
+
+        link.addEventListener('pointerenter', function () {
+          clearLeave();
+          setActive(key, true);
+        });
+
+        link.addEventListener('focus', function () {
+          clearLeave();
+          setActive(key, true);
+        });
+
+        link.addEventListener('pointerleave', function () {
+          clearLeave();
+          leaveTimer = window.setTimeout(function () {
+            if (stage.matches(':hover') || stage.querySelector(':focus-visible')) {
+              return;
+            }
+            setActive(defaultKey, false);
+          }, 180);
+        });
+      });
+
+      stage.addEventListener('pointerleave', function () {
+        clearLeave();
+        leaveTimer = window.setTimeout(function () {
+          if (stage.querySelector(':focus-visible')) return;
+          setActive(defaultKey, false);
+        }, 220);
+      });
+
+      stage.addEventListener('focusout', function () {
+        window.requestAnimationFrame(function () {
+          if (stage.contains(document.activeElement)) return;
+          if (stage.matches(':hover')) return;
+          setActive(defaultKey, false);
+        });
+      });
+
+      setActive(defaultKey, false);
+    })();
 
     // Mobile stage — stacked titles + slow image flip
     var servicesItems = Array.prototype.slice.call(
