@@ -613,6 +613,37 @@ def page(c: dict, photo_i: int) -> str:
     ]
     includes_html = "\n".join(f"          <li>{esc(x)}</li>" for x in includes)
 
+    book_steps = [
+        (
+            "01",
+            "Tell us the event",
+            "Send the date, venue, guest count, service window, and event type so we can check availability.",
+        ),
+        (
+            "02",
+            "Shape the service",
+            "We recommend a service shape for speed, guest mix, season, and the tone of the event.",
+        ),
+        (
+            "03",
+            "Confirm setup",
+            "We align on load-in, power, weather coverage, cart placement, and timing with the venue or planner.",
+        ),
+        (
+            "04",
+            "Serve the room",
+            "A Jude barista team arrives with the coffee bar, dials in, serves guests, and breaks down after service.",
+        ),
+    ]
+    book_steps_html = "\n".join(
+        f'''          <li class="geo-book__step">
+            <span class="geo-book__num" aria-hidden="true">{num}</span>
+            <h3 class="geo-book__step-title">{esc(title)}</h3>
+            <p class="geo-book__step-copy">{esc(copy)}</p>
+          </li>'''
+        for num, title, copy in book_steps
+    )
+
     schema_json = json.dumps(schema, indent=2, ensure_ascii=False)
 
     return f'''<!DOCTYPE html>
@@ -712,6 +743,15 @@ def page(c: dict, photo_i: int) -> str:
       </div>
     </section>
 
+    <section class="geo-book" aria-labelledby="geo-book-title">
+      <div class="geo-book__inner">
+        <h2 id="geo-book-title" class="geo-book__title">How to book a {esc(name)} coffee cart without making the planner chase details.</h2>
+        <ol class="geo-book__list">
+{book_steps_html}
+        </ol>
+      </div>
+    </section>
+
     <section class="geo-include" aria-labelledby="geo-include-title">
       <div class="geo-include__inner">
         <figure class="geo-include__figure">
@@ -725,8 +765,8 @@ def page(c: dict, photo_i: int) -> str:
             decoding="async"
           >
         </figure>
-        <h2 id="geo-include-title" class="geo-include__title">What's included</h2>
-        <p class="geo-include__lead">One specialty coffee cart experience for your {esc(name)} event — we bring the bar, you host.</p>
+        <h2 id="geo-include-title" class="geo-include__title">Features</h2>
+        <p class="geo-include__lead">What's included with every Jude coffee cart for your {esc(name)} event — we bring the bar, you host.</p>
         <ul class="geo-include__list">
 {includes_html}
         </ul>

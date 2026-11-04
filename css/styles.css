@@ -5955,13 +5955,97 @@ html:has(.page-services) {
 }
 
 
+.geo-book,
 .geo-include,
 .geo-faq {
   padding: clamp(3rem, 7vw, 5rem) var(--page-gutter);
 }
 
-.geo-include {
+.geo-book {
   background: var(--off-white);
+  color: var(--charcoal);
+}
+
+.geo-book__inner {
+  max-width: min(58rem, 100%);
+  margin: 0 auto;
+}
+
+.geo-book__title {
+  margin: 0 0 clamp(2rem, 5vw, 3.25rem);
+  max-width: 22ch;
+  font-family: var(--font-sans);
+  font-size: clamp(1.65rem, 3.8vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.geo-book__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid color-mix(in srgb, var(--charcoal) 14%, transparent);
+}
+
+.geo-book__step {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 0.65rem 1rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem) 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--charcoal) 14%, transparent);
+}
+
+@media (min-width: 800px) {
+  .geo-book__step {
+    grid-template-columns: 3rem minmax(10rem, 0.85fr) minmax(0, 1.35fr);
+    gap: 1rem 1.75rem;
+    align-items: start;
+  }
+}
+
+.geo-book__num {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--charcoal) 42%, transparent);
+}
+
+.geo-book__step-title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: clamp(0.95rem, 1.6vw, 1.125rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.geo-book__step-copy {
+  margin: 0;
+  grid-column: 2;
+  font-family: var(--font-sans);
+  font-size: clamp(0.8rem, 1.25vw, 0.95rem);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--charcoal) 58%, transparent);
+}
+
+@media (min-width: 800px) {
+  .geo-book__step-copy {
+    grid-column: 3;
+  }
+}
+
+.geo-include {
+  background: var(--cream);
 }
 
 .geo-faq {
@@ -6738,8 +6822,12 @@ html:has(.page-services) {
 
 .site-footer--mega {
   background: #eef1ea;
-  color: var(--charcoal);
+  color: #111;
   padding: clamp(3rem, 7vw, 4.5rem) var(--page-gutter) 1.75rem;
+}
+
+.site-footer--mega a {
+  color: #111;
 }
 
 .footer-mega {
@@ -6780,13 +6868,13 @@ html:has(.page-services) {
   font-family: var(--font-sans);
   font-size: 0.95rem;
   line-height: 1.55;
-  color: var(--charcoal-light);
+  color: #2c2c2c;
 }
 
 .footer-mega__social a {
   font-family: var(--font-sans);
   font-size: 0.95rem;
-  color: var(--sage-dark);
+  color: #111;
   text-decoration: none;
 }
 
@@ -6801,7 +6889,7 @@ html:has(.page-services) {
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: var(--charcoal);
+  color: #111;
 }
 
 .footer-mega__sub {
@@ -6809,7 +6897,7 @@ html:has(.page-services) {
   font-family: var(--font-display);
   font-size: 0.9rem;
   font-weight: 700;
-  color: var(--charcoal);
+  color: #111;
 }
 
 .footer-mega__list {
@@ -6824,7 +6912,7 @@ html:has(.page-services) {
   font-family: var(--font-sans);
   font-size: 0.92rem;
   line-height: 1.4;
-  color: var(--charcoal-light);
+  color: #111;
   text-decoration: none;
 }
 
@@ -6839,7 +6927,7 @@ html:has(.page-services) {
   font-family: var(--font-sans);
   font-size: 0.92rem;
   line-height: 1.45;
-  color: var(--charcoal-light);
+  color: #2c2c2c;
 }
 
 .footer-mega__nearby {
@@ -6847,7 +6935,7 @@ html:has(.page-services) {
   font-family: var(--font-sans);
   font-size: 0.88rem;
   line-height: 1.55;
-  color: var(--charcoal-light);
+  color: #2c2c2c;
 }
 
 .footer-mega__copy {
@@ -6858,5 +6946,17 @@ html:has(.page-services) {
   text-align: center;
   font-family: var(--font-sans);
   font-size: 0.8rem;
-  color: var(--charcoal-light);
+  color: #2c2c2c;
+}
+
+.page-services .site-footer--mega,
+.page-services .site-footer--mega a,
+.page-services .footer-mega__heading,
+.page-services .footer-mega__sub,
+.page-services .footer-mega__list a,
+.page-services .footer-mega__blurb,
+.page-services .footer-mega__nearby,
+.page-services .footer-mega__copy,
+.page-services .footer-mega__list--contact li {
+  color: #111;
 }

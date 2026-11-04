@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import html
 
-CACHE = "20261103fix1"
+CACHE = "20261104book1"
 
 HUBS = [
     ("lakeland", "Lakeland, FL"),
@@ -43,7 +43,6 @@ QUICK_LINKS = [
     ("/services", "Catering Services"),
     ("/reach-out", "Reach Out"),
     ("/", "About Us"),
-    ("/lakeland", "Lakeland Home Base"),
 ]
 
 
