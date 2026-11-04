@@ -729,7 +729,7 @@ def page(c: dict, photo_i: int) -> str:
     <section class="geo-services" aria-labelledby="geo-services-title">
       <div class="geo-services__intro">
         <div class="geo-services__intro-copy">
-          <h2 id="geo-services-title" class="geo-services__title">Hospitality that<br>travels well —<br>weddings to offices</h2>
+          <h2 id="geo-services-title" class="geo-services__title">Genuine hospitality that<br>travels well, from weddings to offices</h2>
           <p class="geo-services__lead">{esc(c["services_lead"])}</p>
         </div>
         <a class="btn geo-btn geo-btn--ghost" href="/contact">Get a quote</a>
