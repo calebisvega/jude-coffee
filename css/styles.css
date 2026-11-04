@@ -3993,8 +3993,8 @@ html:has(.page-services) {
   --services-offer-copy-gap: 0.7rem;
   --services-offer-lead-max: 36rem;
   --services-grid-min: 0;
-  --services-tile-label-size: clamp(0.8125rem, 1.35vw, 1.0625rem);
-  --services-tile-label-pad: 1.15rem 1.3rem;
+  --services-tile-label-size: clamp(0.9375rem, 1.55vw, 1.2rem);
+  --services-tile-label-pad: 1.25rem 1.4rem;
   --services-tile-hover-scale: 1.05;
   --services-footer-pad-y: 0.9rem;
   --services-split-panel-height: 700px;
@@ -4286,24 +4286,16 @@ html:has(.page-services) {
   color: rgba(244, 247, 238, 0.88);
 }
 
-.services-offer__areas {
-  margin: 0.35rem 0 0;
-  font-family: var(--font-tagline);
-  font-size: clamp(0.8125rem, 1.2vw, 0.9375rem);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: rgba(244, 247, 238, 0.78);
+.services-offer__cta {
+  margin-top: 0.35rem;
+  background: var(--cream);
+  color: var(--charcoal);
 }
 
-.services-offer__areas a {
-  color: var(--cream);
-  border-bottom: 1px solid rgba(244, 247, 238, 0.45);
-  text-decoration: none;
-}
-
-.services-offer__areas a:hover,
-.services-offer__areas a:focus-visible {
-  border-bottom-color: var(--cream);
+.services-offer__cta:hover,
+.services-offer__cta:focus-visible {
+  background: #fff;
+  color: var(--charcoal);
 }
 
 .services-grid {
@@ -4365,10 +4357,9 @@ html:has(.page-services) {
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(20, 32, 22, 0.58) 0%,
-    rgba(20, 32, 22, 0.22) 32%,
-    rgba(20, 32, 22, 0.28) 52%,
-    rgba(20, 32, 22, 0.08) 78%,
+    rgba(20, 32, 22, 0.72) 0%,
+    rgba(20, 32, 22, 0.28) 38%,
+    rgba(20, 32, 22, 0.06) 68%,
     transparent 100%
   );
   pointer-events: none;
@@ -4377,20 +4368,21 @@ html:has(.page-services) {
 
 .services-tile__label {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 2;
   margin: 0;
   padding: var(--services-tile-label-pad);
-  max-width: calc(100% - 1.5rem);
-  width: max-content;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  max-width: none;
+  width: auto;
+  transform: none;
+  text-align: left;
   font-family: var(--font-display);
   font-size: var(--services-tile-label-size);
   font-weight: 700;
   line-height: 1.2;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--cream);
 }
