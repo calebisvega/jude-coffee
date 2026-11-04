@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import html
 
-CACHE = "20261104copy2"
+CACHE = "20261104book2"
 
 # Never use these as page heroes (location or service).
 BANNED_HERO_IMAGES = frozenset(

@@ -20,6 +20,79 @@
     }
   }
 
+  var book = document.querySelector('.geo-book');
+  if (book) {
+    var bookSteps = Array.prototype.slice.call(book.querySelectorAll('.geo-book__step'));
+    var bookList = book.querySelector('.geo-book__list');
+    var reduceBookMotion =
+      window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function setBookProgress(count) {
+      if (!bookList || !bookSteps.length) return;
+      var ratio = Math.max(0, Math.min(1, count / bookSteps.length));
+      bookList.style.setProperty('--geo-book-progress', String(ratio));
+    }
+
+    function activateBookStep(step, index) {
+      if (!step || step.classList.contains('is-active')) return;
+      step.classList.add('is-active');
+      setBookProgress(index + 1);
+    }
+
+    if (reduceBookMotion || !('IntersectionObserver' in window)) {
+      book.classList.add('is-inview');
+      bookSteps.forEach(function (step, i) {
+        step.classList.add('is-active');
+        step.style.setProperty('--geo-book-i', String(i));
+      });
+      setBookProgress(bookSteps.length);
+    } else {
+      var bookObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-inview');
+            bookObserver.unobserve(entry.target);
+          });
+        },
+        { rootMargin: '0px 0px -10% 0px', threshold: 0.2 }
+      );
+      bookObserver.observe(book);
+
+      var stepObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var step = entry.target;
+            var index = bookSteps.indexOf(step);
+            activateBookStep(step, index);
+            stepObserver.unobserve(step);
+          });
+        },
+        { rootMargin: '0px 0px -18% 0px', threshold: 0.55 }
+      );
+
+      bookSteps.forEach(function (step, i) {
+        step.style.setProperty('--geo-book-i', String(i));
+        step.setAttribute('tabindex', '0');
+        stepObserver.observe(step);
+        step.addEventListener('mouseenter', function () {
+          step.classList.add('is-hot');
+        });
+        step.addEventListener('mouseleave', function () {
+          step.classList.remove('is-hot');
+        });
+        step.addEventListener('focus', function () {
+          step.classList.add('is-hot');
+          activateBookStep(step, i);
+        });
+        step.addEventListener('blur', function () {
+          step.classList.remove('is-hot');
+        });
+      });
+    }
+  }
+
   var deepTiles = document.querySelectorAll('.geo-deep__tile');
   if (deepTiles.length) {
     var canHover = window.matchMedia && window.matchMedia('(hover: hover)').matches;

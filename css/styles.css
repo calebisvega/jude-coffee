@@ -5959,6 +5959,7 @@ html:has(.page-services) {
 }
 
 .geo-book {
+  --geo-book-rail: 0.14rem;
   background: var(--off-white);
   color: var(--charcoal);
 }
@@ -5978,24 +5979,91 @@ html:has(.page-services) {
   letter-spacing: 0.01em;
   text-transform: uppercase;
   color: #111;
+  opacity: 0;
+  transform: translateY(0.85rem);
+  transition:
+    opacity 0.7s var(--ease),
+    transform 0.7s var(--ease);
+}
+
+.geo-book.is-inview .geo-book__title {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .geo-book__list {
+  --geo-book-progress: 0;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 1.15rem;
+  position: relative;
   border-top: 1px solid color-mix(in srgb, var(--charcoal) 14%, transparent);
+}
+
+.geo-book__list::before,
+.geo-book__list::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--geo-book-rail);
+  border-radius: 999px;
+}
+
+.geo-book__list::before {
+  background: color-mix(in srgb, var(--charcoal) 12%, transparent);
+}
+
+.geo-book__list::after {
+  background: var(--sage);
+  transform-origin: top center;
+  transform: scaleY(var(--geo-book-progress));
+  transition: transform 0.55s var(--ease);
 }
 
 .geo-book__step {
   display: grid;
   grid-template-columns: 2.5rem minmax(0, 1fr);
   gap: 0.65rem 1rem;
-  padding: clamp(1.25rem, 3vw, 1.75rem) 0;
+  padding: clamp(1.25rem, 3vw, 1.75rem) 0.35rem clamp(1.25rem, 3vw, 1.75rem) 0.85rem;
   border-bottom: 1px solid color-mix(in srgb, var(--charcoal) 14%, transparent);
+  border-radius: 0.35rem;
+  cursor: default;
+  opacity: 0;
+  transform: translateY(1rem);
+  transition:
+    opacity 0.55s var(--ease),
+    transform 0.55s var(--ease),
+    background-color 0.35s var(--ease);
+  transition-delay: calc(var(--geo-book-i, 0) * 0.08s);
+}
+
+.geo-book.is-inview .geo-book__step {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.geo-book__step.is-active .geo-book__num {
+  color: var(--sage-dark);
+}
+
+.geo-book__step.is-hot,
+.geo-book__step:focus-visible {
+  background: color-mix(in srgb, var(--sage) 8%, transparent);
+  outline: none;
+}
+
+.geo-book__step.is-hot .geo-book__step-title,
+.geo-book__step:focus-visible .geo-book__step-title {
+  color: var(--sage-dark);
 }
 
 @media (min-width: 800px) {
+  .geo-book__list {
+    padding-left: 1.35rem;
+  }
+
   .geo-book__step {
     grid-template-columns: 3rem minmax(10rem, 0.85fr) minmax(0, 1.35fr);
     gap: 1rem 1.75rem;
@@ -6010,6 +6078,7 @@ html:has(.page-services) {
   line-height: 1.4;
   letter-spacing: 0.04em;
   color: color-mix(in srgb, var(--charcoal) 42%, transparent);
+  transition: color 0.35s var(--ease);
 }
 
 .geo-book__step-title {
@@ -6021,6 +6090,7 @@ html:has(.page-services) {
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: #111;
+  transition: color 0.35s var(--ease);
 }
 
 .geo-book__step-copy {
@@ -6038,6 +6108,16 @@ html:has(.page-services) {
 @media (min-width: 800px) {
   .geo-book__step-copy {
     grid-column: 3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .geo-book__title,
+  .geo-book__step,
+  .geo-book__list::after {
+    transition: none;
+    opacity: 1;
+    transform: none;
   }
 }
 
