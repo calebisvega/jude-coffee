@@ -45,53 +45,152 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css?v=20261104scroll2">
-  <link rel="stylesheet" href="/css/mobile.css?v=20261104scroll2">
+  <link rel="stylesheet" href="/css/styles.css?v=20261104svcgrid">
+  <link rel="stylesheet" href="/css/mobile.css?v=20261104svcgrid">
 </head>
 <body class="page-services">
   <a href="#main" class="skip-link">Skip to content</a>
 
+  <div class="services-marquee-frame" aria-hidden="true">
+    <div class="services-marquee services-marquee--horizontal services-marquee--top">
+      <div class="services-marquee__track" data-services-marquee-track data-marquee-axis="x" data-marquee-direction="left"></div>
+    </div>
+    <div class="services-marquee services-marquee--vertical services-marquee--left">
+      <div class="services-marquee__track" data-services-marquee-track data-marquee-axis="y" data-marquee-direction="up"></div>
+    </div>
+    <div class="services-marquee services-marquee--vertical services-marquee--right">
+      <div class="services-marquee__track" data-services-marquee-track data-marquee-axis="y" data-marquee-direction="down"></div>
+    </div>
+  </div>
+
   <main id="main">
-    <section class="services-stage" data-services-stage aria-labelledby="services-offer-title">
-      <div class="services-stage__media" aria-hidden="true">
-        <img class="services-stage__photo is-active" data-service-photo="corporate" src="/images/barista.png" alt="" width="1600" height="2000" fetchpriority="high" decoding="async">
-        <img class="services-stage__photo" data-service-photo="weddings" src="/images/popup.png" alt="" width="1600" height="2000" decoding="async">
-        <img class="services-stage__photo" data-service-photo="private" src="/images/team.png" alt="" width="1600" height="2000" loading="lazy" decoding="async">
-        <img class="services-stage__photo" data-service-photo="holiday" src="/images/geo-close.jpg" alt="" width="1348" height="1791" loading="lazy" decoding="async">
-        <img class="services-stage__photo" data-service-photo="activations" src="/images/geo-detail.jpg" alt="" width="1348" height="1791" loading="lazy" decoding="async">
-        <img class="services-stage__photo" data-service-photo="popups" src="/images/geo-cart.jpg" alt="" width="1348" height="1791" loading="lazy" decoding="async">
-        <img class="services-stage__photo" data-service-photo="office" src="/images/prep.png" alt="" width="1600" height="2000" loading="lazy" decoding="async">
-        <img class="services-stage__photo" data-service-photo="conferences" src="/images/geo-cart-alt.jpg" alt="" width="1348" height="1791" loading="lazy" decoding="async">
-        <img class="services-stage__photo" data-service-photo="rental" src="/images/story-cart.png" alt="" width="1600" height="2000" loading="lazy" decoding="async">
-      </div>
-      <div class="services-stage__veil" aria-hidden="true"></div>
-
-      <div class="services-stage__content">
-        <a href="/" class="services-stage__logo" aria-label="Jude — Home">
-          <img src="/images/logo-cream.png" alt="" width="480" height="192" decoding="async">
-        </a>
-
-        <div class="services-stage__intro">
-          <h1 id="services-offer-title" class="services-stage__title">What we do</h1>
-          <p class="services-stage__lead">Genuine hospitality that<br>travels well, from weddings to offices</p>
-          <a class="btn services-stage__cta" href="/contact">Get a quote</a>
-        </div>
-
-        <nav class="services-stage__nav" aria-label="Jude services">
-          <ul class="services-stage__list">
-            <li><a class="services-stage__link is-active" href="/services/corporate-coffee-catering" data-service-key="corporate">Corporate catering</a></li>
-            <li><a class="services-stage__link" href="/services/wedding-coffee-cart" data-service-key="weddings">Weddings</a></li>
-            <li><a class="services-stage__link" href="/services/private-parties" data-service-key="private">Private parties</a></li>
-            <li><a class="services-stage__link" href="/services/holiday-parties" data-service-key="holiday">Holiday parties</a></li>
-            <li><a class="services-stage__link" href="/services/brand-activations" data-service-key="activations">Brand activations</a></li>
-            <li><a class="services-stage__link" href="/services/brand-pop-ups" data-service-key="popups">Brand pop-ups</a></li>
-            <li><a class="services-stage__link" href="/services/office-coffee" data-service-key="office">Office coffee</a></li>
-            <li><a class="services-stage__link" href="/services/conference-coffee-catering" data-service-key="conferences">Conferences</a></li>
-            <li><a class="services-stage__link" href="/services/coffee-cart-rental" data-service-key="rental">Coffee cart rental</a></li>
-          </ul>
-        </nav>
+    <section class="services-offer" aria-labelledby="services-offer-title">
+      <a href="/" class="services-offer__logo" aria-label="Jude — Home">
+        <img
+          src="/images/logo-cream.png"
+          alt=""
+          class="services-offer__jude"
+          width="480"
+          height="192"
+          decoding="async"
+        >
+      </a>
+      <div class="services-offer__copy">
+        <h1 id="services-offer-title" class="services-offer__title">What we do</h1>
+        <p class="services-offer__lead">Specialty coffee catering for weddings, offices, and gatherings across Central Florida.</p>
+        <a class="btn services-offer__cta" href="/contact">Get a quote</a>
       </div>
     </section>
+
+    <section class="services-grid" aria-label="Services">
+      <a class="services-tile" id="corporate-coffee-catering" href="/services/corporate-coffee-catering" aria-label="Corporate catering">
+        <img
+          class="services-tile__photo"
+          src="/images/barista.png"
+          alt="Barista preparing espresso at a corporate event"
+          width="800"
+          height="1000"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Corporate catering</h2>
+      </a>
+      <a class="services-tile" id="wedding-coffee-cart" href="/services/wedding-coffee-cart" aria-label="Weddings">
+        <img
+          class="services-tile__photo"
+          src="/images/popup.png"
+          alt="Jude coffee cart at a wedding venue"
+          width="800"
+          height="1000"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Weddings</h2>
+      </a>
+      <a class="services-tile" id="private-parties" href="/services/private-parties" aria-label="Private parties">
+        <img
+          class="services-tile__photo"
+          src="/images/team.png"
+          alt="Jude baristas with the coffee cart at a private gathering"
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Private parties</h2>
+      </a>
+      <a class="services-tile" id="holiday-parties" href="/services/holiday-parties" aria-label="Holiday parties">
+        <img
+          class="services-tile__photo"
+          src="/images/geo-close.jpg"
+          alt="Jude coffee cart set up for a celebration"
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Holiday parties</h2>
+      </a>
+      <a class="services-tile" id="brand-activations" href="/services/brand-activations" aria-label="Brand activations">
+        <img
+          class="services-tile__photo"
+          src="/images/geo-detail.jpg"
+          alt="Jude coffee service at a brand event"
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Brand activations</h2>
+      </a>
+      <a class="services-tile" id="brand-pop-ups" href="/services/brand-pop-ups" aria-label="Brand pop-ups">
+        <img
+          class="services-tile__photo"
+          src="/images/geo-cart.jpg"
+          alt="Jude mobile coffee cart set up for a pop-up"
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Brand pop-ups</h2>
+      </a>
+      <a class="services-tile" id="office-coffee" href="/services/office-coffee" aria-label="Office coffee">
+        <img
+          class="services-tile__photo"
+          src="/images/prep.png"
+          alt="Barista preparing espresso for an office gathering"
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Office coffee</h2>
+      </a>
+      <a class="services-tile" id="conference-coffee-catering" href="/services/conference-coffee-catering" aria-label="Conferences">
+        <img
+          class="services-tile__photo"
+          src="/images/geo-cart.jpg"
+          alt="Jude mobile coffee cart ready for event service"
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Conferences</h2>
+      </a>
+      <a class="services-tile" id="coffee-cart-rental" href="/services/coffee-cart-rental" aria-label="Coffee cart rental">
+        <img
+          class="services-tile__photo"
+          src="/images/story-cart.png"
+          alt="Jude specialty mobile coffee cart"
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Coffee cart rental</h2>
+      </a>
+    </section>
+
   </main>
 
   <section class="reviews" aria-labelledby="reviews-title" data-reviews>
@@ -237,6 +336,6 @@
     <p class="footer-mega__copy">© 2026 Jude Coffee. All rights reserved.</p>
   </footer>
 
-  <script src="/js/main.js?v=20261104scroll2"></script>
+  <script src="/js/main.js?v=20261104svcgrid"></script>
 </body>
 </html>

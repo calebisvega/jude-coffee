@@ -981,62 +981,19 @@
   .page-services {
     --services-marquee-size: 0;
     --services-marquee-radius: 0;
+    --services-offer-height: 24vh;
+    --services-offer-pad-x: 1.15rem;
+    --services-offer-pad-y: 1.15rem;
+    --services-offer-logo-width: 76px;
+    --services-offer-logo-gap: 0.4rem;
+    --services-offer-title-size: clamp(2.15rem, 9vw, 2.85rem);
+    --services-offer-lead-size: clamp(0.8125rem, 3.4vw, 0.9375rem);
+    --services-offer-copy-gap: 0.4rem;
+    --services-grid-min: 0;
+    --services-tile-label-size: clamp(0.625rem, 2.6vw, 0.75rem);
+    --services-tile-label-pad: 0.75rem 0.85rem;
     --services-footer-pad-y: 0.65rem;
-    background: #142016;
-  }
-
-  .page-services .services-stage {
-    min-height: 100dvh;
-  }
-
-  .page-services .services-stage__content {
-    min-height: 100dvh;
-    gap: 1.5rem;
-    padding:
-      clamp(1.15rem, 4vw, 1.75rem)
-      var(--page-gutter)
-      clamp(1.5rem, 5vw, 2.25rem);
-    align-content: space-between;
-  }
-
-  .page-services .services-stage__nav {
-    width: 100%;
-  }
-
-  .page-services .services-stage__list {
-    padding-bottom: 0.35rem;
-  }
-
-  .page-services .services-stage__logo {
-    width: min(5.75rem, 38vw);
-  }
-
-  .page-services .services-stage__intro {
-    max-width: none;
-    gap: 0.7rem;
-  }
-
-  .page-services .services-stage__title {
-    font-size: clamp(2.35rem, 11vw, 3.25rem);
-  }
-
-  .page-services .services-stage__lead {
-    font-size: clamp(0.9375rem, 3.8vw, 1.0625rem);
-    max-width: 22rem;
-  }
-
-  .page-services .services-stage__list {
-    gap: 0.05rem;
-  }
-
-  .page-services .services-stage__link {
-    font-size: clamp(1.05rem, 4.6vw, 1.35rem);
-    padding: 0.55rem 0;
-  }
-
-  .page-services .services-stage__link:hover,
-  .page-services .services-stage__link:focus-visible {
-    transform: none;
+    background: var(--sage);
   }
 
   .page-services .services-opening,
@@ -1085,9 +1042,10 @@
   }
 
   .page-services #main {
-    display: block;
-    flex: none;
-    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 100dvh;
     height: auto;
     overflow: visible;
     padding: 0;
@@ -1612,14 +1570,6 @@
   .page-svc .footer-mega__list,
   .page-services .footer-mega__list {
     columns: 1;
-  }
-
-  .page-services .services-stage {
-    min-height: 100dvh;
-  }
-
-  .page-services .services-stage__content {
-    min-height: 100dvh;
   }
 
   .page-services .reviews {
