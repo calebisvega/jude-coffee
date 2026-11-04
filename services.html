@@ -45,8 +45,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Inter:wght@200;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css?v=20261103svc1">
-  <link rel="stylesheet" href="/css/mobile.css?v=20261103svc1">
+  <link rel="stylesheet" href="/css/styles.css?v=20261103fix1">
+  <link rel="stylesheet" href="/css/mobile.css?v=20261103fix1">
 </head>
 <body class="page-services">
   <a href="#main" class="skip-link">Skip to content</a>
@@ -102,9 +102,15 @@
           <span aria-hidden="true"> · </span>
           <a href="/services/private-parties">Private parties</a>
           <span aria-hidden="true"> · </span>
+          <a href="/services/holiday-parties">Holiday parties</a>
+          <span aria-hidden="true"> · </span>
           <a href="/services/brand-activations">Brand activations</a>
           <span aria-hidden="true"> · </span>
+          <a href="/services/brand-pop-ups">Brand pop-ups</a>
+          <span aria-hidden="true"> · </span>
           <a href="/services/office-coffee">Office coffee</a>
+          <span aria-hidden="true"> · </span>
+          <a href="/services/conference-coffee-catering">Conferences</a>
           <span aria-hidden="true"> · </span>
           <a href="/services/coffee-cart-rental">Coffee cart rental</a>
         </p>
@@ -112,7 +118,18 @@
     </section>
 
     <section class="services-grid" aria-label="Services">
-      <a class="services-tile" id="weddings" href="/services/wedding-coffee-cart" aria-label="Weddings — wedding coffee cart">
+      <a class="services-tile" id="corporate-coffee-catering" href="/services/corporate-coffee-catering" aria-label="Corporate catering">
+        <img
+          class="services-tile__photo"
+          src="/images/barista.png"
+          alt="Barista preparing espresso at a corporate event"
+          width="800"
+          height="1000"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Corporate catering</h2>
+      </a>
+      <a class="services-tile" id="wedding-coffee-cart" href="/services/wedding-coffee-cart" aria-label="Weddings">
         <img
           class="services-tile__photo"
           src="/images/popup.png"
@@ -123,19 +140,7 @@
         >
         <h2 class="services-tile__label">Weddings</h2>
       </a>
-      <a class="services-tile" id="corporate" href="/services/corporate-coffee-catering" aria-label="Corporate events — corporate coffee catering">
-        <img
-          class="services-tile__photo"
-          src="/images/barista.png"
-          alt="Barista preparing espresso at a corporate event"
-          width="800"
-          height="1000"
-          loading="lazy"
-          decoding="async"
-        >
-        <h2 class="services-tile__label">Corporate events &amp; conferences</h2>
-      </a>
-      <a class="services-tile" id="parties" href="/services/private-parties" aria-label="Private parties coffee cart">
+      <a class="services-tile" id="private-parties" href="/services/private-parties" aria-label="Private parties">
         <img
           class="services-tile__photo"
           src="/images/team.png"
@@ -147,21 +152,82 @@
         >
         <h2 class="services-tile__label">Private parties</h2>
       </a>
-      <a class="services-tile" id="popups" href="/services/brand-pop-ups" aria-label="Brand pop-ups coffee cart">
+      <a class="services-tile" id="holiday-parties" href="/services/holiday-parties" aria-label="Holiday parties">
         <img
           class="services-tile__photo"
-          src="/images/cart.png"
-          alt="Jude mobile coffee cart set up for a public pop-up"
+          src="/images/geo-close.jpg"
+          alt="Jude coffee cart set up for a celebration"
           width="800"
           height="1000"
           loading="lazy"
           decoding="async"
         >
-        <h2 class="services-tile__label">Public pop-ups</h2>
+        <h2 class="services-tile__label">Holiday parties</h2>
+      </a>
+      <a class="services-tile" id="brand-activations" href="/services/brand-activations" aria-label="Brand activations">
+        <img
+          class="services-tile__photo"
+          src="/images/geo-detail.jpg"
+          alt="Jude coffee service at a brand event"
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Brand activations</h2>
+      </a>
+      <a class="services-tile" id="brand-pop-ups" href="/services/brand-pop-ups" aria-label="Brand pop-ups">
+        <img
+          class="services-tile__photo"
+          src="/images/cart.png"
+          alt="Jude mobile coffee cart set up for a pop-up"
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Brand pop-ups</h2>
+      </a>
+      <a class="services-tile" id="office-coffee" href="/services/office-coffee" aria-label="Office coffee">
+        <img
+          class="services-tile__photo"
+          src="/images/prep.png"
+          alt="Barista preparing espresso for an office gathering"
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Office coffee</h2>
+      </a>
+      <a class="services-tile" id="conference-coffee-catering" href="/services/conference-coffee-catering" aria-label="Conferences">
+        <img
+          class="services-tile__photo"
+          src="/images/geo-cart.jpg"
+          alt="Jude mobile coffee cart ready for event service"
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Conferences</h2>
+      </a>
+      <a class="services-tile" id="coffee-cart-rental" href="/services/coffee-cart-rental" aria-label="Coffee cart rental">
+        <img
+          class="services-tile__photo"
+          src="/images/story-cart.png"
+          alt="Jude specialty mobile coffee cart"
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        >
+        <h2 class="services-tile__label">Coffee cart rental</h2>
       </a>
     </section>
+  </main>
 
-    <footer class="site-footer site-footer--mega">
+  <footer class="site-footer site-footer--mega">
     <div class="footer-mega">
       <div class="footer-mega__brand">
         <a href="/" class="footer-mega__logo" aria-label="Jude — Home">
@@ -230,8 +296,7 @@
     </div>
     <p class="footer-mega__copy">© 2026 Jude Coffee. All rights reserved.</p>
   </footer>
-  </main>
 
-  <script src="/js/main.js?v=20260907noabout1"></script>
+  <script src="/js/main.js?v=20261103fix1"></script>
 </body>
 </html>
