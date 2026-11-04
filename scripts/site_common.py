@@ -5,7 +5,18 @@ from __future__ import annotations
 
 import html
 
-CACHE = "20261104hero4"
+CACHE = "20261104hero5"
+
+# Never use these as page heroes (location or service).
+BANNED_HERO_IMAGES = frozenset(
+    {
+        "/images/geo-setup.jpg",
+        "/images/geo-latte.jpg",
+        "/images/geo-deep-wedding.jpg",
+        "/images/geo-deep-corporate.jpg",
+        "/images/geo-deep-private.jpg",
+    }
+)
 
 HUBS = [
     ("lakeland", "Lakeland, FL"),

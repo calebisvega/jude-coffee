@@ -10,7 +10,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from site_common import CACHE, HUBS, SERVICES, esc, mega_footer, reviews_section  # noqa: E402
+from site_common import (  # noqa: E402
+    BANNED_HERO_IMAGES,
+    CACHE,
+    HUBS,
+    SERVICES,
+    esc,
+    mega_footer,
+    reviews_section,
+)
 
 TODAY = date.today().isoformat()
 OUT = ROOT / "services"
@@ -26,7 +34,7 @@ SERVICE_PAGES = [
         "lead": "Elevate meetings, appreciation days, and brand moments with a specialty mobile espresso cart — pulled to order, ready for your team.",
         "meta": "Corporate coffee catering across Central Florida — mobile espresso for offices, conferences, and client events. Get a quote from Jude.",
         "og_title": "Corporate Coffee Catering | Jude",
-        "hero_img": "/images/geo-deep-corporate.jpg",
+        "hero_img": "/images/barista.png",
         "hero_alt": "Jude baristas with the coffee cart at a corporate event",
         "why_title": "Why companies book a mobile coffee cart",
         "why": [
@@ -95,7 +103,7 @@ SERVICE_PAGES = [
         "lead": "A specialty espresso bar for cocktail hour, dessert, or late night — so guests get a café moment instead of a forgotten coffee station.",
         "meta": "Wedding coffee cart catering in Central Florida — mobile espresso for cocktail hour, reception, and late-night. Get a quote from Jude.",
         "og_title": "Wedding Coffee Cart | Jude",
-        "hero_img": "/images/geo-deep-wedding.jpg",
+        "hero_img": "/images/popup.png",
         "hero_alt": "Jude coffee cart at a wedding celebration",
         "why_title": "Why couples book a wedding coffee cart",
         "why": [
@@ -164,7 +172,7 @@ SERVICE_PAGES = [
         "lead": "Bring a specialty espresso cart to backyard celebrations, milestone parties, and gatherings at home or a private venue.",
         "meta": "Private party coffee cart catering in Central Florida — birthdays, showers, and celebrations with mobile espresso from Jude.",
         "og_title": "Private Party Coffee Cart | Jude",
-        "hero_img": "/images/geo-deep-private.jpg",
+        "hero_img": "/images/team.png",
         "hero_alt": "Guests gathering near the Jude coffee cart at a private event",
         "why_title": "Why hosts book Jude for private parties",
         "why": [
@@ -400,7 +408,7 @@ SERVICE_PAGES = [
         "lead": "Bring a specialty espresso cart to the office for appreciation mornings, client days, or a repeating perk.",
         "meta": "Office coffee cart catering in Central Florida — mobile espresso for workplaces and recurring office visits. Get a quote from Jude.",
         "og_title": "Office Coffee Cart | Jude",
-        "hero_img": "/images/barista.png",
+        "hero_img": "/images/prep.png",
         "hero_alt": "Barista pulling espresso for an office gathering",
         "why_title": "Why offices book Jude",
         "why": [
@@ -828,6 +836,9 @@ def patch_sitemap() -> None:
 
 def main() -> None:
     for c in SERVICE_PAGES:
+        hero = c["hero_img"].split("?")[0]
+        if hero in BANNED_HERO_IMAGES:
+            raise SystemExit(f"Banned hero image on {c['slug']}: {hero}")
         path = OUT / f"{c['slug']}.html"
         path.write_text(page(c))
         print("wrote", path.relative_to(ROOT))

@@ -11,14 +11,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from site_common import CACHE, mega_footer  # noqa: E402
+from site_common import BANNED_HERO_IMAGES, CACHE, mega_footer  # noqa: E402
 
 TODAY = date.today().isoformat()
 
-# Location heroes: full cart / brand scenes only.
-# Banned as heroes (too tight, square, or candid crops):
-#   geo-setup.jpg, geo-latte.jpg, geo-deep-wedding.jpg,
-#   geo-deep-corporate.jpg, geo-deep-private.jpg
+# Location heroes: full cart / brand scenes only (see BANNED_HERO_IMAGES).
 HERO_PHOTOS = [
     "/images/geo-cart.jpg",
     "/images/geo-cup.jpg",
@@ -28,13 +25,7 @@ HERO_PHOTOS = [
 ]
 
 # Allowed in body sections only (not heroes).
-BODY_PHOTOS = HERO_PHOTOS + [
-    "/images/geo-setup.jpg",
-    "/images/geo-latte.jpg",
-    "/images/geo-deep-wedding.jpg",
-    "/images/geo-deep-corporate.jpg",
-    "/images/geo-deep-private.jpg",
-]
+BODY_PHOTOS = HERO_PHOTOS + sorted(BANNED_HERO_IMAGES)
 
 # Primary hubs Jude should rank for (existing + new)
 HUBS = [
