@@ -900,8 +900,6 @@ def page(c: dict, photo_i: int) -> str:
       </div>
     </section>
 
-{service_areas_html(slug)}
-
     <section class="geo-close" aria-labelledby="geo-close-title">
       <div class="geo-close__media" aria-hidden="true">
         <img
