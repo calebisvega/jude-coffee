@@ -347,7 +347,7 @@ SERVICE_PAGES = [
         "lead": "Who to hire when a launch day, retail takeover, or sampling pop-up needs specialty espresso on site.",
         "meta": "Brand pop-up coffee cart catering in Central Florida — espresso for launches, retail takeovers, and sampling days. Get a quote from Jude.",
         "og_title": "Brand Pop-Up Coffee Cart | Jude",
-        "hero_img": "/images/geo-setup.jpg",
+        "hero_img": "/images/cart.png",
         "hero_alt": "Jude coffee cart ready for a pop-up event",
         "why_title": "Why pop-ups book a coffee cart",
         "why": [
