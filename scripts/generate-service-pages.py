@@ -355,7 +355,7 @@ SERVICE_PAGES = [
         "lead": "Who to hire when a launch day, retail takeover, or sampling pop-up needs specialty espresso on site.",
         "meta": "Brand pop-up coffee cart catering in Central Florida — espresso for launches, retail takeovers, and sampling days. Get a quote from Jude.",
         "og_title": "Brand Pop-Up Coffee Cart | Jude",
-        "hero_img": "/images/cart.png",
+        "hero_img": "/images/geo-cart.jpg",
         "hero_alt": "Jude coffee cart ready for a pop-up event",
         "why_title": "Why pop-ups book a coffee cart",
         "why": [
@@ -514,7 +514,7 @@ SERVICE_PAGES = [
         "lead": "Looking for coffee cart rental near Lakeland, Tampa, or Orlando? Jude brings the cart, baristas, and menu — specialty espresso catering, not an empty trailer.",
         "meta": "Coffee cart rental in Central Florida — full-service mobile espresso catering for weddings, offices, and parties. Get a quote from Jude.",
         "og_title": "Coffee Cart Rental Central Florida | Jude",
-        "hero_img": "/images/cart.png",
+        "hero_img": "/images/geo-close.jpg",
         "hero_alt": "Jude mobile coffee cart",
         "why_title": "What coffee cart rental with Jude includes",
         "why": [
@@ -606,15 +606,6 @@ def page(c: dict) -> str:
           </details>'''
         for q, a in c["faqs"]
     )
-    area_links = "\n".join(
-        f'          <li><a href="/{slug_}">{esc(label)}</a></li>' for slug_, label in HUBS
-    )
-    more_services = "\n".join(
-        f'          <li><a href="/services/{s}">{esc(label)}</a></li>'
-        for s, label in SERVICES
-        if s != slug
-    )
-
     schema = {
         "@context": "https://schema.org",
         "@graph": [
@@ -764,23 +755,6 @@ def page(c: dict) -> str:
       <div class="geo-faq__inner">
         <h2 id="svc-faq-title" class="geo-faq__title">Frequently asked questions</h2>
 {faq_html}
-      </div>
-    </section>
-
-    <section class="svc-links" aria-labelledby="svc-areas-title">
-      <div class="svc-links__inner">
-        <div>
-          <h2 id="svc-areas-title" class="svc-links__title">Where we provide this service</h2>
-          <ul class="svc-links__list">
-{area_links}
-          </ul>
-        </div>
-        <div>
-          <h2 class="svc-links__title">More Jude services</h2>
-          <ul class="svc-links__list">
-{more_services}
-          </ul>
-        </div>
       </div>
     </section>
 
