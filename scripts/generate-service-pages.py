@@ -776,8 +776,6 @@ def page(c: dict) -> str:
       </div>
     </section>
 
-{reviews_section(title=f"What clients say about Jude {c['short'].lower()}")}
-
     <section class="svc-close" aria-labelledby="svc-close-title">
       <div class="svc-close__inner">
         <h2 id="svc-close-title" class="svc-close__title">Ready for {esc(c["short"].lower())} that feels considered?</h2>
@@ -786,6 +784,8 @@ def page(c: dict) -> str:
       </div>
     </section>
   </main>
+
+{reviews_section(title=f"What clients say about Jude {c['short'].lower()}")}
 
 {mega_footer()}
 

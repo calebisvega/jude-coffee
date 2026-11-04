@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import html
 
-CACHE = "20261104voice1"
+CACHE = "20261104fix2"
 
 HUBS = [
     ("lakeland", "Lakeland, FL"),
@@ -198,7 +198,7 @@ def mega_footer() -> str:
         <a href="/" class="footer-mega__logo" aria-label="Jude — Home">
           <img src="/images/logo-cream.png" alt="" width="220" height="88" decoding="async">
         </a>
-        <p class="footer-mega__blurb">Specialty mobile espresso for weddings, offices, and parties across Central Florida — based in Lakeland, traveling wherever the event is.</p>
+        <p class="footer-mega__blurb">Specialty mobile espresso for weddings, offices, and parties across Central Florida.</p>
         <p class="footer-mega__social">
           <a href="https://www.instagram.com/judeforall/" target="_blank" rel="noopener noreferrer">Instagram</a>
         </p>

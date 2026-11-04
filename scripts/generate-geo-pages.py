@@ -15,7 +15,7 @@ from site_common import CACHE, mega_footer  # noqa: E402
 
 TODAY = date.today().isoformat()
 
-# Never use geo-setup.jpg (lifestyle drinker) as a location hero.
+# Never use as location heroes: geo-setup.jpg (lifestyle drinker), geo-latte.jpg (tight crop).
 HERO_PHOTOS = [
     "/images/geo-cart.jpg",
     "/images/geo-cup.jpg",
@@ -23,12 +23,12 @@ HERO_PHOTOS = [
     "/images/geo-detail.jpg",
     "/images/geo-cart-alt.jpg",
     "/images/geo-deep-wedding.jpg",
-    "/images/geo-latte.jpg",
     "/images/geo-deep-corporate.jpg",
+    "/images/geo-deep-private.jpg",
 ]
 
 # Allowed in body sections only (not heroes).
-BODY_PHOTOS = HERO_PHOTOS + ["/images/geo-setup.jpg"]
+BODY_PHOTOS = HERO_PHOTOS + ["/images/geo-setup.jpg", "/images/geo-latte.jpg"]
 
 # Primary hubs Jude should rank for (existing + new)
 HUBS = [
@@ -468,6 +468,10 @@ def page(c: dict, photo_i: int) -> str:
                 "Espresso-based drinks, drip, and cold brew with house-made syrups. "
                 f"See the full Jude menu, then tell us if you want a signature drink for your {name} event."
             ),
+            "a_html": (
+                "Espresso-based drinks, drip, and cold brew with house-made syrups. "
+                f'<a href="/menu">See the full Jude menu</a>, then tell us if you want a signature drink for your {esc(name)} event.'
+            ),
         },
     ]
 
@@ -586,7 +590,7 @@ def page(c: dict, photo_i: int) -> str:
             <span class="geo-faq__q-text">{esc(item["q"])}</span>
             <span class="geo-faq__icon" aria-hidden="true"></span>
           </summary>
-          <p class="geo-faq__a">{esc(item["a"])}</p>
+          <p class="geo-faq__a">{item.get("a_html") or esc(item["a"])}</p>
         </details>'''
         for item in faq
     )

@@ -7140,4 +7140,24 @@ html:has(.page-services) {
 .page-services .reviews {
   position: relative;
   z-index: 100;
+  background: var(--off-white);
+  color: #111;
+}
+
+.page-services .reviews__title,
+.page-services .reviews__lead,
+.page-services .reviews__quote,
+.page-services .reviews__name,
+.page-services .reviews__when,
+.page-services .reviews__aggregate {
+  color: #111;
+}
+
+.page-services .reviews__lead,
+.page-services .reviews__when {
+  color: var(--charcoal-light);
+}
+
+.page-services .reviews__all {
+  color: var(--sage-dark);
 }
