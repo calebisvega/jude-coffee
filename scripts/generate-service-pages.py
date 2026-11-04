@@ -10,7 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from site_common import CACHE, HUBS, SERVICES, esc, mega_footer  # noqa: E402
+from site_common import CACHE, HUBS, SERVICES, esc, mega_footer, reviews_section  # noqa: E402
 
 TODAY = date.today().isoformat()
 OUT = ROOT / "services"
@@ -775,6 +775,8 @@ def page(c: dict) -> str:
         </div>
       </div>
     </section>
+
+{reviews_section(title=f"What clients say about Jude {c['short'].lower()}")}
 
     <section class="svc-close" aria-labelledby="svc-close-title">
       <div class="svc-close__inner">

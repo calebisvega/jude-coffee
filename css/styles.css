@@ -5355,6 +5355,11 @@ html:has(.page-services) {
   height: auto;
 }
 
+.geo-hero__logo .logo-img--cream {
+  /* Cream wordmark stays readable over the dark hero photo */
+  filter: none;
+}
+
 .geo-hero__copy {
   position: relative;
   z-index: 1;
@@ -6821,13 +6826,13 @@ html:has(.page-services) {
    ========================================================================== */
 
 .site-footer--mega {
-  background: #eef1ea;
-  color: #111;
+  background: var(--sage);
+  color: var(--cream);
   padding: clamp(3rem, 7vw, 4.5rem) var(--page-gutter) 1.75rem;
 }
 
 .site-footer--mega a {
-  color: #111;
+  color: var(--cream);
 }
 
 .footer-mega {
@@ -6868,13 +6873,13 @@ html:has(.page-services) {
   font-family: var(--font-sans);
   font-size: 0.95rem;
   line-height: 1.55;
-  color: #2c2c2c;
+  color: color-mix(in srgb, var(--cream) 88%, transparent);
 }
 
 .footer-mega__social a {
   font-family: var(--font-sans);
   font-size: 0.95rem;
-  color: #111;
+  color: var(--cream);
   text-decoration: none;
 }
 
@@ -6889,7 +6894,7 @@ html:has(.page-services) {
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: #111;
+  color: var(--cream);
 }
 
 .footer-mega__sub {
@@ -6897,7 +6902,7 @@ html:has(.page-services) {
   font-family: var(--font-display);
   font-size: 0.9rem;
   font-weight: 700;
-  color: #111;
+  color: var(--cream);
 }
 
 .footer-mega__list {
@@ -6912,13 +6917,13 @@ html:has(.page-services) {
   font-family: var(--font-sans);
   font-size: 0.92rem;
   line-height: 1.4;
-  color: #111;
+  color: var(--cream);
   text-decoration: none;
 }
 
 .footer-mega__list a:hover,
 .footer-mega__list a:focus-visible {
-  color: var(--sage-dark);
+  color: var(--cream);
   text-decoration: underline;
   text-underline-offset: 0.16em;
 }
@@ -6927,7 +6932,7 @@ html:has(.page-services) {
   font-family: var(--font-sans);
   font-size: 0.92rem;
   line-height: 1.45;
-  color: #2c2c2c;
+  color: color-mix(in srgb, var(--cream) 88%, transparent);
 }
 
 .footer-mega__nearby {
@@ -6935,18 +6940,18 @@ html:has(.page-services) {
   font-family: var(--font-sans);
   font-size: 0.88rem;
   line-height: 1.55;
-  color: #2c2c2c;
+  color: color-mix(in srgb, var(--cream) 88%, transparent);
 }
 
 .footer-mega__copy {
   max-width: 72rem;
   margin: 2.5rem auto 0;
   padding-top: 1.25rem;
-  border-top: 1px solid color-mix(in srgb, var(--charcoal) 12%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--cream) 28%, transparent);
   text-align: center;
   font-family: var(--font-sans);
   font-size: 0.8rem;
-  color: #2c2c2c;
+  color: color-mix(in srgb, var(--cream) 80%, transparent);
 }
 
 .page-services .site-footer--mega,
@@ -6958,5 +6963,181 @@ html:has(.page-services) {
 .page-services .footer-mega__nearby,
 .page-services .footer-mega__copy,
 .page-services .footer-mega__list--contact li {
+  color: var(--cream);
+}
+
+/* ==========================================================================
+   Google reviews carousel (Solo-inspired)
+   ========================================================================== */
+
+.reviews {
+  background: var(--off-white);
+  color: var(--charcoal);
+  padding: clamp(3.5rem, 8vw, 5.5rem) var(--page-gutter);
+}
+
+.reviews__inner {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.reviews__title {
+  margin: 0 0 0.75rem;
+  max-width: 18ch;
+  font-family: var(--font-sans);
+  font-size: clamp(1.75rem, 3.8vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
   color: #111;
+}
+
+.reviews__lead {
+  margin: 0 0 clamp(1.75rem, 4vw, 2.5rem);
+  max-width: 40rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.95rem, 1.5vw, 1.125rem);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--charcoal-light);
+}
+
+.reviews__viewport {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.reviews__track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(16.5rem, 85%);
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0.35rem 0.15rem 1rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.reviews__track::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 700px) {
+  .reviews__track {
+    grid-auto-columns: minmax(18rem, calc((100% - 2rem) / 3));
+  }
+}
+
+.reviews__card {
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-height: 14rem;
+  padding: 1.35rem 1.25rem 1.25rem;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(20, 32, 22, 0.04), 0 10px 28px rgba(20, 32, 22, 0.06);
+}
+
+.reviews__stars {
+  color: #f5b400;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.reviews__quote {
+  margin: 0;
+  flex: 1 1 auto;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: #222;
+}
+
+.reviews__name {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.reviews__when {
+  margin: -0.45rem 0 0;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--charcoal-light);
+}
+
+.reviews__nav {
+  flex: 0 0 auto;
+  width: 2.35rem;
+  height: 2.35rem;
+  border: 1px solid color-mix(in srgb, var(--charcoal) 16%, transparent);
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reviews__nav:hover,
+.reviews__nav:focus-visible {
+  border-color: var(--sage);
+  outline: none;
+}
+
+.reviews__nav:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.reviews__summary {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem 0.85rem;
+  text-align: center;
+}
+
+.reviews__aggregate {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.reviews__all {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--sage-dark);
+  text-decoration: none;
+}
+
+.reviews__all:hover,
+.reviews__all:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+.page-services .reviews {
+  position: relative;
+  z-index: 100;
 }

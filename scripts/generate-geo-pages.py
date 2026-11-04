@@ -703,7 +703,7 @@ def page(c: dict, photo_i: int) -> str:
       </div>
 
       <a href="/" class="geo-hero__logo logo" aria-label="Jude — Home">
-        <img src="/images/Artboard%201.png?v=20250812mob1" alt="" class="logo-img" width="1081" height="1081" decoding="async">
+        <img src="/images/logo-cream.png?v={CACHE}" alt="" class="logo-img logo-img--cream" width="480" height="192" decoding="async">
       </a>
 
       <div class="geo-hero__copy">

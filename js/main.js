@@ -1818,4 +1818,36 @@
       });
     }
   }
+
+  /* Google reviews carousels */
+  document.querySelectorAll('[data-reviews]').forEach(function (root) {
+    var track = root.querySelector('[data-reviews-track]');
+    var prev = root.querySelector('[data-reviews-prev]');
+    var next = root.querySelector('[data-reviews-next]');
+    if (!track || !prev || !next) return;
+
+    var step = function () {
+      var card = track.querySelector('.reviews__card');
+      if (!card) return Math.round(track.clientWidth * 0.85);
+      var styles = window.getComputedStyle(track);
+      var gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
+      return Math.round(card.getBoundingClientRect().width + gap);
+    };
+
+    var sync = function () {
+      var max = track.scrollWidth - track.clientWidth - 2;
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= max;
+    };
+
+    prev.addEventListener('click', function () {
+      track.scrollBy({ left: -step(), behavior: 'smooth' });
+    });
+    next.addEventListener('click', function () {
+      track.scrollBy({ left: step(), behavior: 'smooth' });
+    });
+    track.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  });
 })();
