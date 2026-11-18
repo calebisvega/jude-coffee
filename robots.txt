@@ -4,5 +4,7 @@ Disallow: /book-preview
 Disallow: /book-preview.html
 Disallow: /quote-calculator
 Disallow: /quote-calculator.html
+Disallow: /live-quote
+Disallow: /live-quote.html
 
 Sitemap: https://judecoffee.com/sitemap.xml

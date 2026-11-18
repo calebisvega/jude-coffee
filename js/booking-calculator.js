@@ -1,22 +1,19 @@
 /**
  * Jude Coffee — quote calculator
- * One function, two call sites later (browser live preview + server save).
+ * Spec: jude-pricing-formulavnew.md (Nov 17, 2026)
  *
  * Do not duplicate this math elsewhere.
  *
- *   staffing   = staff_count * hourly_rate_per_person * hours
- *   guest_fee  = guests * per_guest_rate
- *   quoted_subtotal = max(staffing + resource + guest_fee + add_ons, 500)
- *   travel     = billable round-trip miles × 1.25
- *   tax        = 0.07 × (quoted_subtotal + travel)
- *   total      = quoted_subtotal + travel + tax
- *
- * staff_count = 1 if guests <= 75, 2 if guests > 75.
- *
- * Travel:
- *   round_trip_miles = one_way_miles × 2
- *   billable_miles = max(0, round_trip_miles - 5)
- *   travel_fee = billable_miles × 1.25
+ *   staffCount    = guests > 75 ? 2 : 1
+ *   resourceCount = guests > 100 ? 2 : 1
+ *   staffing      = staffCount * hourlyPerStaff * hours
+ *   resources     = resourceCount * resourceFee
+ *   guestFee      = guests * perGuest
+ *   travel        = roundTripMiles * travelRatePerMile
+ *   addOnTotal    = tier == premium ? addOns * addOnPrice : 0
+ *   subtotal      = max(staffing + resources + guestFee + travel + addOnTotal, minimumCharge)
+ *   tax           = round(subtotal * salesTaxRate, 2)
+ *   total         = subtotal + tax
  */
 (function (root) {
   'use strict';
@@ -31,37 +28,29 @@
     capacityPerHour: 50,
     minimumCharge: 500,
     staffGuestThreshold: 75,
+    resourceGuestThreshold: 100,
     taxRate: 0.07,
-    travelFreeRoundTripMiles: 5,
-    travelPerBillableMile: 1.25,
+    travelRatePerMile: 0.76,
+    hourlyPerStaff: 100,
+    addOnPrice: 250,
     lean: {
-      staffingPerPersonPerHour: 75,
       resourceFee: 200,
       perGuest: 3.25
     },
     standard: {
-      staffingPerPersonPerHour: 200,
       resourceFee: 275,
       perGuest: 5.13
     },
     premium: {
-      staffingPerPersonPerHour: 225,
       resourceFee: 275,
       perGuest: 5.13
-    },
-    // TODO: pending final pricing decision — $0 is a stub, not forever-free
-    addOns: {
-      stamp: { label: 'Custom stamp', amount: 0, pricingPending: true },
-      menu_design: { label: 'Custom menu design', amount: 0, pricingPending: true },
-      stamp_design: { label: 'Custom stamp design', amount: 0, pricingPending: true },
-      specialty_drink: { label: 'Custom drink', amount: 0, pricingPending: true }
     }
   };
 
   var TIER_LABELS = {
-    lean: 'Essentials',
-    standard: 'Signature',
-    premium: 'Curated',
+    lean: 'Lean',
+    standard: 'Standard',
+    premium: 'Premium',
     custom: 'Custom'
   };
 
@@ -78,13 +67,8 @@
     return toNumber(guestCount) > RATES.staffGuestThreshold ? 2 : 1;
   }
 
-  function staffingPerPerson(tier) {
-    var cfg = tierConfig(tier);
-    return cfg ? cfg.staffingPerPersonPerHour : 0;
-  }
-
-  function staffingRate(tier, guestCount) {
-    return staffCount(guestCount) * staffingPerPerson(tier);
+  function resourceCount(guestCount) {
+    return toNumber(guestCount) > RATES.resourceGuestThreshold ? 2 : 1;
   }
 
   function tierConfig(tier) {
@@ -94,20 +78,22 @@
     return null;
   }
 
-  function addOnTotal(addOns) {
-    var ids = Array.isArray(addOns) ? addOns : [];
-    return ids.reduce(function (sum, id) {
-      var item = RATES.addOns[id];
-      return sum + (item ? item.amount : 0);
-    }, 0);
+  function staffingPerPerson() {
+    return RATES.hourlyPerStaff;
   }
 
+  function staffingRate(tier, guestCount) {
+    return staffCount(guestCount) * RATES.hourlyPerStaff;
+  }
+
+  function travelFeeFromRoundTrip(roundTripMiles) {
+    var miles = Math.max(0, toNumber(roundTripMiles));
+    return roundMoney(miles * RATES.travelRatePerMile);
+  }
+
+  /** @deprecated prefer travelFeeFromRoundTrip; kept for older callers that pass one-way miles */
   function travelFeeFromOneWay(milesOneWay) {
-    var oneWay = toNumber(milesOneWay);
-    if (oneWay <= 0) return 0;
-    var roundTrip = oneWay * 2;
-    var billable = Math.max(0, roundTrip - RATES.travelFreeRoundTripMiles);
-    return roundMoney(billable * RATES.travelPerBillableMile);
+    return travelFeeFromRoundTrip(toNumber(milesOneWay) * 2);
   }
 
   function haversineMiles(lat1, lng1, lat2, lng2) {
@@ -115,7 +101,7 @@
     var dLat = toRad(lat2 - lat1);
     var dLng = toRad(lng2 - lng1);
     var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(toRad(lat1)) * Math.cos(toRad(lng2)) *
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
       Math.sin(dLng / 2) * Math.sin(dLng / 2);
     return 3958.8 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
@@ -124,36 +110,47 @@
     var tier = input && input.tier ? input.tier : null;
     var guests = Math.max(0, Math.round(toNumber(input && input.guestCount)));
     var hours = Math.max(0, toNumber(input && input.durationHours));
-    var miles = input && input.locationMiles != null ? toNumber(input.locationMiles) : null;
-    var addOns = (input && input.addOns) || [];
+    var roundTripMiles = null;
+    if (input && input.roundTripMiles != null && input.roundTripMiles !== '') {
+      roundTripMiles = Math.max(0, toNumber(input.roundTripMiles));
+    } else if (input && input.locationMiles != null && input.locationMiles !== '') {
+      // legacy one-way miles → round trip
+      roundTripMiles = Math.max(0, toNumber(input.locationMiles) * 2);
+    }
+    var addOnCount = Math.max(0, Math.round(toNumber(input && (input.addOnCount != null ? input.addOnCount : input.addOns))));
+    if (Array.isArray(input && input.addOns)) {
+      addOnCount = input.addOns.length;
+    }
     var budget = toNumber(input && input.budget);
 
     var calcTier = tier === 'custom' ? null : tier;
     var cfg = calcTier ? tierConfig(calcTier) : null;
     var people = calcTier ? staffCount(guests) : 0;
-    var perPerson = calcTier ? staffingPerPerson(calcTier) : 0;
-    var rate = perPerson * people;
+    var resources = calcTier ? resourceCount(guests) : 0;
+    var perPerson = calcTier ? RATES.hourlyPerStaff : 0;
     var staffing = calcTier && hours ? roundMoney(people * perPerson * hours) : 0;
-    var resource = cfg ? cfg.resourceFee : 0;
+    var resourceFee = cfg ? roundMoney(resources * cfg.resourceFee) : 0;
     var perGuest = cfg && guests ? roundMoney(cfg.perGuest * guests) : 0;
-    var extras = calcTier === 'premium' ? addOnTotal(addOns) : 0;
-    var travel = miles != null ? travelFeeFromOneWay(miles) : 0;
-    var beforeFloor = roundMoney(staffing + resource + perGuest + extras);
+    var extras = calcTier === 'premium' ? roundMoney(addOnCount * RATES.addOnPrice) : 0;
+    var travel = roundTripMiles != null ? travelFeeFromRoundTrip(roundTripMiles) : 0;
+    var beforeFloor = roundMoney(staffing + resourceFee + perGuest + travel + extras);
     var quotedSubtotal = calcTier && guests > 0 && hours > 0
       ? Math.max(RATES.minimumCharge, beforeFloor)
       : beforeFloor;
     var tax = calcTier && guests > 0 && hours > 0
-      ? roundMoney((quotedSubtotal + travel) * RATES.taxRate)
+      ? roundMoney(quotedSubtotal * RATES.taxRate)
       : 0;
-    var total = roundMoney(quotedSubtotal + travel + tax);
-    var amount = roundMoney(quotedSubtotal + travel);
+    var total = roundMoney(quotedSubtotal + tax);
+    // amount = pre-tax total (matches prior API used by booking UI)
+    var amount = quotedSubtotal;
 
     var drinksPerHour = hours > 0 && guests > 0 ? guests / hours : 0;
-    var overCapacity = hours > 0 && guests > 0 && drinksPerHour > RATES.capacityPerHour;
+    var overCapacity = (hours > 0 && guests > 0 && drinksPerHour > RATES.capacityPerHour) ||
+      guests > RATES.resourceGuestThreshold;
 
     var recommendedTier = null;
     if (tier === 'custom' && budget > 0 && guests > 0 && hours > 0) {
-      recommendedTier = matchBudget(budget, guests, hours, addOns, miles);
+      recommendedTier = matchBudget(budget, guests, hours, addOnCount, roundTripMiles);
     }
 
     return {
@@ -164,13 +161,15 @@
       ready: Boolean(calcTier && guests > 0 && hours > 0),
       breakdown: {
         staffCount: people,
+        resourceCount: resources,
         staffing: staffing,
         staffingRate: perPerson,
-        resourceFee: resource,
+        resourceFee: resourceFee,
         perGuest: perGuest,
         addOns: extras,
+        addOnCount: extras ? addOnCount : 0,
         travel: travel,
-        travelPending: miles == null,
+        travelPending: roundTripMiles == null,
         tax: tax,
         minimumApplied: guests > 0 && hours > 0 && beforeFloor < RATES.minimumCharge
       },
@@ -181,15 +180,25 @@
     };
   }
 
-  function matchBudget(budget, guests, hours, addOns, miles) {
-    var lean = calculate({ tier: 'lean', guestCount: guests, durationHours: hours, locationMiles: miles }).amount;
-    var standard = calculate({ tier: 'standard', guestCount: guests, durationHours: hours, locationMiles: miles }).amount;
+  function matchBudget(budget, guests, hours, addOnCount, roundTripMiles) {
+    var lean = calculate({
+      tier: 'lean',
+      guestCount: guests,
+      durationHours: hours,
+      roundTripMiles: roundTripMiles
+    }).amount;
+    var standard = calculate({
+      tier: 'standard',
+      guestCount: guests,
+      durationHours: hours,
+      roundTripMiles: roundTripMiles
+    }).amount;
     var premium = calculate({
       tier: 'premium',
       guestCount: guests,
       durationHours: hours,
-      locationMiles: miles,
-      addOns: addOns
+      roundTripMiles: roundTripMiles,
+      addOnCount: addOnCount
     }).amount;
     if (budget >= premium) return 'premium';
     if (budget >= standard) return 'standard';
@@ -198,7 +207,7 @@
   }
 
   function startingAmount(tier) {
-    return calculate({ tier: tier, guestCount: 1, durationHours: 1 }).quotedSubtotal;
+    return calculate({ tier: tier, guestCount: 1, durationHours: 1, roundTripMiles: 0 }).quotedSubtotal;
   }
 
   function formatMoney(amount) {
@@ -217,8 +226,10 @@
     calculate: calculate,
     startingAmount: startingAmount,
     staffCount: staffCount,
+    resourceCount: resourceCount,
     staffingRate: staffingRate,
     travelFeeFromOneWay: travelFeeFromOneWay,
+    travelFeeFromRoundTrip: travelFeeFromRoundTrip,
     haversineMiles: haversineMiles,
     formatMoney: formatMoney
   };

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#FAFAF7">
+  <title>Live quote — Jude Coffee (private)</title>
+  <link rel="icon" href="/images/favicon.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icon-mug-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500;9..40,600;9..40,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css?v=20261118livequote1">
+  <link rel="stylesheet" href="/css/live-quote.css?v=20261118livequote1">
+</head>
+<body class="page-live-quote">
+  <p class="live-quote-banner">Private link — not in site nav. Formula from Nov 17 pricing spec.</p>
+
+  <main class="live-quote">
+    <header class="live-quote__header">
+      <a href="/" class="live-quote__logo" aria-label="Jude — Home">
+        <img src="/images/logo-transparent.png" alt="" width="120" height="48">
+      </a>
+      <p class="live-quote__eyebrow">Live quote lab</p>
+    </header>
+
+    <div class="live-quote__layout">
+      <section class="live-quote__inputs" aria-labelledby="live-quote-inputs-title">
+        <h1 id="live-quote-inputs-title" class="live-quote__title">Build a quote</h1>
+        <p class="live-quote__lead">Enter guests, service time, and location. The Standard breakdown updates live — switch tiers anytime.</p>
+
+        <div class="live-quote__tiers" role="tablist" aria-label="Package tier">
+          <button type="button" class="live-quote__tier" data-tier="lean" aria-pressed="false">Lean</button>
+          <button type="button" class="live-quote__tier is-active" data-tier="standard" aria-pressed="true">Standard</button>
+          <button type="button" class="live-quote__tier" data-tier="premium" aria-pressed="false">Premium</button>
+        </div>
+
+        <form class="live-quote__form" id="live-quote-form" autocomplete="off">
+          <label class="live-quote__field">
+            <span class="live-quote__label">Guest count</span>
+            <input type="number" id="lq-guests" name="guests" min="1" max="500" step="1" inputmode="numeric" placeholder="">
+          </label>
+
+          <label class="live-quote__field">
+            <span class="live-quote__label">Service time (hours)</span>
+            <input type="number" id="lq-hours" name="hours" min="0.5" max="12" step="0.5" inputmode="decimal" placeholder="">
+          </label>
+
+          <label class="live-quote__field">
+            <span class="live-quote__label">Location</span>
+            <input type="text" id="lq-location" name="location" placeholder="" autocomplete="street-address">
+          </label>
+
+          <label class="live-quote__field">
+            <span class="live-quote__label">Round-trip miles <span class="live-quote__hint">(from Lakeland base)</span></span>
+            <input type="number" id="lq-miles" name="miles" min="0" max="1000" step="1" inputmode="decimal" placeholder="">
+          </label>
+
+          <label class="live-quote__field live-quote__field--addons" id="lq-addons-wrap" hidden>
+            <span class="live-quote__label">Premium add-ons <span class="live-quote__hint">($250 each)</span></span>
+            <input type="number" id="lq-addons" name="addons" min="0" max="20" step="1" value="0" inputmode="numeric">
+          </label>
+        </form>
+      </section>
+
+      <section class="live-quote__result" aria-live="polite" aria-labelledby="live-quote-total-label">
+        <p class="live-quote__tier-badge" id="lq-tier-badge">Standard</p>
+        <p class="live-quote__total-label" id="live-quote-total-label">Live quote</p>
+        <p class="live-quote__total" id="lq-total">—</p>
+        <p class="live-quote__subtotal" id="lq-subtotal-note"></p>
+
+        <div class="live-quote__guard" id="lq-guard" hidden>
+          For a group this size we'd recommend a longer service window so every guest is served well. We'll follow up with options.
+        </div>
+
+        <h2 class="live-quote__breakdown-title">Pricing breakdown</h2>
+        <dl class="live-quote__breakdown" id="lq-breakdown">
+          <div><dt>Staffing</dt><dd id="lq-line-staffing">—</dd></div>
+          <div><dt>Resources</dt><dd id="lq-line-resources">—</dd></div>
+          <div><dt>Guests</dt><dd id="lq-line-guests">—</dd></div>
+          <div><dt>Travel</dt><dd id="lq-line-travel">—</dd></div>
+          <div id="lq-line-addons-row" hidden><dt>Add-ons</dt><dd id="lq-line-addons">—</dd></div>
+          <div class="live-quote__breakdown-sub"><dt>Subtotal</dt><dd id="lq-line-subtotal">—</dd></div>
+          <div><dt>Tax (7%)</dt><dd id="lq-line-tax">—</dd></div>
+          <div class="live-quote__breakdown-total"><dt>Total</dt><dd id="lq-line-total">—</dd></div>
+        </dl>
+
+        <p class="live-quote__meta" id="lq-meta"></p>
+      </section>
+    </div>
+  </main>
+
+  <script src="/js/booking-calculator.js?v=20261118livequote1"></script>
+  <script src="/js/live-quote.js?v=20261118livequote1"></script>
+</body>
+</html>
