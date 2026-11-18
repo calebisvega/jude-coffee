@@ -151,6 +151,59 @@
   color: transparent;
 }
 
+.live-quote__suggest {
+  position: relative;
+}
+
+.live-quote__suggest-list {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.35rem);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0.35rem;
+  list-style: none;
+  border: 1px solid rgba(44, 44, 44, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 14px 28px rgba(20, 32, 22, 0.12);
+  max-height: 14rem;
+  overflow: auto;
+}
+
+.live-quote__suggest-list[hidden] {
+  display: none;
+}
+
+.live-quote__suggest-option {
+  display: block;
+  width: 100%;
+  appearance: none;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--charcoal, #2c2c2c);
+  text-align: left;
+  padding: 0.7rem 0.8rem;
+  font-family: var(--font-sans, Inter, system-ui, sans-serif);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.live-quote__suggest-option.is-active,
+.live-quote__suggest-option:hover {
+  background: rgba(105, 150, 107, 0.14);
+}
+
+.live-quote__distance {
+  margin: 0;
+  min-height: 1.25em;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(74, 74, 74, 0.82);
+}
+
 .live-quote__result {
   position: sticky;
   top: 1rem;

@@ -11,8 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500;9..40,600;9..40,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css?v=20261118livequote1">
-  <link rel="stylesheet" href="/css/live-quote.css?v=20261118livequote1">
+  <link rel="stylesheet" href="/css/styles.css?v=20261118livequote2">
+  <link rel="stylesheet" href="/css/live-quote.css?v=20261118livequote2">
 </head>
 <body class="page-live-quote">
   <p class="live-quote-banner">Private link — not in site nav. Formula from Nov 17 pricing spec.</p>
@@ -47,15 +47,26 @@
             <input type="number" id="lq-hours" name="hours" min="0.5" max="12" step="0.5" inputmode="decimal" placeholder="">
           </label>
 
-          <label class="live-quote__field">
-            <span class="live-quote__label">Location</span>
-            <input type="text" id="lq-location" name="location" placeholder="" autocomplete="street-address">
-          </label>
-
-          <label class="live-quote__field">
-            <span class="live-quote__label">Round-trip miles <span class="live-quote__hint">(from Lakeland base)</span></span>
-            <input type="number" id="lq-miles" name="miles" min="0" max="1000" step="1" inputmode="decimal" placeholder="">
-          </label>
+          <div class="live-quote__field live-quote__field--location">
+            <label class="live-quote__label" for="lq-location">Location</label>
+            <div class="live-quote__suggest">
+              <input
+                type="text"
+                id="lq-location"
+                name="location"
+                placeholder=""
+                autocomplete="off"
+                autocapitalize="words"
+                spellcheck="false"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded="false"
+                aria-controls="lq-suggest-list"
+              >
+              <ul class="live-quote__suggest-list" id="lq-suggest-list" role="listbox" hidden></ul>
+            </div>
+            <p class="live-quote__distance" id="lq-distance" aria-live="polite"></p>
+          </div>
 
           <label class="live-quote__field live-quote__field--addons" id="lq-addons-wrap" hidden>
             <span class="live-quote__label">Premium add-ons <span class="live-quote__hint">($250 each)</span></span>
@@ -91,7 +102,7 @@
     </div>
   </main>
 
-  <script src="/js/booking-calculator.js?v=20261118livequote1"></script>
-  <script src="/js/live-quote.js?v=20261118livequote1"></script>
+  <script src="/js/booking-calculator.js?v=20261118livequote2"></script>
+  <script src="/js/live-quote.js?v=20261118livequote2"></script>
 </body>
 </html>
