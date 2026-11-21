@@ -187,7 +187,9 @@
     guestRange: '',
     hoursChoice: '',
     partialCaptured: false,
-    submitted: false
+    submitted: false,
+    submitStatus: '',
+    submissionId: ''
   };
 
   if (teamQuote) {
@@ -571,6 +573,7 @@
               '<label class="booking-sheet__field"><span>Name</span><input id="booking-follow-name" type="text" autocomplete="name" placeholder="Jane" value="' + escapeHtml(state.contactName) + '"></label>' +
               '<label class="booking-sheet__field"><span>Phone, if you want a call</span><input id="booking-follow-phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(863) 555-0100" value="' + escapeHtml(state.contactPhone) + '"></label>' +
               '<label class="booking-sheet__field"><span>Anything else we should know?</span><textarea id="booking-follow-note" rows="3" placeholder="Venue, event type, timing">' + escapeHtml(state.contactNote) + '</textarea></label>' +
+              '<p class="booking-error" data-error hidden></p>' +
               '<button type="button" class="booking-quote__continue" data-goto="done">Send this to the Jude team</button>' +
               '<button type="button" class="booking-sheet__skip" data-goto="done">Skip for now</button>' +
             '</div>' +
@@ -602,7 +605,7 @@
           '<section class="booking-step booking-done" data-step="done">' +
             '<div class="booking-step__inner">' +
               '<h2 class="booking-question">We\'ve got it' + (firstName() ? ', ' + escapeHtml(firstName()) : '') + '.</h2>' +
-              '<p class="booking-lead">The Jude team will confirm from Lakeland. This preview doesn\'t send anything yet.</p>' +
+              '<p class="booking-lead" data-done-copy>' + escapeHtml(doneCopy()) + '</p>' +
             '</div>' +
           '</section>'
         );
@@ -1616,8 +1619,128 @@
     if (state.partialCaptured) return;
     if (contactValid()) return;
     state.partialCaptured = true;
-    // Preview only: no quotes table yet. This is the blur/submit hook
-    // that will create status = 'partial' once Supabase is wired.
+  }
+
+  function doneCopy() {
+    if (state.submitStatus === 'accepted') {
+      return 'Thanks — your inquiry is in Cortado. The Jude team will confirm from Lakeland.';
+    }
+    if (state.submitStatus === 'error') {
+      return 'We couldn\'t reach Cortado just now. Your details are still on this page — try Send again, or email info@judecoffee.com.';
+    }
+    if (state.submitStatus === 'sending') {
+      return 'Sending your inquiry to the Jude team\u2026';
+    }
+    return 'The Jude team will confirm from Lakeland.';
+  }
+
+  function paintDone(root) {
+    var node = root || stage.querySelector('[data-step="done"]');
+    if (!node) return;
+    var copy = node.querySelector('[data-done-copy]');
+    if (copy) copy.textContent = doneCopy();
+    var title = node.querySelector('.booking-question');
+    if (title) {
+      title.textContent = 'We\'ve got it' + (firstName() ? ', ' + firstName() : '') + '.';
+    }
+  }
+
+  function intakeIdempotencyKey() {
+    var stamp = [
+      state.contactEmail || '',
+      state.eventDate || '',
+      state.tier || '',
+      state.guestCount || '',
+      state.durationHours || ''
+    ].join('|');
+    var key = 'jude-intake-' + stamp;
+    if (key.length > 255) key = key.slice(0, 255);
+    return key;
+  }
+
+  function buildIntakePayload() {
+    var tier = tierById(state.tier);
+    var params = new URLSearchParams(window.location.search || '');
+    var attribution = {
+      landing_page_url: window.location.href,
+      referrer_url: document.referrer || undefined
+    };
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid'].forEach(function (key) {
+      var value = params.get(key);
+      if (value) attribution[key] = value;
+    });
+    return {
+      customer_email: state.contactEmail,
+      customer_name: state.contactName,
+      customer_phone: state.contactPhone,
+      event_date: state.eventDate,
+      event_guest_count: parseInt(state.guestCount, 10) || undefined,
+      event_duration_hours: parseFloat(state.durationHours) || undefined,
+      event_location: state.eventCity || state.eventZip || undefined,
+      event_city: state.eventCity || undefined,
+      event_zip: state.eventZip || undefined,
+      event_type: tier ? tier.title : state.tier,
+      tier: state.tier,
+      tier_label: tier ? tier.title : state.tier,
+      duration_hours: state.durationHours,
+      guest_count: state.guestCount,
+      budget: state.budget || undefined,
+      additional_info: state.contactNote || undefined,
+      timezone: 'America/New_York',
+      attribution: attribution
+    };
+  }
+
+  function submitLeadToCortado() {
+    if (teamQuote) {
+      return Promise.resolve({ ok: true, skipped: true });
+    }
+    if (state.submitted && state.submitStatus === 'accepted') {
+      return Promise.resolve({ ok: true, submission_id: state.submissionId });
+    }
+    if (!emailLooksValid(state.contactEmail) || !/^\d{4}-\d{2}-\d{2}$/.test(state.eventDate)) {
+      return Promise.resolve({
+        ok: false,
+        error: 'invalid_field',
+        message: 'Email and event date are required.'
+      });
+    }
+    state.submitStatus = 'sending';
+    paintDone();
+    var key = intakeIdempotencyKey();
+    return fetch('/api/leads', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Idempotency-Key': key
+      },
+      body: JSON.stringify(buildIntakePayload())
+    }).then(function (res) {
+      return res.json().then(function (data) {
+        return { status: res.status, data: data || {} };
+      }).catch(function () {
+        return { status: res.status, data: {} };
+      });
+    }).then(function (result) {
+      if (result.status === 202 && result.data.ok) {
+        state.submitted = true;
+        state.submitStatus = 'accepted';
+        state.submissionId = result.data.submission_id || '';
+        paintDone();
+        return { ok: true, submission_id: state.submissionId };
+      }
+      state.submitStatus = 'error';
+      paintDone();
+      return {
+        ok: false,
+        error: (result.data && result.data.error) || 'send_failed',
+        message: (result.data && result.data.message) || 'Could not send inquiry.'
+      };
+    }).catch(function () {
+      state.submitStatus = 'error';
+      paintDone();
+      return { ok: false, error: 'network', message: 'Could not reach the Jude intake.' };
+    });
   }
 
   function goSoon(delta) {
@@ -1750,6 +1873,7 @@
       next.classList.remove('is-exit-back');
       if (steps[to] && steps[to].id === 'path') paintQuote(next, false);
       if (steps[to] && steps[to].id === 'budget') paintBudget(next);
+      if (steps[to] && steps[to].id === 'done') paintDone(next);
       syncChrome();
       window.setTimeout(function () {
         current.classList.remove('is-exit-back');
@@ -2196,7 +2320,24 @@
     if (jump) {
       event.preventDefault();
       readFields();
-      goTo(jump.getAttribute('data-goto'));
+      var target = jump.getAttribute('data-goto');
+      if (target === 'done') {
+        if (jump.disabled || jump.getAttribute('aria-busy') === 'true') return;
+        jump.setAttribute('aria-busy', 'true');
+        jump.disabled = true;
+        submitLeadToCortado().then(function (result) {
+          jump.removeAttribute('aria-busy');
+          jump.disabled = false;
+          if (!result.ok) {
+            showError(result.message || 'Could not send your inquiry.');
+            return;
+          }
+          clearError();
+          goTo('done');
+        });
+        return;
+      }
+      goTo(target);
       return;
     }
     var day = event.target.closest('[data-pick-date]');
