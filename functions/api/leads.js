@@ -32,6 +32,40 @@ function asNumber(value) {
   return Number.isFinite(n) ? n : null;
 }
 
+/** Normalize to HH:MM (24h). Accepts "10:00", "10:00:00", "9", "9am", "10:30 AM". */
+function normalizeEventTime(value) {
+  const raw = String(value == null ? '' : value).trim();
+  if (!raw) return '';
+
+  const ampm = raw.match(/^(\d{1,2})(?::(\d{2}))?(?::\d{2})?\s*(am|pm)$/i);
+  if (ampm) {
+    let h = Number.parseInt(ampm[1], 10);
+    const m = ampm[2] ? Number.parseInt(ampm[2], 10) : 0;
+    const meridiem = ampm[3].toLowerCase();
+    if (meridiem === 'pm' && h < 12) h += 12;
+    if (meridiem === 'am' && h === 12) h = 0;
+    if (h > 23 || m > 59) return '';
+    return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+  }
+
+  const twentyFour = raw.match(/^(\d{1,2})(?::(\d{2}))(?::\d{2})?$/);
+  if (twentyFour) {
+    const h = Number.parseInt(twentyFour[1], 10);
+    const m = Number.parseInt(twentyFour[2], 10);
+    if (h > 23 || m > 59) return '';
+    return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+  }
+
+  const hourOnly = raw.match(/^(\d{1,2})$/);
+  if (hourOnly) {
+    const h = Number.parseInt(hourOnly[1], 10);
+    if (h > 23) return '';
+    return String(h).padStart(2, '0') + ':00';
+  }
+
+  return '';
+}
+
 function buildAdditionalInfo(body) {
   const bits = [];
   const tier = trim(body.tier_label || body.tier, 100);
@@ -73,8 +107,12 @@ function buildPayload(body) {
   const company = trim(body.company_name || body.company, 200);
   if (company) payload.company_name = company;
 
-  const time = trim(body.event_time, 8);
-  if (time) payload.event_time = time;
+  // Cortado Create Lead currently requires event_time (docs still say optional).
+  // Book-preview collects duration, not a clock start — default when missing.
+  const time = normalizeEventTime(
+    body.event_time || body.eventTime || body.start_time || body.time
+  );
+  payload.event_time = time || '10:00';
 
   const guests = asInt(body.event_guest_count || body.guest_count || body.guests);
   if (guests != null && guests >= 0) payload.event_guest_count = guests;
